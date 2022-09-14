@@ -243,8 +243,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
           for (int tick = 5; tick < 20; tick += 5) {
               addEvent(() -> {
                   //Slash Projectile Shoot 3!
-                  float damage = 6f;
-                  ProjectileHomingFlame slash1 = new ProjectileHomingFlame(world, this, damage);
+                  ProjectileHomingFlame slash1 = new ProjectileHomingFlame(world, this, getAttack() * getConfigFloat("mk_projectile"));
                   Vec3d pos = this.getPositionVector();
                   Vec3d targetPos = new Vec3d(ModRandom.getFloat(5), 0, ModRandom.getFloat(5));
                   Vec3d velocity = targetPos.subtract(pos).normalize().scale(0.5);
