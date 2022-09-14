@@ -78,7 +78,11 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     @Override
     protected void initAnimation() {
         this.setSummonanim(true);
-        addEvent(() -> EntityMaelstromKnight.super.setSummonanim(false), 40);
+        if (this.isSummonAnim()) {
+            this.motionX = 0;
+            this.motionZ =0;
+            addEvent(() -> EntityMaelstromKnight.super.setSummonanim(false), 40);
+        }
     }
 
 
