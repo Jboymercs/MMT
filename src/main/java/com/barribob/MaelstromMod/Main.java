@@ -41,7 +41,7 @@ import software.bernie.geckolib3.GeckoLib;
 public class Main {
     @Instance
     public static Main instance;
-
+    //Github Test
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
     public static CommonProxy proxy;
     public static SimpleNetworkWrapper network;
