@@ -1,0 +1,185 @@
+{
+    "pools": [
+        {
+            "name": "level_2_loot",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "mm:shadow_dagger",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "mm:maelstrom_cannon",
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "mm:will-o-the-wisp_staff",
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "mm:sword_of_shades",
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "mm:maelstrom_battleaxe",
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "mm:beast_blade",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "mm:maelstrom_helmet",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "mm:maelstrom_chestplate",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "mm:maelstrom_leggings",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "mm:maelstrom_boots",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "mm:enchant",
+                            "level": 2,
+                            "conditions": [
+                                {
+                                    "condition": "random_chance",
+                                    "chance": 0.4
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "item",
+                    "name": "mm:chasmium_ammo_case",
+                    "weight": 1
+                }
+            ]
+        }
+    ]
+}

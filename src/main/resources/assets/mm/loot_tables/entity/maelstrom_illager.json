@@ -1,0 +1,32 @@
+{
+    "pools": [
+        {
+            "name": "maelstrom_illager",
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "mm:cliff_key_fragment"
+                }
+            ]
+        },
+        {
+            "rolls": 1,
+            "name": "maelstrom_illager",
+            "entries": [
+                {
+                    "type": "item",
+                    "weight": 1,
+                    "name": "mm:azure_maelstrom_core_crystal",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": 4
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

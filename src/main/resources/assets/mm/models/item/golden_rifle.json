@@ -1,0 +1,6 @@
+{
+   "parent": "mm:item/rifle",
+   "textures": {
+       "0": "mm:items/golden_rifle"
+   }
+}

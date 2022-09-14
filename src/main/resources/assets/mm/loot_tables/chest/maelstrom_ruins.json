@@ -1,0 +1,35 @@
+{
+    "pools": [
+        {
+            "name": "maelstrom_ruins",
+            "rolls": 2,
+            "entries": [
+                {
+                    "type": "loot_table",
+                    "name": "mm:util/level_3_loot",
+                    "weight": 3
+                },
+                {
+                    "type": "loot_table",
+                    "name": "mm:util/level_2_loot",
+                    "weight": 4
+                },
+                {
+                    "type": "item",
+                    "name": "minecraft:book",
+                    "weight": 1,
+                    "functions": [
+                        {
+                            "function": "enchant_with_levels",
+                            "levels": {
+                                "min": 10,
+                                "max": 25
+                            },
+                            "treasure": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
