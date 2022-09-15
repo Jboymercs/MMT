@@ -19,7 +19,7 @@ public class ModDamageSource {
     public static final String MAGIC = Reference.MOD_ID + ":" + "magicMaelstrom";
 
     public static final DamageSource MAELSTROM_DAMAGE = (new DamageSource(MAELSTROM));
-
+    // To Fix the Access Transformer Issue, move the mm_at.cfg to META_INF after exporting the mod.
     public static DamageSource causeElementalMeleeDamage(EntityLivingBase mob, Element element) {
         return new EntityElementalDamageSource(MOB, mob, element);
     }
@@ -48,12 +48,13 @@ public class ModDamageSource {
         private Element element = Element.NONE;
         private Entity directEntity;
         private Entity indirectEntity;
-        private String damageType = MOB;
+        private String damageType;
         private boolean stoppedByArmorNotShields;
         private boolean disablesShields;
 
         public DamageSourceBuilder element(Element element) {
             this.element = element;
+            this.damageType = MOB;
             return this;
         }
 
@@ -83,17 +84,18 @@ public class ModDamageSource {
         }
 
         public DamageSource build() {
-            if(damageType == null || directEntity == null) {
-                throw new NullPointerException("Damage source type or entity cannot be null");
-            }
+            if (this.damageType != null && this.directEntity != null) {
+                EntityElementalDamageSourceIndirect source = new EntityElementalDamageSourceIndirect(this.damageType, this.directEntity, this.indirectEntity, this.element);
 
-            EntityElementalDamageSourceIndirect source = new EntityElementalDamageSourceIndirect(damageType, directEntity, indirectEntity, element);
-            if(stoppedByArmorNotShields) {
-                source.setStoppedByArmor(true);
-                source.isUnblockable = true;
+                if (this.stoppedByArmorNotShields) {
+                    source.setStoppedByArmor(true);
+                    source.isUnblockable = true;
+                }
+                source.setDisablesShields(disablesShields);
+                return source;
+            } else {
+                throw new NullPointerException("Damage Source type or entity can be null");
             }
-            source.setDisablesShields(disablesShields);
-            return source;
         }
     }
 }

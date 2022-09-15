@@ -28,6 +28,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -245,13 +246,12 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                   //Slash Projectile Shoot 3!
                   ProjectileHomingFlame slash1 = new ProjectileHomingFlame(world, this, getAttack() * getConfigFloat("mk_projectile"));
                   Vec3d pos = this.getPositionVector();
-                  Vec3d targetPos = new Vec3d(ModRandom.getFloat(5), 0, ModRandom.getFloat(5));
-                  Vec3d velocity = targetPos.subtract(pos).normalize().scale(0.5);
                   slash1.setPosition(pos.x + ModRandom.getFloat(3), pos.y + 5.6D, pos.z + ModRandom.getFloat(3));
-                  slash1.shoot(this, 0, 0, 0.0F, 0.0f, 0);
-                  ModUtils.setEntityVelocity(slash1, velocity);
-                  slash1.setTravelRange(20f);
+                  slash1.setTravelRange(20);
+                  slash1.setNoGravity(true);
                   world.spawnEntity(slash1);
+                  ModUtils.throwProjectileNoSpawn(target.getPositionEyes(1), slash1, 0, 0.4f);
+
               }, tick);
           }
       }, 12);
@@ -401,7 +401,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     }
 
     @Override
-    public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+    public void attackEntityWithRangedAttack(@Nonnull EntityLivingBase target, float distanceFactor) {
 
     }
 

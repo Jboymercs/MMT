@@ -14,6 +14,7 @@ import net.minecraft.world.WorldServer;
 /**
  * Finds a portal in the azure dimension, or builds one
  */
+//DO NOT GO TO THE AZURE, IT WILL CRASH DUE TO FINDING ANY GEN OR LOCATION TO.
 public class DimensionalTeleporter extends Teleporter {
     private Block rimBlock;
     private Block portalBlock;
