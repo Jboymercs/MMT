@@ -19,7 +19,7 @@ public class ModDamageSource {
     public static final String MAGIC = Reference.MOD_ID + ":" + "magicMaelstrom";
 
     public static final DamageSource MAELSTROM_DAMAGE = (new DamageSource(MAELSTROM));
-    // To Fix the Access Transformer Issue, move the mm_at.cfg to META_INF after exporting the mod.
+    // To Fix the Access Transformer Issue, move the mm_at.cfg to META_INF after exporting the mod. //
     public static DamageSource causeElementalMeleeDamage(EntityLivingBase mob, Element element) {
         return new EntityElementalDamageSource(MOB, mob, element);
     }
