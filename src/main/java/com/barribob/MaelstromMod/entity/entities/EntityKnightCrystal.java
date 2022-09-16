@@ -26,7 +26,7 @@ public class EntityKnightCrystal extends EntityMaelstromMob implements IAnimatab
         this.setSize(0.8F, 1.2F);
     }
 
-    @SideOnly(Side.CLIENT)
+
     private AnimationFactory factory = new AnimationFactory(this);
 
 
