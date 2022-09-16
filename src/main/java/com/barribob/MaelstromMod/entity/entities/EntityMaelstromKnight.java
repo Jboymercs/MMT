@@ -89,7 +89,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
 
 
     //Animation Factory
-   @SideOnly(Side.CLIENT)
+
    private AnimationFactory factory = new AnimationFactory(this);
 
     // SIMPLE STRIKE
