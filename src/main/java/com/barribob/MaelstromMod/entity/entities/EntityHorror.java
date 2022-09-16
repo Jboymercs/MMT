@@ -52,7 +52,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
     public static final float PROJECTILE_VELOCITY = 1.2f;
     public static final float PROJECTILE_SPEED = 1.0f;
 
-   
+
     private AnimationFactory factory = new AnimationFactory(this);
 
     public EntityHorror(World worldIn) {

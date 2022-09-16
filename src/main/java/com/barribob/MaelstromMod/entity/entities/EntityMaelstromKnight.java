@@ -421,7 +421,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     }
 
 
-    @SideOnly(Side.CLIENT)
+  
     public void processAnimationsUpdates(String animationId) {
        this.currentAnimationPlaying = animationId;
        switch (animationId) {
