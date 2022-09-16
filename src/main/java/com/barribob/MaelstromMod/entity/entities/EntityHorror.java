@@ -52,7 +52,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
     public static final float PROJECTILE_VELOCITY = 1.2f;
     public static final float PROJECTILE_SPEED = 1.0f;
 
-    @SideOnly(Side.CLIENT)
+    
     private AnimationFactory factory = new AnimationFactory(this);
 
     public EntityHorror(World worldIn) {
@@ -122,8 +122,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
             float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.6F;
             projectile.shoot(d1, d2 + f, d3, this.PROJECTILE_SPEED, this.PROJECTILE_INACCURACY);
             this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            System.out.println("Begin Shooting, Send to Animation Updates");
-            return;
+
         }
 
     }
