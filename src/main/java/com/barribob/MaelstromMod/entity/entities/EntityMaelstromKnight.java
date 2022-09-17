@@ -75,7 +75,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
         super(worldIn);
         this.setSize(1.0f, 2.9f);
     }
-
+    //Calls the Summon Animation upon being spawned
     @Override
     protected void initAnimation() {
         this.setSummonanim(true);
@@ -250,7 +250,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                   slash1.setTravelRange(20);
                   slash1.setNoGravity(true);
                   world.spawnEntity(slash1);
-                  ModUtils.throwProjectileNoSpawn(target.getPositionEyes(1), slash1, 0, 0.4f);
+                  ModUtils.throwProjectileNoSpawn(target.getPositionEyes(1), slash1, 0, 0.3f);
 
               }, tick);
           }
@@ -499,7 +499,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
 
         super.readEntityFromNBT(compound);
     }
-
+    // Calls the death Animation upon Health being 0.0 
     @Override
     public void onDeath(DamageSource cause) {
         this.setHealth(0.0001f);
