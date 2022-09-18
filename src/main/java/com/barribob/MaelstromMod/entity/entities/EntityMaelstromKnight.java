@@ -75,6 +75,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     public EntityMaelstromKnight(World worldIn) {
         super(worldIn);
         this.setSize(1.0f, 2.9f);
+        this.healthScaledAttackFactor = 0.1;
     }
     //Calls the Summon Animation upon being spawned
     @Override
@@ -532,8 +533,15 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
         this.bossInfo.removePlayer(player);
     }
     private Vec3d DashDir;
+
     public Optional<Vec3d> getTarget() {
         return Optional.ofNullable(this.DashDir);
     }
 
+
+    @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+    
 }
