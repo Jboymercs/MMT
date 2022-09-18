@@ -169,6 +169,16 @@
 			}
 		]
 	},
+	"mk.cast": {
+	"category": "entity",
+	"subtitle": "entity.mk.cast",
+	"sounds": [
+		{
+			"name": "mm:entity/mk/cast",
+			"steam": true
+		}
+	]
+},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",

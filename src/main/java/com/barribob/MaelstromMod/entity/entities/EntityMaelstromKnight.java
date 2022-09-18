@@ -8,6 +8,7 @@ import com.barribob.MaelstromMod.util.IElement;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModRandom;
 import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -118,7 +119,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                 addEvent(() -> EntityMaelstromKnight.super.setfightMode(false), 25);
         addEvent(() -> EntityMaelstromKnight.super.setBlockedbyanimation(false), 25);
                   addEvent(() -> HasStriked.set(false), 40);
-                System.out.println("Awaiting Stop");
+
 
 
 
@@ -136,7 +137,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             Vec3d pos = this.getPositionVector().add(ModUtils.yVec(1)).add(this.getLookVec());
             if (!HasSpinned.get())
                addEvent(() -> {
-                   for (int tick = 3; tick < 9; tick +=3) {
+                   for (int tick = 3; tick < 10; tick +=3) {
                        addEvent(() -> {
                        float damage = getAttack() * getConfigFloat("mk_circle_spin");
                        DamageSource source = ModDamageSource.builder()
@@ -145,6 +146,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                                .element(getElement())
                                .disablesShields().build();
                        ModUtils.handleAreaImpact(4.0f, (e) -> damage, this, pos, source, 0.5F, 0, false);
+
                        HasSpinned.set(true);
                    }, tick);
                    }
@@ -152,7 +154,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             addEvent(() -> EntityMaelstromKnight.super.setfightMode(false), 45);
             addEvent(() -> EntityMaelstromKnight.super.setSpecial1(false), 40);
         addEvent(() -> HasSpinned.set(false), 45);
-            System.out.println("Awaiting Stop");
+
 
     };
     //TELEPORT TOO
@@ -161,6 +163,9 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             this.setTeleport(true);
             this.processAnimationsUpdates(TELEPORT_TOO);
             AtomicBoolean HasTeleported = new AtomicBoolean(false);
+            addEvent(() -> {
+                playSound(SoundsHandler.ENTITY_KNIGHT_CAST, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
+            }, 10);
             addEvent(()-> {
 
                 if (!HasTeleported.get()) {
@@ -168,6 +173,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                     double d2 = target.posY;
                     double d3 = target.posZ;
                     this.teleportTarget(d1, d2, d3);
+                    playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
                     HasTeleported.set(true);
                 }
             }, 24);
@@ -288,7 +294,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0f, 50, 15, 0.2f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.2f, 50, 15, 0.2f));
 
     }
 
@@ -499,7 +505,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
 
         super.readEntityFromNBT(compound);
     }
-    // Calls the death Animation upon Health being 0.0 
+    // Calls the death Animation upon Health being 0.0
     @Override
     public void onDeath(DamageSource cause) {
         this.setHealth(0.0001f);
