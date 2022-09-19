@@ -131,7 +131,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             this.setSpecial1(true);
             this.setfightMode(true);
         AtomicBoolean HasSpinned = new AtomicBoolean(false);
-
+            playSound(SoundsHandler.ENTITY_KNIGHT_SPIN, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
 
 
 
@@ -166,7 +166,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             AtomicBoolean HasTeleported = new AtomicBoolean(false);
             addEvent(() -> {
                 playSound(SoundsHandler.ENTITY_KNIGHT_CAST, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
-            }, 10);
+            }, 5);
             addEvent(()-> {
 
                 if (!HasTeleported.get()) {
@@ -269,6 +269,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     private final Consumer<EntityLivingBase> OverArcSwing = (target) -> {
             this.setfightMode(true);
             this.setArcleap(true);
+            playSound(SoundsHandler.ENTITY_KNIGHT_SLAM, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
             addEvent(() -> {
                 ModUtils.leapTowards(this, target.getPositionVector(), 0.6f, 0.2f);
 
@@ -543,5 +544,5 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     protected boolean canDespawn() {
         return false;
     }
-    
+
 }

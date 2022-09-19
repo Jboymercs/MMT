@@ -31,6 +31,10 @@ public class SoundsHandler {
 
     public static SoundEvent ENTITY_KNIGHT_CAST;
 
+    public static SoundEvent ENTITY_KNIGHT_SPIN;
+
+    public static SoundEvent ENTITY_KNIGHT_SLAM;
+
     // Sound hooks
     public static class Hooks{
         public static SoundEvent ENTITY_ILLAGER_SPELL_CHARGE;
@@ -62,6 +66,8 @@ public class SoundsHandler {
         NONE = registerSound("none", "entity");
 
         ENTITY_KNIGHT_CAST = registerSound("mk.cast", "entity");
+        ENTITY_KNIGHT_SPIN = registerSound("mk.spin", "entity");
+        ENTITY_KNIGHT_SLAM = registerSound("mk.slam", "entity");
 
         Hooks.ENTITY_ILLAGER_SPELL_CHARGE = registerSound("illager.spell_charge", "entity");
         Hooks.ENTITY_ILLAGER_DOME_CHARGE = registerSound("illager.dome_charge", "entity");

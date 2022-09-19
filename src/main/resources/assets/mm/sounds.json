@@ -169,7 +169,7 @@
 			}
 		]
 	},
-	"mk.cast": {
+	"entity.mk.cast": {
 	"category": "entity",
 	"subtitle": "entity.mk.cast",
 	"sounds": [
@@ -179,6 +179,26 @@
 		}
 	]
 },
+	"entity.mk.spin": {
+		"category": "entity",
+		"subtitle": "entity.mk.spin",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/spin",
+				"steam": true
+			}
+		]
+	},
+	"entity.mk.slam": {
+		"category": "entity",
+		"subtitle": "entity.mk.slam",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/slam",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",
