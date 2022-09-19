@@ -199,6 +199,56 @@
 			}
 		]
 	},
+	"entity.mk.evade": {
+		"category": "entity",
+		"subtitle": "entity.mk.evade",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/evade",
+				"steam": true
+			}
+		]
+	},
+	"entity.mk.hurt": {
+		"category": "entity",
+		"subtitle": "entity.mk.hurt",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/hurt",
+				"steam": true
+			}
+		]
+	},
+	"entity.mk.death": {
+		"category": "entity",
+		"subtitle": "entity.mk.death",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/death",
+				"steam": true
+			}
+		]
+	},
+	"entity.mk.summoncrystals": {
+		"category": "entity",
+		"subtitle": "entity.mk.summoncrystals",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/summoncrystals",
+				"steam": true
+			}
+		]
+	},
+	"entity.mk.crystalsummon": {
+		"category": "entity",
+		"subtitle": "entity.mk.crystalsummon",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/crystalsummon",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",

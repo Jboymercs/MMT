@@ -3,6 +3,7 @@ package com.barribob.MaelstromMod.entity.entities;
 import com.barribob.MaelstromMod.init.MMAnimations;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,9 @@ public class EntityKnightCrystal extends EntityMaelstromMob implements IAnimatab
         }
         if (ticksExisted > 15) {
             this.setDead();
+        }
+        if (ticksExisted == 1) {
+            playSound(SoundsHandler.ENTITY_KNIGHT_CRYSTALSUMMON, 1.0F, 1.2F);
         }
 
 

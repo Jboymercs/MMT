@@ -4,16 +4,15 @@ package com.barribob.MaelstromMod.entity.entities;
 import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.projectile.ProjectileHomingFlame;
 import com.barribob.MaelstromMod.entity.util.IAttack;
-import com.barribob.MaelstromMod.util.IElement;
-import com.barribob.MaelstromMod.util.ModDamageSource;
-import com.barribob.MaelstromMod.util.ModRandom;
-import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.*;
+import com.barribob.MaelstromMod.util.handlers.ParticleManager;
 import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
@@ -197,6 +196,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
         this.setfightMode(true);
         this.setSpellCasting(true);
         this.processAnimationsUpdates(SUMMON_CRYSTALS);
+        playSound(SoundsHandler.ENTITY_KNIGHT_SUMMONCRYSTALS, 1.2F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
         addEvent(() -> {
             if (target.isEntityAlive()) {
                 Vec3d targetPos = getAttackTarget().getPositionVector();
@@ -234,7 +234,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             this.setfightMode(true);
             this.processAnimationsUpdates(EVASION);
       addEvent(() -> {
-
+            playSound(SoundsHandler.ENTITY_KNIGHT_EVADE, 1.3F, 1.7F);
             //Jump away from Target
           Vec3d away = this.getPositionVector().subtract(target.getPositionVector()).normalize();
           ModUtils.leapTowards(this, away, 1.5f, 0.4f);
@@ -258,6 +258,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                   slash1.setNoGravity(true);
                   world.spawnEntity(slash1);
                   ModUtils.throwProjectileNoSpawn(target.getPositionEyes(1), slash1, 0, 0.3f);
+                  world.setEntityState(this, ModUtils.PARTICLE_BYTE);
 
               }, tick);
           }
@@ -469,6 +470,16 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
         }
     }
 
+    @Override
+    public void handleStatusUpdate(byte id) {
+        if (id == ModUtils.PARTICLE_BYTE) {
+            ModUtils.circleCallback(3, 60, (pos) -> {
+                pos = new Vec3d(pos.x, 0, pos.z);
+                ParticleManager.spawnDust(world, pos.add(this.getPositionVector()).add(ModUtils.yVec(5.6)), ModColors.YELLOW, pos.normalize().scale(0.3).add(ModUtils.yVec(0.1)), ModRandom.range(20, 30));
+            } );
+        }
+        super.handleStatusUpdate(id);
+    }
 
     @Override
     public int startAttack(EntityLivingBase target, float distanceFactor, boolean strafingBackwards) {
@@ -512,6 +523,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     public void onDeath(DamageSource cause) {
         this.setHealth(0.0001f);
         this.setDeath(true);
+        playSound(SoundsHandler.ENTITY_KNIGHT_DEATH, 1.5F, 1.0F);
         if (this.isDeath()) {
             this.motionX = 0;
             this.motionZ = 0;
@@ -527,7 +539,8 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
        super.addTrackingPlayer(player);
        this.bossInfo.addPlayer(player);
     }
-
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {return SoundsHandler.ENTITY_KNIGHT_HURT;}
     @Override
     public void removeTrackingPlayer(EntityPlayerMP player) {
         super.removeTrackingPlayer(player);

@@ -1,6 +1,7 @@
 package com.barribob.MaelstromMod.util.handlers;
 
 import com.barribob.MaelstromMod.util.Reference;
+import net.minecraft.client.audio.Sound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -35,6 +36,16 @@ public class SoundsHandler {
 
     public static SoundEvent ENTITY_KNIGHT_SLAM;
 
+    public static SoundEvent ENTITY_KNIGHT_EVADE;
+
+    public static SoundEvent ENTITY_KNIGHT_HURT;
+
+    public static SoundEvent ENTITY_KNIGHT_DEATH;
+
+    public static SoundEvent ENTITY_KNIGHT_SUMMONCRYSTALS;
+
+    public static SoundEvent ENTITY_KNIGHT_CRYSTALSUMMON;
+
     // Sound hooks
     public static class Hooks{
         public static SoundEvent ENTITY_ILLAGER_SPELL_CHARGE;
@@ -68,11 +79,20 @@ public class SoundsHandler {
         ENTITY_KNIGHT_CAST = registerSound("mk.cast", "entity");
         ENTITY_KNIGHT_SPIN = registerSound("mk.spin", "entity");
         ENTITY_KNIGHT_SLAM = registerSound("mk.slam", "entity");
+        ENTITY_KNIGHT_EVADE = registerSound("mk.evade", "entity");
+        ENTITY_KNIGHT_HURT = registerSound("mk.hurt", "entity");
+        ENTITY_KNIGHT_DEATH = registerSound("mk.death", "entity");
+        ENTITY_KNIGHT_SUMMONCRYSTALS = registerSound("mk.summoncrystals", "entity");
+
+        ENTITY_KNIGHT_CRYSTALSUMMON = registerSound("mk.crystalsummon", "entity");
 
         Hooks.ENTITY_ILLAGER_SPELL_CHARGE = registerSound("illager.spell_charge", "entity");
         Hooks.ENTITY_ILLAGER_DOME_CHARGE = registerSound("illager.dome_charge", "entity");
         Hooks.ENTITY_ILLAGER_VORTEX = registerSound("illager.vortex", "entity");
         Hooks.ENTITY_ILLAGER_DOME = registerSound("illager.dome", "entity");
+
+
+
     }
 
     private static SoundEvent registerSound(String name, String category) {
