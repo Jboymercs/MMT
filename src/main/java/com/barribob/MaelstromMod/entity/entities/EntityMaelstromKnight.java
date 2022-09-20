@@ -204,6 +204,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                 EntityKnightCrystal crystal = new EntityKnightCrystal(this.world);
                 crystal.setPosition(pos1);
                 this.world.spawnEntity(crystal);
+                world.setEntityState(this, ModUtils.PARTICLE_BYTE);
             }
         }, 15);
         addEvent(() -> {
@@ -213,6 +214,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                 EntityKnightCrystal crystal = new EntityKnightCrystal(this.world);
                 crystal.setPosition(pos1);
                 this.world.spawnEntity(crystal);
+                world.setEntityState(this, ModUtils.PARTICLE_BYTE);
             }
         }, 25);
         addEvent(() -> {
@@ -222,6 +224,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                 EntityKnightCrystal crystal = new EntityKnightCrystal(this.world);
                 crystal.setPosition(pos1);
                 this.world.spawnEntity(crystal);
+                world.setEntityState(this, ModUtils.PARTICLE_BYTE);
             }
         }, 35);
 
@@ -246,6 +249,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     private final Consumer<EntityLivingBase> KnightSlash = (target) -> {
         this.setfightMode(true);
         this.setSlashing(true);
+        playSound(SoundsHandler.ENTITY_KNIGHT_CAST1, 1.0F, 1.0F / (getRNG().nextFloat() * 0.4F + 0.8F));
       addEvent(() -> {
 
           for (int tick = 5; tick < 20; tick += 5) {
@@ -258,7 +262,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                   slash1.setNoGravity(true);
                   world.spawnEntity(slash1);
                   ModUtils.throwProjectileNoSpawn(target.getPositionEyes(1), slash1, 0, 0.3f);
-                  world.setEntityState(this, ModUtils.PARTICLE_BYTE);
+                  world.setEntityState(this, ModUtils.THIRD_PARTICLE_BYTE);
 
               }, tick);
           }
@@ -285,7 +289,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
                 float damage = getAttack() * getConfigFloat("mk_leap_damage");
                 ModUtils.handleAreaImpact(3.0f, (e) -> damage, this, offset, source, 0.2F, 0, false );
                 this.world.newExplosion(this, offset.x, offset.y -1, offset.z, (float) getMobConfig().getDouble("mk_explosion"), false, true);
-                this.world.setEntityState(this, ModUtils.PARTICLE_BYTE);
+
             }, 24);
 
             addEvent(() -> EntityMaelstromKnight.super.setArcleap(false), 40);
@@ -472,11 +476,17 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
 
     @Override
     public void handleStatusUpdate(byte id) {
-        if (id == ModUtils.PARTICLE_BYTE) {
-            ModUtils.circleCallback(3, 60, (pos) -> {
-                pos = new Vec3d(pos.x, 0, pos.z);
-                ParticleManager.spawnDust(world, pos.add(this.getPositionVector()).add(ModUtils.yVec(5.6)), ModColors.YELLOW, pos.normalize().scale(0.3).add(ModUtils.yVec(0.1)), ModRandom.range(20, 30));
+        if (id == ModUtils.THIRD_PARTICLE_BYTE) {
+            ModUtils.circleCallback(2, 50, (pos) -> {
+                pos = new Vec3d(pos.x, 0, pos.y);
+                ParticleManager.spawnDust(world, pos.add(this.getPositionVector()).add(ModUtils.yVec(5.6)), ModColors.YELLOW, pos.normalize().scale(0.3).add(ModUtils.yVec(0.1)), ModRandom.range(10, 15));
             } );
+        }
+        if (id == ModUtils.PARTICLE_BYTE) {
+            ModUtils.circleCallback(1, 15, (pos) -> {
+                pos = new Vec3d(pos.x, 0, pos.y);
+                ParticleManager.spawnDust(world, pos.add(this.getPositionVector()).add(ModUtils.yVec(0.3)), ModColors.MAELSTROM, pos.normalize().scale(0.1).add(ModUtils.yVec(0.1)), ModRandom.range(1, 3));
+            });
         }
         super.handleStatusUpdate(id);
     }

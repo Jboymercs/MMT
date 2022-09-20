@@ -249,6 +249,16 @@
 			}
 		]
 	},
+	"entity.mk.cast1": {
+		"category": "entity",
+		"subtitle": "entity.mk.cast1",
+		"sounds": [
+			{
+				"name": "mm:entity/mk/cast1",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",
