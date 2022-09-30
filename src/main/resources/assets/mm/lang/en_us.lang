@@ -290,6 +290,7 @@ tile.cracked_swamp_brick.name=Cracked Swamp Brick
 tile.cliff_portal.name=Golden Valley Portal
 tile.swamp_plank_stairs.name=Swamp Plank Stairs
 tile.swamp_fence.name=Swamp Plank Fence
+tile.gold_stone_slab=Gold Stone Slab
 
 //�����������������������������������������������������������
 // Crimson Blocks

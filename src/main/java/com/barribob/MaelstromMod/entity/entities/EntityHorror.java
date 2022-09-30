@@ -1,11 +1,13 @@
 package com.barribob.MaelstromMod.entity.entities;
 
 import com.barribob.MaelstromMod.entity.ai.EntityAIRangedAttack;
+import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.ai.EntityAIWanderWithGroup;
 import com.barribob.MaelstromMod.entity.animation.AnimationManager;
 import com.barribob.MaelstromMod.entity.animation.AnimationManagerServer;
 import com.barribob.MaelstromMod.entity.projectile.ProjectileHorrorAttack;
 import com.barribob.MaelstromMod.entity.util.IAcceleration;
+import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.init.MMAnimations;
 import com.barribob.MaelstromMod.init.ModBBAnimations;
 import com.barribob.MaelstromMod.util.ModRandom;
@@ -47,8 +49,8 @@ import static java.lang.Math.abs;
 /**
  * Model, Animations, and Textures done by GDrayn, AI revision done by UnseenDontRun.
  */
-public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
-    public static final float PROJECTILE_INACCURACY = 6;
+public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAttack {
+    public static final float PROJECTILE_INACCURACY = 0;
     public static final float PROJECTILE_VELOCITY = 1.2f;
     public static final float PROJECTILE_SPEED = 1.0f;
 
@@ -85,7 +87,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAIRangedAttack<EntityMaelstromMob>(this, 1.0f, 80, 20.0f, 0.5f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0f, 40, 20.0f, 0.1f));
 
 
     }
@@ -100,7 +102,10 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
             for (int i = 0; i < 5; i++) {
                 ParticleManager.spawnMaelstromSmoke(world, rand, new Vec3d(this.posX + ModRandom.getFloat(0.4f), this.posY + 1.5, this.posZ + ModRandom.getFloat(0.4f)), true);
             }
-
+            if (this.isfightMode()) {
+                motionZ = 0;
+                motionX = 0;
+            }
         }
 
 
@@ -110,22 +115,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
     //Redone for playing nice with Geckolib and overall change up the whole ideal of the Cauldron AI and attack methods
 
 
-    @Override
-    public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-        if (!world.isRemote) {
-            ProjectileHorrorAttack projectile = new ProjectileHorrorAttack(this.world, this, this.getAttack());
-            projectile.posY = this.posY + this.getEyeHeight() + 0.8f;
-            double d0 = target.posY + target.getEyeHeight() - 0.9f;
-            double d1 = target.posX - this.posX;
-            double d2 = d0 - projectile.posY;
-            double d3 = target.posZ - this.posZ;
-            float f = MathHelper.sqrt(d1 * d1 + d3 * d3) * 0.6F;
-            projectile.shoot(d1, d2 + f, d3, this.PROJECTILE_SPEED, this.PROJECTILE_INACCURACY);
-            this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
 
-        }
-
-    }
 
 
 
@@ -152,12 +142,54 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData animationData) {
-        animationData.addAnimationController(MMAnimations.WalkController(this));
-        animationData.addAnimationController(MMAnimations.IdleController(this));
-
-
+            animationData.addAnimationController(new AnimationController(this, "horror_attack", 0, this::predicateHorrorAttack));
+            animationData.addAnimationController(new AnimationController(this, "horror_basic", 0, this::predicateHorrorBasic));
 
     }
 
+    private <E extends IAnimatable> PlayState predicateHorrorBasic(AnimationEvent<E> event) {
+        //Walk & Idle
+        if (!this.isfightMode()) {
+            if (event.isMoving()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
+            }
+        }
+        return PlayState.CONTINUE;
+    }
 
+    //Shoot Animation
+    private <E extends IAnimatable> PlayState predicateHorrorAttack(AnimationEvent<E> event) {
+        if (this.isfightMode()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("horrorShoot", false));
+            System.out.println("Playing Shoot Animation");
+            return PlayState.CONTINUE;
+        }
+        event.getController().markNeedsReload();
+        return PlayState.STOP;
+    }
+
+    @Override
+    public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
+        this.setfightMode(true);
+        ProjectileHorrorAttack projectile = new ProjectileHorrorAttack(this.world, this, this.getAttack());
+        projectile.posY = this.posY + this.getEyeHeight() + 0.2f;
+        double d0 = target.posX - this.posX;
+        double d1 = target.posY + target.getEyeHeight() - 0.9f;
+        double d2 = d1 - projectile.posY;
+        double d3 = target.posZ - this.posZ;
+        float f = MathHelper.sqrt(d0 * d0 + d3 * d3) * 0.8F;
+        projectile.shoot(d0, d2 + f, d3, PROJECTILE_SPEED, PROJECTILE_INACCURACY);
+        this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / this.getRNG().nextFloat() * 0.4F + 0.8F);
+        this.world.spawnEntity(projectile);
+        addEvent(() -> EntityHorror.super.setfightMode(false), 22);
+
+        return  60;
+    }
+
+    @Override
+    public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+
+    }
 }

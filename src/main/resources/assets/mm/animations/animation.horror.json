@@ -18269,7 +18269,7 @@
 				}
 			}
 		},
-		"shoot": {
+		"horrorShoot": {
 			"animation_length": 1.08,
 			"bones": {
 				"ZBody": {

@@ -493,8 +493,8 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
 
     @Override
     public int startAttack(EntityLivingBase target, float distanceFactor, boolean strafingBackwards) {
-
-        if (!isfightMode() && !isLeaping() && !isSummonAnim()) {
+            //It will register these booleans before iniating another attack, basically if they are all false, it will start another attack. A fail safe to keep anything from bugging out.
+        if (!isfightMode() && !isLeaping() && !isSummonAnim() && !isDeath()) {
 
             float HealthChange = this.getHealth() / this.getMaxHealth();
             double distance = Math.sqrt(distanceFactor);
@@ -504,10 +504,10 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
             double[] weights = {
                     // All the variables to determine distance, health, and what previous attack was entered if you don't want a animation to be repeated with it being a power move
                     1 / distance, //Simple Attack {PHASE 1 START}
-                    HealthChange < .8 ? 1/ distance : 0, // Circle Spin 80% Health {PARTIAL PHASE 1}
+                    HealthChange < .9 ? 1/ distance : 0, // Circle Spin 90% Health {PARTIAL PHASE 1}
                     (distance > 5) ? distance * 0.08 : 0, // Teleport Too (Ideal is to increase the chance of the Knight teleporting to you the further you are away)
                     HealthChange < 0.7  ? 1 / distance : 0, //Evasion Tactic, A simple leap away from the Target {PHASE 2 START}
-                    HealthChange < 0.60 ? distance * 0.08 : 0, //SummonCrystals 65% Health
+                    HealthChange < 0.65 ? distance * 0.08 : 0, //SummonCrystals 65% Health
                     HealthChange < 0.5 ? distance * 0.08 : 0,   //!Jump and Projectile Shoot {PHASE 3 START}
                     HealthChange < 0.5 && distance < 6 && prevAttack != OverArcSwing ? 2 : 0  //OverArcLeap Attack
                                                             //Death Calling, End current attack
