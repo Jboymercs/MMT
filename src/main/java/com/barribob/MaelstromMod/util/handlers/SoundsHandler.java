@@ -48,6 +48,8 @@ public class SoundsHandler {
 
     public static SoundEvent ENTITY_KNIGHT_CAST1;
 
+    public static SoundEvent ENTITY_NAVIGATOR_HORN;
+
     // Sound hooks
     public static class Hooks{
         public static SoundEvent ENTITY_ILLAGER_SPELL_CHARGE;
@@ -86,6 +88,8 @@ public class SoundsHandler {
         ENTITY_KNIGHT_DEATH = registerSound("mk.death", "entity");
         ENTITY_KNIGHT_SUMMONCRYSTALS = registerSound("mk.summoncrystals", "entity");
         ENTITY_KNIGHT_CAST1 = registerSound("mk.cast1", "entity");
+
+        ENTITY_NAVIGATOR_HORN = registerSound("navigator.rally", "entity");
 
         ENTITY_KNIGHT_CRYSTALSUMMON = registerSound("mk.crystalsummon", "entity");
 

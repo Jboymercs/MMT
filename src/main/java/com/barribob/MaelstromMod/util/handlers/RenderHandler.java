@@ -131,6 +131,7 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityHorror.class, RenderHorror::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureGolem.class, RenderAzureGolem::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromKnight.class, RenderMaelstromKnight::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromNavigator.class, RenderMaelstromNavigator::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);

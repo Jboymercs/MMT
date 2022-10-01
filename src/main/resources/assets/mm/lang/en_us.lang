@@ -350,6 +350,7 @@ entity.maelstrom_fury.name=Maelstrom Fury
 entity.alternative_maelstrom_gauntlet_stage_1.name=Alternative Maelstrom Gauntlet Stage 1
 entity.alternative_maelstrom_gauntlet_stage_2.name=Alternative Maelstrom Gauntlet Stage 2
 entity.maelstrom_knight.name=Maelstrom Knight
+entity.maelstrom_navigator.name=Maelstrom Navigator
 
 //�����������������������������������������������������������
 // Projectiles

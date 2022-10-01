@@ -87,7 +87,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0f, 40, 20.0f, 0.1f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0f, 40, 20.0f, 0.5f));
 
 
     }
@@ -102,10 +102,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
             for (int i = 0; i < 5; i++) {
                 ParticleManager.spawnMaelstromSmoke(world, rand, new Vec3d(this.posX + ModRandom.getFloat(0.4f), this.posY + 1.5, this.posZ + ModRandom.getFloat(0.4f)), true);
             }
-            if (this.isfightMode()) {
-                motionZ = 0;
-                motionX = 0;
-            }
+
         }
 
 
@@ -149,20 +146,20 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
 
     private <E extends IAnimatable> PlayState predicateHorrorBasic(AnimationEvent<E> event) {
         //Walk & Idle
-        if (!this.isfightMode()) {
+
             if (event.isMoving()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("walk", true));
             } else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("idle", true));
             }
-        }
+
         return PlayState.CONTINUE;
     }
 
     //Shoot Animation
     private <E extends IAnimatable> PlayState predicateHorrorAttack(AnimationEvent<E> event) {
         if (this.isfightMode()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("horrorShoot", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("shoot", false));
             System.out.println("Playing Shoot Animation");
             return PlayState.CONTINUE;
         }
@@ -173,19 +170,21 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
     @Override
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
         this.setfightMode(true);
+        addEvent(() -> {
         ProjectileHorrorAttack projectile = new ProjectileHorrorAttack(this.world, this, this.getAttack());
         projectile.posY = this.posY + this.getEyeHeight() + 0.2f;
         double d0 = target.posX - this.posX;
         double d1 = target.posY + target.getEyeHeight() - 0.9f;
         double d2 = d1 - projectile.posY;
         double d3 = target.posZ - this.posZ;
-        float f = MathHelper.sqrt(d0 * d0 + d3 * d3) * 0.8F;
+        float f = MathHelper.sqrt(d0 * d0 + d3 * d3) * 0.6F;
         projectile.shoot(d0, d2 + f, d3, PROJECTILE_SPEED, PROJECTILE_INACCURACY);
         this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / this.getRNG().nextFloat() * 0.4F + 0.8F);
         this.world.spawnEntity(projectile);
+        }, 15);
         addEvent(() -> EntityHorror.super.setfightMode(false), 22);
 
-        return  60;
+        return  40;
     }
 
     @Override

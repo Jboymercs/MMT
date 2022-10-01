@@ -259,6 +259,16 @@
 			}
 		]
 	},
+	"entity.navigator.rally": {
+		"category": "entity",
+		"subtitle": "entity.navigator.rally",
+		"sounds": [
+			{
+				"name": "mm:entity/navigator/rally",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",
