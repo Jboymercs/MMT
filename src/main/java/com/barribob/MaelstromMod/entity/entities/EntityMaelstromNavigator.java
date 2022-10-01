@@ -3,9 +3,8 @@ package com.barribob.MaelstromMod.entity.entities;
 import com.barribob.MaelstromMod.entity.ai.AIJumpAtTarget;
 import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.util.IAttack;
-import com.barribob.MaelstromMod.util.IElement;
-import com.barribob.MaelstromMod.util.ModDamageSource;
-import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.*;
+import com.barribob.MaelstromMod.util.handlers.ParticleManager;
 import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.EntityLivingBase;
@@ -18,6 +17,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import scala.reflect.internal.Trees;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -51,6 +52,31 @@ public class EntityMaelstromNavigator extends EntityMaelstromMob implements IAni
         this.tasks.addTask(0, new AIJumpAtTarget(this, 0.4f, 0.5f));
 
     }
+
+    @Override
+    public void onEntityUpdate() {
+        super.onEntityUpdate();
+        if (rand.nextInt(20) == 0) {
+            world.setEntityState(this, ModUtils.PARTICLE_BYTE);
+        }
+
+
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void handleStatusUpdate(byte id) {
+        if (id == ModUtils.PARTICLE_BYTE) {
+            if (this.getElement().equals(Element.NONE)) {
+                ParticleManager.spawnMaelstromPotionParticle(world, rand, this.getPositionVector().add(ModRandom.randVec()).add(ModUtils.yVec(1)), false);
+            }
+
+            ParticleManager.spawnEffect(world, this.getPositionVector().add(ModRandom.randVec()).add(ModUtils.yVec(1)), getElement().particleColor);
+        } else {
+            super.handleStatusUpdate(id);
+        }
+    }
+
     @Override
     public void applyEntityAttributes() {
         super.applyEntityAttributes();
@@ -82,7 +108,7 @@ public class EntityMaelstromNavigator extends EntityMaelstromMob implements IAni
         addEvent(() -> {
             Vec3d pos = this.getPositionVector().add(ModUtils.yVec(1)).add(this.getLookVec());
             this.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0F, 0.8F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-            ModUtils.handleAreaImpact(0.6f, (e) -> this.getAttack(), this, pos, ModDamageSource.causeElementalMeleeDamage(this, getElement()), 0.20f, 0, false);
+            ModUtils.handleAreaImpact(0.8f, (e) -> this.getAttack(), this, pos, ModDamageSource.causeElementalMeleeDamage(this, getElement()), 0.20f, 0, false);
         }, 10);
 
         addEvent(() -> EntityMaelstromNavigator.super.setfightMode(false), 14);

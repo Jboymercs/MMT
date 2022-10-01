@@ -351,6 +351,7 @@ entity.alternative_maelstrom_gauntlet_stage_1.name=Alternative Maelstrom Gauntle
 entity.alternative_maelstrom_gauntlet_stage_2.name=Alternative Maelstrom Gauntlet Stage 2
 entity.maelstrom_knight.name=Maelstrom Knight
 entity.maelstrom_navigator.name=Maelstrom Navigator
+entity.maelstrom_shielder.name=Maelstrom Shielder
 
 //�����������������������������������������������������������
 // Projectiles

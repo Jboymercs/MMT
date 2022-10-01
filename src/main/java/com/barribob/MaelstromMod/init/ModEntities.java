@@ -86,7 +86,9 @@ public class ModEntities {
     public static Vec3i nexus = new Vec3i(15724287, 12501453, 0);
     public static Vec3i cliff = new Vec3i(0x999966, 0xe6e600, 0);
     public static Vec3i cliff_maelstrom = new Vec3i(6433126, 0xe6e600, 0);
-    public static Vec3i crimson_maelstrom = new Vec3i(6433126, 0xeb4034, 0);
+    public static Vec3i crimson_maelstrom = new Vec3i(6433126, 8111156, 0);
+
+
 
     private static final Map<Class<? extends Entity>, String> ID_MAP = new HashMap<>();
 
@@ -128,6 +130,7 @@ public class ModEntities {
         registerEntityWithID("maelstrom_knight", EntityMaelstromKnight.class, ENTITY_START_ID++, 70, cliff_maelstrom);
         registerEntityWithID("knight_crystal", EntityKnightCrystal.class, ENTITY_START_ID++, 50, azure);
         registerEntityWithID("maelstrom_navigator", EntityMaelstromNavigator.class, ENTITY_START_ID++, 50, maelstrom);
+        registerEntityWithID("maelstrom_shielder", EntityMaelstromShielder.class, ENTITY_START_ID++, 50, maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);
