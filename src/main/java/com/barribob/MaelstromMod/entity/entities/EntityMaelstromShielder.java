@@ -52,7 +52,7 @@ public class EntityMaelstromShielder extends EntityMaelstromMob implements IAtta
         this.setStriking(true);
         this.setfightMode(true);
         addEvent(() -> {
-            ModUtils.leapTowards(this, this.getAttackTarget().getPositionVector(), 0.4f, 0.3f);
+            ModUtils.leapTowards(this, target.getPositionVector(), 0.4f, 0.3f);
         }, 10);
         addEvent(() -> {
             Vec3d pos = this.getPositionVector().add(ModUtils.yVec(1)).add(this.getLookVec());
@@ -71,7 +71,7 @@ public class EntityMaelstromShielder extends EntityMaelstromMob implements IAtta
         this.setfightMode(true);
         this.setArcleap(true);
         addEvent(() -> {
-            ModUtils.leapTowards(this, this.getAttackTarget().getPositionVector(), 0.7f, 0.2f);
+            ModUtils.leapTowards(this, target.getPositionVector(), 0.7f, 0.2f);
 
         },7);
         addEvent(() ->{
