@@ -6,6 +6,7 @@ import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityAlternativeMaels
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityCrimsonCrystal;
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityMaelstromGauntlet;
 import com.barribob.MaelstromMod.entity.entities.npc.*;
+import com.barribob.MaelstromMod.entity.entities.EntityPlayerBase;
 import com.barribob.MaelstromMod.entity.model.*;
 import com.barribob.MaelstromMod.entity.projectile.*;
 import com.barribob.MaelstromMod.entity.render.*;
@@ -137,6 +138,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromNavigator.class, RenderMaelstromNavigator::new);
         // Lush Maelstrom
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromShielder.class, RenderMaelstromShielder::new);
+        // Player Base
+        RenderingRegistry.registerEntityRenderingHandler(EntityPlayerBase.class, RenderPlayerBase::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);

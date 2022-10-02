@@ -8,6 +8,7 @@ import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityAlternativeMaels
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityCrimsonCrystal;
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityMaelstromGauntlet;
 import com.barribob.MaelstromMod.entity.entities.npc.*;
+import com.barribob.MaelstromMod.entity.entities.EntityPlayerBase;
 import com.barribob.MaelstromMod.entity.particleSpawners.ParticleSpawnerExplosion;
 import com.barribob.MaelstromMod.entity.particleSpawners.ParticleSpawnerRainbow;
 import com.barribob.MaelstromMod.entity.particleSpawners.ParticleSpawnerSwordSwing;
@@ -131,6 +132,7 @@ public class ModEntities {
         registerEntityWithID("knight_crystal", EntityKnightCrystal.class, ENTITY_START_ID++, 50, azure);
         registerEntityWithID("maelstrom_navigator", EntityMaelstromNavigator.class, ENTITY_START_ID++, 50, maelstrom);
         registerEntityWithID("maelstrom_shielder", EntityMaelstromShielder.class, ENTITY_START_ID++, 50, maelstrom);
+        registerEntityWithID("player_base", EntityPlayerBase.class, ENTITY_START_ID++, 100, maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);
