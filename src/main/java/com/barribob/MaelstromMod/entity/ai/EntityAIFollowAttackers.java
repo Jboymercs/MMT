@@ -56,5 +56,6 @@ public class EntityAIFollowAttackers extends EntityAIBase {
     @Override
     public void startExecuting() {
         this.creature.getNavigator().tryMoveToEntityLiving(this.targetEntity, this.movementSpeed);
+
     }
 }

@@ -2,6 +2,8 @@ package com.barribob.MaelstromMod.entity.model;
 
 import com.barribob.MaelstromMod.entity.entities.EntityPlayerBase;
 import com.barribob.MaelstromMod.util.Reference;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 
@@ -20,4 +22,10 @@ public class ModelPlayerBase extends AnimatedGeoModel<EntityPlayerBase> {
     public ResourceLocation getAnimationFileLocation(EntityPlayerBase entityPlayerBase) {
         return new ResourceLocation(Reference.MOD_ID, "animations/animation.playerbase.json");
     }
+
+    public void setLivingAnimations(EntityLivingBase entityIn) {
+        ItemStack MainHand = ((EntityLivingBase) entityIn).getHeldItemMainhand();
+        ItemStack OffHand = ((EntityLivingBase) entityIn).getHeldItemOffhand();
+    }
+
 }

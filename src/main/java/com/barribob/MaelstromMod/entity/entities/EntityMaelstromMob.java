@@ -246,6 +246,13 @@ public abstract class EntityMaelstromMob extends EntityLeveledMob implements IRa
         return super.attackEntityFrom(source, amount);
     }
 
+    /**
+     *  Used for Players, NPCS for setting equipment in there hands
+     */
+    protected void setEquipment() {
+
+    }
+
     @Override
     protected void entityInit() {
         super.entityInit();

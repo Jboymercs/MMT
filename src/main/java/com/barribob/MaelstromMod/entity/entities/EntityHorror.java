@@ -160,7 +160,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
     private <E extends IAnimatable> PlayState predicateHorrorAttack(AnimationEvent<E> event) {
         if (this.isfightMode()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("shoot", false));
-            System.out.println("Playing Shoot Animation");
+
             return PlayState.CONTINUE;
         }
         event.getController().markNeedsReload();
