@@ -1,0 +1,7 @@
+{
+  "variants":
+  {
+    "half=bottom,variant=default": { "model": "mm:azure_stone_1_slab_bottom" },
+    "half=top,variant=default": { "model": "mm:azure_stone_1_slab_top" }
+  }
+}

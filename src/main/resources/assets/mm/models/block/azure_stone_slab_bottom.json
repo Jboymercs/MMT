@@ -1,0 +1,9 @@
+{
+  "parent": "block/half_slab",
+  "textures":
+  {
+    "bottom": "mm:blocks/azure_stone_0",
+    "top": "mm:blocks/azure_stone_0",
+    "side": "mm:blocks/azure_stone_0"
+  }
+}

@@ -298,6 +298,10 @@ tile.azure_planks_slab_half.name=Azure Planks Slab
 tile.azure_planks_slab_double.name=Double Azure Planks Slab
 tile.azure_stonebrick_slab_half.name=Fracture Stonebrick Slab
 tile.azure_stonebrick_slab_double.name=Double Fracture Stonebrick Slab
+tile.azure_stone_slab_half.name=Dark Fracture Slab
+tile.azure_stone_slab_double.name=Double Dark Fracture Slab
+tile.azure_stone_1_half.name=Fracture Slab
+tile.azure_stone_1_double.name=Double Fracture Slab
 
 //�����������������������������������������������������������
 // Crimson Blocks

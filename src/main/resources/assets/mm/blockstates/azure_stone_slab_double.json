@@ -1,0 +1,6 @@
+{
+  "variants":
+  {
+    "variant=default": { "model": "mm:azure_stone_slab_double" }
+  }
+}
