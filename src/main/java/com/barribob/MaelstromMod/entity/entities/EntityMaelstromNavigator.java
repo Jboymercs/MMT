@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class EntityMaelstromNavigator extends EntityMaelstromMob implements IAnimatable, IAttack, IElement {
     /**
      * The Navigator, specifically for later use, but is intended for Raids only.
-     * @param worldIn
+     * Animations, Textures and Model Additions done by UnseenDontRun
      */
     private AnimationFactory factory = new AnimationFactory(this);
     public final String IDLE_ANIM = "idle";

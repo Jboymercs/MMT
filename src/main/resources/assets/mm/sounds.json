@@ -19,6 +19,16 @@
 			}
 		]
 	},
+	"entity.horror.shoot": {
+		"category": "entity",
+		"subtitle": "entity.horror.shoot",
+		"sounds": [
+			{
+				"name": "mm:entity/horror/shoot",
+				"stream": true
+			}
+		]
+	},
 	"entity.gauntlet.hurt": {
 		"category": "entity",
 		"subtitle": "entity.gauntlet.hurt",

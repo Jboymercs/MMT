@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 public class EntityMaelstromShielder extends EntityMaelstromMob implements IAttack, IAnimatable, IElement {
     /**
      * The Shielder, first found in Lush Tier Dungeon or in Raids which will be unlocked after defeating the Crimson Kingdom
+     * Animations, and Model Texture Additions done by UnseenDontRun
      */
     public final String IDLE_ANIM = "idle";
     public final String ATTACK_ANIM = "attack";

@@ -50,6 +50,8 @@ public class SoundsHandler {
 
     public static SoundEvent ENTITY_NAVIGATOR_HORN;
 
+    public static SoundEvent ENTITY_HORROR_SHOOT;
+
     // Sound hooks
     public static class Hooks{
         public static SoundEvent ENTITY_ILLAGER_SPELL_CHARGE;
@@ -92,6 +94,7 @@ public class SoundsHandler {
         ENTITY_NAVIGATOR_HORN = registerSound("navigator.rally", "entity");
 
         ENTITY_KNIGHT_CRYSTALSUMMON = registerSound("mk.crystalsummon", "entity");
+        ENTITY_HORROR_SHOOT = registerSound("horror.shoot", "entity");
 
         Hooks.ENTITY_ILLAGER_SPELL_CHARGE = registerSound("illager.spell_charge", "entity");
         Hooks.ENTITY_ILLAGER_DOME_CHARGE = registerSound("illager.dome_charge", "entity");

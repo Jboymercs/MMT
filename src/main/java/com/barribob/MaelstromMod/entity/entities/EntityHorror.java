@@ -167,6 +167,9 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
         return PlayState.STOP;
     }
 
+    /**
+     * From now on we will use this method with combat mobs, very effective and I love it's ideals. Further expanding upon it in the player base to see how we can make it better!
+     */
     @Override
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
         this.setfightMode(true);
@@ -179,7 +182,7 @@ public class EntityHorror extends EntityMaelstromMob implements IAnimatable, IAt
         double d3 = target.posZ - this.posZ;
         float f = MathHelper.sqrt(d0 * d0 + d3 * d3) * 0.6F;
         projectile.shoot(d0, d2 + f, d3, PROJECTILE_SPEED, PROJECTILE_INACCURACY);
-        this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, 1.0F / this.getRNG().nextFloat() * 0.4F + 0.8F);
+        this.playSound(SoundsHandler.ENTITY_HORROR_SHOOT, 1.0F, 1.0F / this.getRNG().nextFloat() * 0.4F + 0.9F);
         this.world.spawnEntity(projectile);
         }, 15);
         addEvent(() -> EntityHorror.super.setfightMode(false), 22);
