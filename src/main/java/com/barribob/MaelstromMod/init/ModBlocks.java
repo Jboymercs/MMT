@@ -3,6 +3,8 @@ package com.barribob.MaelstromMod.init;
 import com.barribob.MaelstromMod.blocks.*;
 import com.barribob.MaelstromMod.blocks.key_blocks.BlockKey;
 import com.barribob.MaelstromMod.blocks.portal.*;
+import com.barribob.MaelstromMod.blocks.slab.BlockDoubleSlabBase;
+import com.barribob.MaelstromMod.blocks.slab.BlockHalfSlabBase;
 import com.barribob.MaelstromMod.entity.util.EntityAzurePortalSpawn;
 import com.barribob.MaelstromMod.entity.util.EntityCliffPortalSpawn;
 import com.barribob.MaelstromMod.entity.util.EntityCrimsonTowerSpawner;
@@ -12,6 +14,7 @@ import com.barribob.MaelstromMod.world.gen.foliage.WorldGenBigPlumTree;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenPlumTree;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenSwampTree;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -149,8 +152,11 @@ public class ModBlocks {
     public static final Block CHISELED_CLIFF_STONE = new BlockBase("chiseled_cliff_stone", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block SWAMP_BRICK = new BlockBase("swamp_brick", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block CRACKED_SWAMP_BRICK = new BlockBase("cracked_swamp_brick", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
-    //SLABS
-    public static final Block GOLD_STONE_SLAB = new BlockSlabBase("gold_stone_slab", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
+    //SLABS                                         //FIX
+
+    public static final BlockSlab GOLD_STONE_SLAB_DOUBLE = new BlockDoubleSlabBase("gold_stone_slab_double", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.GOLD_STONE_SLAB_HALF, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
+    public static final BlockSlab GOLD_STONE_SLAB_HALF = new BlockHalfSlabBase("gold_stone_slab_half", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.GOLD_STONE_SLAB_HALF, ModBlocks.GOLD_STONE_SLAB_DOUBLE, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
+    
     public static final Block CRIMSON_MAELSTROM_BRICKS = new BlockBase("crimson_maelstrom_bricks", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block CRIMSON_MAELSTROM_BRICK_FENCE = new BlockFenceBase("crimson_maelstrom_brick_fence", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block CRIMSON_MAELSTROM_BRICK_STAIRS =

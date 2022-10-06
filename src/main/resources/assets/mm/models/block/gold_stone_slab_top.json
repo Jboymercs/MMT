@@ -1,0 +1,9 @@
+{
+  "parent": "block/upper_slab",
+  "textures":
+  {
+    "bottom": "mm:blocks/gold_stone",
+    "top": "mm:blocks/gold_stone",
+    "side": "mm:blocks/gold_stone"
+  }
+}
