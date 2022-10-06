@@ -1,0 +1,9 @@
+{
+  "parent": "block/upper_slab",
+  "textures":
+  {
+    "bottom": "mm:blocks/azure_planks",
+    "top": "mm:blocks/azure_planks",
+    "side": "mm:blocks/azure_planks"
+  }
+}

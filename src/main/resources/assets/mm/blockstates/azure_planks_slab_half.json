@@ -1,0 +1,7 @@
+{
+  "variants":
+  {
+    "half=bottom,variant=default": { "model": "mm:azure_planks_slab_bottom" },
+    "half=top,variant=default": { "model": "mm:azure_planks_slab_top" }
+  }
+}

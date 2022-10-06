@@ -292,6 +292,12 @@ tile.swamp_plank_stairs.name=Swamp Plank Stairs
 tile.swamp_fence.name=Swamp Plank Fence
 tile.gold_stone_slab_half.name=Gold Stone Slab
 tile.gold_stone_slab_double.name=Double Gold Stone Slab
+tile.maelstrom_brick_slab_half.name=Maelstrom Brick Slab
+tile.maelstrom_brick_slab_double.name=Double Maelstrom Brick Slab
+tile.azure_planks_slab_half.name=Azure Planks Slab
+tile.azure_planks_slab_double.name=Double Azure Planks Slab
+tile.azure_stonebrick_slab_half.name=Fracture Stonebrick Slab
+tile.azure_stonebrick_slab_double.name=Double Fracture Stonebrick Slab
 
 //�����������������������������������������������������������
 // Crimson Blocks

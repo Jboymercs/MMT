@@ -1,0 +1,6 @@
+{
+  "variants":
+  {
+    "variant=default": { "model": "mm:maelstrom_brick_slab_double" }
+  }
+}

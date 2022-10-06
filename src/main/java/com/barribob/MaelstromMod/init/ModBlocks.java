@@ -152,11 +152,18 @@ public class ModBlocks {
     public static final Block CHISELED_CLIFF_STONE = new BlockBase("chiseled_cliff_stone", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block SWAMP_BRICK = new BlockBase("swamp_brick", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block CRACKED_SWAMP_BRICK = new BlockBase("cracked_swamp_brick", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
-    //SLABS                                         //FIX
 
+    //SLABS FOR SETS OF BLOCKS
     public static final BlockSlab GOLD_STONE_SLAB_DOUBLE = new BlockDoubleSlabBase("gold_stone_slab_double", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.GOLD_STONE_SLAB_HALF, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
+    public static final BlockSlab MAELSTROM_BRICK_SLAB_DOUBLE = new BlockDoubleSlabBase("maelstrom_brick_slab_double", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.MAELSTROM_BRICK_SLAB_HALF, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
+    public static final BlockSlab AZURE_PLANKS_SLAB_DOUBLE = new BlockDoubleSlabBase("azure_planks_slab_double", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.AZURE_PLANKS_SLAB_HALF, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.WOOD);
+    public static final BlockSlab AZURE_STONEBRICK_SLAB_DOUBLE = new BlockDoubleSlabBase("azure_stonebrick_slab_double", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.AZURE_STONEBRICK_SLAB_HALF,BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
     public static final BlockSlab GOLD_STONE_SLAB_HALF = new BlockHalfSlabBase("gold_stone_slab_half", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.GOLD_STONE_SLAB_HALF, ModBlocks.GOLD_STONE_SLAB_DOUBLE, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
-    
+    public static final BlockSlab MAELSTROM_BRICK_SLAB_HALF = new BlockHalfSlabBase("maelstrom_brick_slab_half", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.MAELSTROM_BRICK_SLAB_HALF, ModBlocks.MAELSTROM_BRICK_SLAB_DOUBLE, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
+    public static final BlockSlab AZURE_PLANKS_SLAB_HALF = new BlockHalfSlabBase("azure_planks_slab_half", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.AZURE_PLANKS_SLAB_HALF, ModBlocks.AZURE_PLANKS_SLAB_DOUBLE, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.WOOD);
+    public static final BlockSlab AZURE_STONEBRICK_SLAB_HALF = new BlockHalfSlabBase("azure_stonebrick_slab_half", Material.ROCK, ModCreativeTabs.BLOCKS, ModBlocks.AZURE_STONEBRICK_SLAB_HALF, ModBlocks.AZURE_STONEBRICK_SLAB_DOUBLE, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE);
+
+    //BLOCKS CONTINUED
     public static final Block CRIMSON_MAELSTROM_BRICKS = new BlockBase("crimson_maelstrom_bricks", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block CRIMSON_MAELSTROM_BRICK_FENCE = new BlockFenceBase("crimson_maelstrom_brick_fence", Material.ROCK, BRICK_HARDNESS, STONE_RESISTANCE, SoundType.STONE).setCreativeTab(ModCreativeTabs.BLOCKS);
     public static final Block CRIMSON_MAELSTROM_BRICK_STAIRS =

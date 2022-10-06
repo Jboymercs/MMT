@@ -1,0 +1,6 @@
+{
+  "variants":
+  {
+    "variant=default": { "model": "mm:azure_planks_slab_double" }
+  }
+}
