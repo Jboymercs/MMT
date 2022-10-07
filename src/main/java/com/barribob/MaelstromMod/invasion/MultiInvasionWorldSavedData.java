@@ -11,6 +11,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
 
 import java.util.HashSet;
 import java.util.List;
@@ -67,6 +69,7 @@ public class MultiInvasionWorldSavedData extends WorldSavedData {
 
         if (ticks == warningTime) {
             InvasionUtils.sendInvasionMessage(world, Reference.MOD_ID + ".invasion_1");
+
         }
 
         if (ticks == invasionTime) {

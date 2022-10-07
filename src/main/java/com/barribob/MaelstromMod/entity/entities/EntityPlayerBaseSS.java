@@ -11,6 +11,10 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 
 public class EntityPlayerBaseSS extends EntityPlayerBase implements IAnimatable, IAttack {
+    /**
+     * Specific Base for Sword and Shield Npcs
+     *
+     */
     public EntityPlayerBaseSS(World worldIn) {
         super(worldIn);
     }
