@@ -9,6 +9,7 @@ import com.barribob.MaelstromMod.packets.*;
 import com.barribob.MaelstromMod.util.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -43,9 +44,15 @@ public class CommonProxy {
         Main.network.registerMessage(MessageStartElytraFlying.Handler.class, MessageStartElytraFlying.class, packetId++, Side.SERVER);
         Main.network.registerMessage(MessageEmptySwing.Handler.class, MessageEmptySwing.class, packetId++, Side.SERVER);
         Main.network.registerMessage(MessagePlayDarkNexusWindSound.Handler.class, MessagePlayDarkNexusWindSound.class, packetId++, Side.CLIENT);
+        Main.network.registerMessage(MessageSyncDialogData.SyncDialogDataMessageHandler.class, MessageSyncDialogData.class, packetId++, Side.SERVER);
 
         CapabilityManager.INSTANCE.register(IMana.class, new ManaStorage(), Mana.class);
         // CapabilityManager.INSTANCE.register(IInvasion.class, new InvasionStorage(),
         // Invasion.class);
     }
+
+
+    public void openGui(String id, Object... args) {}
+
+    public void closeGui(EntityPlayer p) {}
 }

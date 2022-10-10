@@ -140,6 +140,10 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromShielder.class, RenderMaelstromShielder::new);
         // Player Base
         RenderingRegistry.registerEntityRenderingHandler(EntityPlayerBase.class, RenderPlayerBase::new);
+        //Player Dialog Base
+        RenderingRegistry.registerEntityRenderingHandler(EntityPlayerDialouge.class, RenderNPCDialog::new);
+        //Azure Beetle
+        RenderingRegistry.registerEntityRenderingHandler(EntityAzureBeetle.class, RenderAzureBeetle::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);

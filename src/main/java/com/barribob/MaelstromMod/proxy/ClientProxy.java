@@ -1,11 +1,14 @@
 package com.barribob.MaelstromMod.proxy;
 
 import com.barribob.MaelstromMod.blocks.BlockLeavesBase;
+import com.barribob.MaelstromMod.gui.Guis;
 import com.barribob.MaelstromMod.util.handlers.RenderHandler;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.IStateMapper;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -39,5 +42,17 @@ public class ClientProxy extends CommonProxy {
         //Registers Geckolib Entities
         RenderHandler.registerGeoEntityRenders();
         super.init();
+    }
+
+
+    @Override
+    public void openGui(String id, Object... args) {
+        Minecraft.getMinecraft().displayGuiScreen(Guis.getGui(id, args));
+    }
+
+    @Override
+    public void closeGui(EntityPlayer p) {
+        if(p.equals(Minecraft.getMinecraft().player))
+            Minecraft.getMinecraft().displayGuiScreen((GuiScreen)null);
     }
 }

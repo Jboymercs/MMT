@@ -6,6 +6,7 @@ import com.barribob.MaelstromMod.entity.entities.EntityMaelstromMob;
 import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModUtils;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIFleeSun;
 import net.minecraft.init.Items;
@@ -34,7 +35,7 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
      */
     private AnimationFactory factory = new AnimationFactory(this);
 
-    protected static final DataParameter<Boolean> WALK = EntityDataManager.<Boolean>createKey(EntityPlayerBase.class, DataSerializers.BOOLEAN);
+
     protected static final DataParameter<Boolean> RUN = EntityDataManager.<Boolean>createKey(EntityPlayerBase.class, DataSerializers.BOOLEAN);
 
     public final String LEGS_WALK_ANIM = "walk";
@@ -52,7 +53,7 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
     }
     public void entityInit() {
         super.entityInit();
-        this.dataManager.register(WALK, Boolean.valueOf(false));
+
         this.dataManager.register(RUN, Boolean.valueOf(false));
     }
 
@@ -123,16 +124,7 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
         return PlayState.STOP;
     }
 
-    public boolean HasTarget() {
-        EntityLivingBase target = this.getAttackTarget();
-        if (target == null) {
-            return false;
 
-        }
-        else {
-            return true;
-        }
-    }
 
     @Override
     protected void setEquipment() {
@@ -143,8 +135,7 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
     public void onUpdate() {
         super.onUpdate();
 
-        if (CAN_TARGET.apply(this)) {
-
+        if (this.getAttackTarget() != null) {
             this.setRunning(true);
         } else {
         this.setRunning(false);
@@ -157,16 +148,12 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
         return this.dataManager.get(RUN);
     }
 
-    public void setWalking(boolean value) {
-        this.dataManager.set(WALK, Boolean.valueOf(value));
-    }
 
-    public boolean isWalking() {
-        return this.dataManager.get(WALK);
-    }
 
     @Override
     public AnimationFactory getFactory() {
         return factory;
     }
+
+
 }

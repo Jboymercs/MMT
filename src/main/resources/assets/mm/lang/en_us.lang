@@ -364,6 +364,7 @@ entity.maelstrom_knight.name=Maelstrom Knight
 entity.maelstrom_navigator.name=Maelstrom Navigator
 entity.maelstrom_shielder.name=Maelstrom Shielder
 entity.player_base.name=Test Dummy
+entity.player_dialog.name=Dialog NPC
 
 //�����������������������������������������������������������
 // Projectiles
@@ -677,3 +678,9 @@ mm.dialog.armor_3=Armor points past 20, a full diamond suit, do not actually mat
 mm.dialog.armor_4=This is because the damage calculation caps armor at 20 even if the armor is stronger.
 mm.dialog.armor_5=My armor is different. It uses maelstrom armor to become stronger than diamond.
 mm.dialog.armor_6=So always buy from your trusted armorer!
+
+######################
+# NPC DIALOG
+######################
+npc.test_dummy.talk0= Hello traveller, welcome to Maelstrom!
+npc.test_dummy.talk0.option0=Thank you.
