@@ -365,6 +365,7 @@ entity.maelstrom_navigator.name=Maelstrom Navigator
 entity.maelstrom_shielder.name=Maelstrom Shielder
 entity.player_base.name=Test Dummy
 entity.player_dialog.name=Dialog NPC
+entity.azure_beetle.name=Fracture Beetle
 
 //�����������������������������������������������������������
 // Projectiles

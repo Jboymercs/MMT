@@ -127,6 +127,7 @@ public class RenderModEntity<T extends EntityLiving> extends RenderLiving<T> {
             GlStateManager.disableBlend();
             GlStateManager.disableNormalize();
 
+
             if (entity instanceof EntityLeveledMob) {
                 ((EntityLeveledMob) entity).doRender(this.renderManager, x, y, z, entityYaw, partialTicks);
                 if (ModConfig.entities.displayLevel) {

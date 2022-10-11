@@ -14,6 +14,8 @@ public class ModelAzureBeetle extends AnimatedGeoModel<EntityAzureBeetle> {
     @Override
     public ResourceLocation getTextureLocation(EntityAzureBeetle entity) {
         return new ResourceLocation(Reference.MOD_ID, "textures/entity/azure_beetle.png");
+
+
     }
 
     @Override
