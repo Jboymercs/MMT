@@ -27,7 +27,8 @@ import org.apache.logging.log4j.LogManager;
 
 import javax.annotation.Nonnull;
 
-public class EntityMaelstromFury extends EntityMaelstromMob implements IAcceleration {
+public class
+EntityMaelstromFury extends EntityMaelstromMob implements IAcceleration {
     Vec3d acceleration = Vec3d.ZERO;
     public EntityMaelstromFury(World worldIn) {
         super(worldIn);
@@ -44,15 +45,15 @@ public class EntityMaelstromFury extends EntityMaelstromMob implements IAccelera
         super.onUpdate();
         Vec3d prevAcceleration = acceleration;
         acceleration = ModUtils.getEntityVelocity(this).scale(0.1).add(this.acceleration.scale(0.9));
-        System.out.println(acceleration.y + "Accel Y");
+
         if (!world.isRemote) {
             if(prevAcceleration.y > 0 && acceleration.y <= 0) {
                 ModBBAnimations.animation(this, "fury.fly", true);
-                LogManager.getLogger().warn("Fury is Set to Ground");
+
             }
             else if (prevAcceleration.y <= 0 && acceleration.y > 0) {
                 ModBBAnimations.animation(this, "fury.fly", false);
-                LogManager.getLogger().warn("Fury is Set to Flying");
+
             }
         }
     }

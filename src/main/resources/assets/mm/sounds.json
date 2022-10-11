@@ -269,6 +269,16 @@
 			}
 		]
 	},
+	"entity.beetle.idle": {
+		"category": "entity",
+		"subtitle": "entity.beetle.idle",
+		"sounds": [
+			{
+				"name": "mm:entity/beetle/idle",
+				"steam": true
+			}
+		]
+	},
 	"entity.navigator.rally": {
 		"category": "entity",
 		"subtitle": "entity.navigator.rally",

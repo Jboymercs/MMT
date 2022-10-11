@@ -60,7 +60,7 @@ public class EntityMaelstromHealer extends EntityMaelstromMob implements IAccele
             this.moveHelper = new FlyingMoveHelper(this);
             this.navigator = new PathNavigateFlying(this, world);
             ModBBAnimations.animation(this, "healer.fly", false);
-            LogManager.getLogger().warn("Fury is Set to Flying");
+
         }
 
         // Switch to ground mode
@@ -71,7 +71,7 @@ public class EntityMaelstromHealer extends EntityMaelstromMob implements IAccele
             this.navigator = new PathNavigateGround(this, world);
             ModBBAnimations.animation(this, "healer.fly", true);
             ModBBAnimations.animation(this, "healer.fold_wing", false);
-            LogManager.getLogger().warn("Fury is Set to Ground");
+
         }
 
         if (this.getAttackTarget() == null) {

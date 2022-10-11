@@ -102,7 +102,9 @@ public class EntityMaelstromShielder extends EntityMaelstromMob implements IAtta
     public void handleStatusUpdate(byte id) {
         if (id == ModUtils.PARTICLE_BYTE) {
             if (this.getElement().equals(Element.NONE)) {
+
                 ParticleManager.spawnMaelstromPotionParticle(world, rand, this.getPositionVector().add(ModRandom.randVec()).add(ModUtils.yVec(1)), false);
+
             }
 
             ParticleManager.spawnEffect(world, this.getPositionVector().add(ModRandom.randVec()).add(ModUtils.yVec(1)), getElement().particleColor);

@@ -1,7 +1,13 @@
 package com.barribob.MaelstromMod.entity.entities;
 
+import com.barribob.MaelstromMod.entity.ai.AIRandomFly;
 import com.barribob.MaelstromMod.entity.ai.FlyingMoveHelper;
+import com.barribob.MaelstromMod.util.Element;
+import com.barribob.MaelstromMod.util.ModColors;
+import com.barribob.MaelstromMod.util.ModRandom;
 import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.handlers.ParticleManager;
+import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -12,7 +18,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateFlying;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -53,18 +61,33 @@ public class EntityAzureBeetle extends EntityLeveledMob implements IAnimatable {
     @Override
     public void initEntityAI() {
         super.initEntityAI();
+        this.tasks.addTask(4, new AIRandomFly(this));
         this.tasks.addTask(5, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.tasks.addTask(7, new EntityAIAvoidEntity<>(this, EntityPlayer.class, 8.0f, 0.2f, 0.4f));
 
 
     }
-    @Override
-    public void onUpdate () {
-      super.onUpdate();
-      this.setNoGravity(true);
-      this.noClip = false;
 
+
+
+    @Override
+    public void onEntityUpdate() {
+        super.onEntityUpdate();
+        if (rand.nextInt(20) == 0) {
+            world.setEntityState(this, ModUtils.PARTICLE_BYTE);
+        }
+
+
+    }
+    @Override
+    public void handleStatusUpdate(byte id) {
+        if (id == ModUtils.PARTICLE_BYTE) {
+            Vec3d pos = new Vec3d(-0.5, 0, posZ);
+            ParticleManager.spawnDust(world, pos.add(this.getPositionVector()), ModColors.AZURE, pos.normalize(), ModRandom.range(1, 2));
+        } else {
+            super.handleStatusUpdate(id);
+        }
     }
 
     @Override
@@ -77,10 +100,7 @@ public class EntityAzureBeetle extends EntityLeveledMob implements IAnimatable {
     }
 
     private <E extends IAnimatable>PlayState predicateBeetle(AnimationEvent<E> event) {
-        if (event.isMoving() && !this.isFlying() && this.onGround) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(WALK_ANIM, true));
-            return PlayState.CONTINUE;
-        }
+
         if (!this.onGround || this.isFlying()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(FLY_ANIM, true));
             return PlayState.CONTINUE;
@@ -96,18 +116,22 @@ public class EntityAzureBeetle extends EntityLeveledMob implements IAnimatable {
 
     @Override
     public void travel(float strafe, float vertical, float forward) {
+            double heightAboveGround;
 
-        ModUtils.aerialTravel(this, strafe, vertical, forward);
+            ModUtils.aerialTravel(this, strafe, vertical, forward);
+
+
+
     }
     public void setFlying() {
         boolean value;
         if (this.onGround) {
             value = false;
-            this.dataManager.set(FLYING, Boolean.valueOf(value));
+            this.dataManager.set(FLYING, value);
 
         }
         value = true;
-        this.dataManager.set(FLYING, Boolean.valueOf(value));
+        this.dataManager.set(FLYING, value);
 
     }
 
@@ -118,5 +142,10 @@ public class EntityAzureBeetle extends EntityLeveledMob implements IAnimatable {
     @Override
     public AnimationFactory getFactory() {
         return factory;
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundsHandler.BEETLE_IDLE;
     }
 }
