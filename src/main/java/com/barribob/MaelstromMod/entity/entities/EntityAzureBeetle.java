@@ -84,7 +84,7 @@ public class EntityAzureBeetle extends EntityLeveledMob implements IAnimatable {
     public void handleStatusUpdate(byte id) {
         if (id == ModUtils.PARTICLE_BYTE) {
             Vec3d pos = new Vec3d(-0.5, 0, posZ);
-            ParticleManager.spawnDust(world, pos.add(this.getPositionVector()), ModColors.AZURE, pos.normalize(), ModRandom.range(1, 2));
+            ParticleManager.spawnDust(world, pos.add(this.getPositionVector()), ModColors.AZURE, pos.normalize(), 10);
         } else {
             super.handleStatusUpdate(id);
         }
