@@ -135,6 +135,7 @@ public class ModEntities {
         registerEntityWithID("player_base", EntityPlayerBase.class, ENTITY_START_ID++, 100, maelstrom);
         registerEntityWithID("player_dialog", EntityPlayerDialouge.class, ENTITY_START_ID++, 100, maelstrom);
         registerEntityWithID("azure_beetle", EntityAzureBeetle.class, ENTITY_START_ID++, 100, azure);
+        registerEntityWithID("azure_wraith", EntityAzureWraith.class, ENTITY_START_ID++, 100, azure);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);

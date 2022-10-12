@@ -1,0 +1,90 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 5,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "Body",
+					"pivot": [0, 23, 0],
+					"cubes": [
+						{"origin": [-4, 19, -2], "size": [8, 7, 4], "uv": [24, 32]},
+						{"origin": [-4.5, 20.5, -2.5], "size": [9, 6, 5], "uv": [21, 0]}
+					]
+				},
+				{
+					"name": "LArmJ",
+					"parent": "Body",
+					"pivot": [4, 25, 0],
+					"cubes": [
+						{"origin": [4, 20, -1], "size": [2, 6, 2], "uv": [26, 43]},
+						{"origin": [3.5, 19.5, -1.5], "size": [3, 7, 3], "uv": [0, 9]}
+					]
+				},
+				{
+					"name": "LEJ",
+					"parent": "LArmJ",
+					"pivot": [5, 20, 0],
+					"cubes": [
+						{"origin": [4, 14, -1], "size": [2, 6, 2], "uv": [41, 11]}
+					]
+				},
+				{
+					"name": "RArmJ",
+					"parent": "Body",
+					"pivot": [-4, 25, 0],
+					"cubes": [
+						{"origin": [-6, 20, -1], "size": [2, 6, 2], "uv": [18, 42]},
+						{"origin": [-6.5, 19.5, -1.5], "size": [3, 7, 3], "uv": [0, 35]}
+					]
+				},
+				{
+					"name": "REJ",
+					"parent": "RArmJ",
+					"pivot": [-5, 20, 0],
+					"cubes": [
+						{"origin": [-6, 14, -1], "size": [2, 6, 2], "uv": [33, 11]}
+					]
+				},
+				{
+					"name": "WeaponHandleJ",
+					"parent": "REJ",
+					"pivot": [-5, 15, 0],
+					"cubes": [
+						{"origin": [-5.5, 14.5, -16], "size": [1, 1, 19], "uv": [0, 0]},
+						{"origin": [-6, 14, -20], "size": [2, 2, 4], "uv": [21, 11]},
+						{"origin": [-5, 5, -20], "size": [0, 9, 4], "uv": [12, 31]},
+						{"origin": [-5.5, 13, -19.5], "size": [1, 1, 1], "uv": [15, 9]},
+						{"origin": [-5.5, 13, -17.5], "size": [1, 1, 1], "uv": [15, 0]},
+						{"origin": [-5, 13.5, -23], "size": [0, 3, 3], "pivot": [-5, 15, -20], "rotation": [0, 0, -45], "uv": [12, 9]},
+						{"origin": [-5, 13.5, -23], "size": [0, 3, 3], "pivot": [-5, 15, -20], "rotation": [0, 0, 45], "uv": [9, 6]}
+					]
+				},
+				{
+					"name": "Torso",
+					"parent": "Body",
+					"pivot": [0, 19, 0],
+					"cubes": [
+						{"origin": [-3, 13, -1.5], "size": [6, 6, 3], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "Head",
+					"parent": "Body",
+					"pivot": [0, 26, 0],
+					"cubes": [
+						{"origin": [-3, 26, -3], "size": [6, 6, 6], "uv": [28, 20]},
+						{"origin": [-3.5, 24.5, -3.5], "size": [7, 8, 7], "uv": [0, 20]}
+					]
+				}
+			]
+		}
+	]
+}

@@ -129,14 +129,15 @@ public class RenderHandler {
     //Geckolib Handler for Rendering
 
     public static void registerGeoEntityRenders() {
-        // Azure Maelstrom
+        // Azure Maelstrom Horror Redone
         RenderingRegistry.registerEntityRenderingHandler(EntityHorror.class, RenderHorror::new);
+        //Azure Golem
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureGolem.class, RenderAzureGolem::new);
-        // Golden Valley Maelstrom
+        // Golden Valley Maelstrom Knight
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromKnight.class, RenderMaelstromKnight::new);
-        // Raid Only Maelstrom
+        // Raid Only Maelstrom Navigator
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromNavigator.class, RenderMaelstromNavigator::new);
-        // Lush Maelstrom
+        // Lush Maelstrom Shielder
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromShielder.class, RenderMaelstromShielder::new);
         // Player Base
         RenderingRegistry.registerEntityRenderingHandler(EntityPlayerBase.class, RenderPlayerBase::new);
@@ -144,6 +145,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityPlayerDialouge.class, RenderNPCDialog::new);
         //Azure Beetle
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureBeetle.class, RenderAzureBeetle::new);
+        //Azure Wraith
+        RenderingRegistry.registerEntityRenderingHandler(EntityAzureWraith.class, RenderAzureWraith::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);
