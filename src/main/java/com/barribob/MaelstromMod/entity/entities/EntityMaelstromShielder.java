@@ -165,7 +165,7 @@ public class EntityMaelstromShielder extends EntityMaelstromMob implements IAtta
     }
 
     private boolean canBlockDamageSource(DamageSource damageSourceIn) {
-        if (!damageSourceIn.isUnblockable() && !this.isfightMode()) {
+        if (!damageSourceIn.isUnblockable() && !this.isStriking() && !this.isArcLeaping()) {
             Vec3d vec3d = damageSourceIn.getDamageLocation();
 
             if (vec3d != null) {

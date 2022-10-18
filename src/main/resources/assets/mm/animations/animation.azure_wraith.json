@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"AzureWraith.animation.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
@@ -114,7 +114,7 @@
 				}
 			}
 		},
-		"AzureWraith.animation.walk": {
+		"walk": {
 			"loop": true,
 			"animation_length": 1.91667,
 			"bones": {
@@ -337,7 +337,7 @@
 				}
 			}
 		},
-		"AzureWraith.animation.strike": {
+		"strike": {
 			"animation_length": 2,
 			"bones": {
 				"Body": {
@@ -355,7 +355,7 @@
 							"vector": [20, -30, -5]
 						},
 						"1.3333": {
-							"vector": [20, "--90", -5]
+							"vector": [20, -90, -5]
 						},
 						"1.5": {
 							"vector": [20, -190, -5]
@@ -540,7 +540,7 @@
 				}
 			}
 		},
-		"AzureWraith.animation.overheadStrike": {
+		"overStrike": {
 			"animation_length": 2.5,
 			"bones": {
 				"Body": {

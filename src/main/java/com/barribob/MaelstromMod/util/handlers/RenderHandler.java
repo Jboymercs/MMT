@@ -147,6 +147,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureBeetle.class, RenderAzureBeetle::new);
         //Azure Wraith
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureWraith.class, RenderAzureWraith::new);
+        //Maelstrom Hunter
+        RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromHunter.class, RenderMaelstromHunter::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);
