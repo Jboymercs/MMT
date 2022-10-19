@@ -305,6 +305,7 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
 
     }
 
+//FIX
     public void teleportTarget(double x, double y, double z) {
         this.setPosition(x - Math.abs(1), y, z - Math.abs(1));
 

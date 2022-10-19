@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.hunter.summon": {
+		"summon": {
 			"animation_length": 2,
 			"bones": {
 				"Torso": {
@@ -311,7 +311,7 @@
 				}
 			}
 		},
-		"animation.hunter.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
@@ -452,7 +452,7 @@
 				}
 			}
 		},
-		"animation.hunter.p1simpleStrike": {
+		"oneSimpleStrike": {
 			"animation_length": 1.25,
 			"bones": {
 				"Torso": {
@@ -851,7 +851,7 @@
 				}
 			}
 		},
-		"animation.hunter.p1jumpStrike": {
+		"oneLeapAttack": {
 			"animation_length": 2,
 			"bones": {
 				"MGrowth1": {
@@ -1286,7 +1286,7 @@
 				}
 			}
 		},
-		"animation.hunter.p1teleportShoot": {
+		"oneTeleport": {
 			"animation_length": 3,
 			"bones": {
 				"MGrowth1": {
@@ -1939,7 +1939,7 @@
 				}
 			}
 		},
-		"animation.hunter.p1simpleStrikeShoot": {
+		"oneSimpleStrikeShoot": {
 			"animation_length": 1.875,
 			"bones": {
 				"Torso": {
@@ -2493,7 +2493,7 @@
 				}
 			}
 		},
-		"animation.hunter.p1overStrike": {
+		"oneOverAttack": {
 			"animation_length": 2,
 			"bones": {
 				"MGrowth1": {
@@ -3064,7 +3064,7 @@
 				}
 			}
 		},
-		"animation.hunter.walk": {
+		"walk": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -3367,7 +3367,7 @@
 				}
 			}
 		},
-		"animation.hunter.p1dash": {
+		"oneDash": {
 			"animation_length": 2,
 			"bones": {
 				"MGrowth1": {

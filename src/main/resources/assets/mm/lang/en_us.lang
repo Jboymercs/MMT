@@ -367,6 +367,7 @@ entity.player_base.name=Test Dummy
 entity.player_dialog.name=Dialog NPC
 entity.azure_beetle.name=Fracture Beetle
 entity.azure_wraith.name=Spirit Wraith
+entity.maelstrom_hunter.name=Maelstrom Hunter
 
 //�����������������������������������������������������������
 // Projectiles
