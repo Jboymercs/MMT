@@ -77,6 +77,8 @@ public abstract class EntityMaelstromMob extends EntityLeveledMob implements IRa
     protected static final DataParameter<Boolean> DEATH = EntityDataManager.<Boolean>createKey(EntityLeveledMob.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Boolean> SUMMONANIM = EntityDataManager.createKey(EntityLeveledMob.class, DataSerializers.BOOLEAN);
+
+
     public static final Predicate<Entity> CAN_TARGET = entity -> {
         boolean isConfigFriend = false;
         if (entity != null) {
