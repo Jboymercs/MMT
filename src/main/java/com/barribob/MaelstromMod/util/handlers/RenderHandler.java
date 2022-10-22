@@ -145,8 +145,9 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityPlayerDialouge.class, RenderNPCDialog::new);
         //Azure Beetle
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureBeetle.class, RenderAzureBeetle::new);
-        //Azure Wraith
+        //Azure Wraith & WraithHand
         RenderingRegistry.registerEntityRenderingHandler(EntityAzureWraith.class, RenderAzureWraith::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityWraithHand.class, RenderWraithHand::new);
         //Maelstrom Hunter
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromHunter.class, RenderMaelstromHunter::new);
 

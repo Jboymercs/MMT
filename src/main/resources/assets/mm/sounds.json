@@ -279,6 +279,26 @@
 			}
 		]
 	},
+	"entity.wraith.idle": {
+		"category": "entity",
+		"subtitle": "entity.wraith.idle",
+		"sounds": [
+			{
+				"name": "mm:entity/wraith/idle",
+				"steam": true
+			}
+		]
+	},
+	"entity.wraith.hurt": {
+		"category": "entity",
+		"subtitle": "entity.wraith.hurt",
+		"sounds": [
+			{
+				"name": "mm:entity/wraith/hurt",
+				"steam": true
+			}
+		]
+	},
 	"entity.navigator.rally": {
 		"category": "entity",
 		"subtitle": "entity.navigator.rally",

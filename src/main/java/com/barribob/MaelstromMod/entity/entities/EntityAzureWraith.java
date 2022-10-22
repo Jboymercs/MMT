@@ -5,6 +5,7 @@ import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModRandom;
 import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -239,4 +240,16 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
     public AnimationFactory getFactory() {
         return factory;
     }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return SoundsHandler.ENTITY_WRAITH_IDLE;
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+        return SoundsHandler.ENTITY_WRAITH_HURT;
+    }
+
+
 }

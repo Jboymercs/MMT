@@ -113,7 +113,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 5, 15, 0.1f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 20, 15, 0.1f));
     }
 
     @Override
@@ -197,7 +197,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
             }
         }
 
-        return 40;
+        return isBlockedbyAnimation() ? 45 : 20;
     }
     //Phase One Abilities
     private final Consumer<EntityLivingBase> AoeAttack = (target) -> {
@@ -329,6 +329,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     private final Consumer<EntityLivingBase> teleportShoot = (target) -> {
         this.setfightMode(true);
         this.setTeleport(true);
+        this.setBlockedbyanimation(true);
 
 
         addEvent(() -> {
@@ -360,6 +361,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
 
         addEvent(() -> EntityMaelstromHunter.super.setTeleport(false), 60);
         addEvent(() -> EntityMaelstromHunter.super.setfightMode(false), 60);
+        addEvent(() -> EntityMaelstromHunter.super.setBlockedbyanimation(false), 60);
     };
     //Phase 1 Abilities End
 
