@@ -13,11 +13,15 @@ public class ModelWraithHand extends AnimatedGeoModel<EntityWraithHand> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityWraithHand entityWraithHand) {
-        return new ResourceLocation(Reference.MOD_ID, "textures/entity/wraithHand.png");
+        return new ResourceLocation(Reference.MOD_ID, "textures/entity/wraith_hand.png");
     }
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityWraithHand entityWraithHand) {
         return new ResourceLocation(Reference.MOD_ID, "animations/animation.wraith_hand.json");
+    }
+
+    public void setRotationAngle(AnimatedGeoModel geoModel, float x, float y, float z) {
+
     }
 }

@@ -34,6 +34,7 @@ import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, IAttack {
@@ -78,35 +79,7 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
         return this.dataManager.get(OVERSTRIKE);
     }
 
-    private void spawnDeathHands(double pos2, double pos4, double pos6, double pos8, double pos10, double pos12 ) {
-        BlockPos upState = new BlockPos(pos2, pos8, pos4);
-        boolean indicator = false;
-        double d0 = 0.0D;
-        while(true) {
-            if (!EntityAzureWraith.this.world.isBlockNormalCube(upState, true) && EntityAzureWraith.this.world.isBlockNormalCube(upState.down(), true)) {
-                if (!EntityAzureWraith.this.world.isAirBlock(upState)) {
-                    IBlockState blockState = EntityAzureWraith.this.world.getBlockState(upState);
-                    AxisAlignedBB assignedDes = blockState.getCollisionBoundingBox(EntityAzureWraith.this.world, upState);
 
-                    if (assignedDes != null) {
-                        d0 = assignedDes.maxY;
-                    }
-                }
-                indicator = true;
-                break;
-            }
-            upState = upState.down();
-
-            if (upState.getY() < MathHelper.floor(pos6) -1) {
-                break;
-            }
-        }
-        if (indicator) {
-            //PROJECTILE
-            Vec3d spawnPos = new Vec3d(pos2, upState.getY() + d0, pos4);
-
-        }
-    }
 
     //Circle Strike Method
     private final Consumer<EntityLivingBase> circleStrike = (target) -> {
@@ -131,26 +104,83 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
 
             addEvent(() -> {
                 Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.3, 1, 0)));
+                Vec3d myPos = getPositionVector();
+                Vec3d targetPos = getAttackTarget().getPositionVector();
+                Vec3d dir = targetPos.subtract(myPos).normalize();
+                AtomicReference<Vec3d> spawnPos = new AtomicReference<>(myPos);
+                int spawn1 = 2;
+
                 DamageSource source = ModDamageSource.builder()
                         .type(ModDamageSource.MOB)
                         .directEntity(this)
                         .build();
                 float damage = 5.0f;
                 ModUtils.handleAreaImpact(2.0f, (e) -> damage, this, offset, source, 0.3f, 0, false);
-                    float f = (float) MathHelper.atan2(target.posZ - EntityAzureWraith.this.posZ, target.posX - EntityAzureWraith.this.posX);
-                for (int i = 3; i < 24;  ++i) {
-                    addEvent(() -> {
-                    double d0 = 1.5D * (double)(1 + 1);
-                        double p3 = this.posX + (double)MathHelper.cos(f) * d0;
-                        double p4 = this.posZ + (double)MathHelper.sin(f) * d0;
-                        EntityKnightCrystal crystal = new EntityKnightCrystal(this.world);
 
-                        BlockPos seePos = new BlockPos(p3 + ModRandom.getFloat(2), this.posY, p4 + ModRandom.getFloat(2));
+                        ModUtils.lineCallback(myPos.add(dir), myPos.add(dir.scale(spawn1)), spawn1 * 2, (pos, r) -> {
+
+                            spawnPos.set(pos);
+                        });
+                        Vec3d initPos = spawnPos.get();
+                        EntityWraithHand crystal = new EntityWraithHand(this.world);
+                        BlockPos seePos = new BlockPos(initPos.x, initPos.y, initPos.z);
                         crystal.setPosition(seePos);
                         this.world.spawnEntity(crystal);
-                }, i);
-                }
+
             }, 25);
+
+            addEvent(() -> {
+                Vec3d myPos = getPositionVector();
+                Vec3d targetPos = getAttackTarget().getPositionVector();
+                Vec3d dir = targetPos.subtract(myPos).normalize();
+                AtomicReference<Vec3d> spawnPos = new AtomicReference<>(myPos);
+                int spawn2 = 4;
+
+                ModUtils.lineCallback(myPos.add(dir), myPos.add(dir.scale(spawn2)), spawn2 * 2, (pos, r) -> {
+
+                    spawnPos.set(pos);
+                });
+                Vec3d initPos = spawnPos.get();
+                EntityWraithHand crystal = new EntityWraithHand(this.world);
+                BlockPos seePos = new BlockPos(initPos.x, initPos.y, initPos.z);
+                crystal.setPosition(seePos);
+                this.world.spawnEntity(crystal);
+            }, 29);
+
+        addEvent(() -> {
+            Vec3d myPos = getPositionVector();
+            Vec3d targetPos = getAttackTarget().getPositionVector();
+            Vec3d dir = targetPos.subtract(myPos).normalize();
+            AtomicReference<Vec3d> spawnPos = new AtomicReference<>(myPos);
+            int spawn3 = 6;
+
+            ModUtils.lineCallback(myPos.add(dir), myPos.add(dir.scale(spawn3)), spawn3 * 2, (pos, r) -> {
+
+                spawnPos.set(pos);
+            });
+            Vec3d initPos = spawnPos.get();
+            EntityWraithHand crystal = new EntityWraithHand(this.world);
+            BlockPos seePos = new BlockPos(initPos.x, initPos.y, initPos.z);
+            crystal.setPosition(seePos);
+            this.world.spawnEntity(crystal);
+        }, 33);
+
+        addEvent(() -> {
+            Vec3d myPos = getPositionVector();
+            Vec3d targetPos = getAttackTarget().getPositionVector();
+            Vec3d dir = targetPos.subtract(myPos).normalize();
+            AtomicReference<Vec3d> spawnPos = new AtomicReference<>(myPos);
+            int spawn4 = 8;
+            ModUtils.lineCallback(myPos.add(dir), myPos.add(dir.scale(spawn4)), spawn4 * 2, (pos, r) -> {
+
+                spawnPos.set(pos);
+            });
+            Vec3d initPos = spawnPos.get();
+            EntityWraithHand crystal = new EntityWraithHand(this.world);
+            BlockPos seePos = new BlockPos(initPos.x, initPos.y, initPos.z);
+            crystal.setPosition(seePos);
+            this.world.spawnEntity(crystal);
+        }, 38);
 
 
 
@@ -159,7 +189,7 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
     @Override
     public void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0F, 50, 9F, 0.1f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0F, 50, 9F, 0.5f));
         this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
@@ -176,8 +206,8 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
             List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(circleStrike, overStrike));
             double[] weights = {
                     // All the values to determine between the two attack
-                    1 / distance, // Simple Strike for the Wraith
-                    (distance < 4) ? 1 / distance : 1.4 / distance //Projectile Scythe Swipe, starts at 8 distance but will be greater until equal too at less that 4
+                      1 / distance, // Simple Strike for the Wraith
+                    (distance > 3) ? distance * 0.08 : 0 //Projectile Scythe Swipe, starts at 8 distance but will be greater until equal too at less that 4
             };
 
 
@@ -192,20 +222,19 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
         animationData.addAnimationController(new AnimationController(this, "azure_wraith_idle", 0, this::predicateWraith));
         animationData.addAnimationController(new AnimationController(this, "azure_wraith_attack_Move", 0, this::predicateWraithAttack));
     }
-    //This will handle the Idle when no other actions are going on
+
     private <E extends IAnimatable>PlayState predicateWraith(AnimationEvent<E> event) {
+        if (!this.isStriking() && !this.isOverStriking()) {
+            if (event.isMoving()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(WRAITH_WALK, true));
 
-        if (event.isMoving() && !this.isStriking() && !this.isOverStriking()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(WRAITH_WALK, true));
-
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(WRAITH_IDLE, true));
+            }
         }
-        else {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(WRAITH_IDLE, true));
-        }
-
         return PlayState.CONTINUE;
     }
-    //The Moving was put in here due to the moving animation stopping every so often
+
     private <E extends IAnimatable> PlayState predicateWraithAttack(AnimationEvent<E> event) {
         if (this.isStriking()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(WRAITH_ATTACK, false));
@@ -223,10 +252,7 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (this.isStriking() || this.isOverStriking()) {
-            motionZ = 0;
-            motionX = 0;
-        }
+
     }
     @Override
     public void applyEntityAttributes() {
