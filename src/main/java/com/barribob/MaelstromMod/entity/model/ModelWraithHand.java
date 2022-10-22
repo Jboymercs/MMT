@@ -18,6 +18,6 @@ public class ModelWraithHand extends AnimatedGeoModel<EntityWraithHand> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityWraithHand entityWraithHand) {
-        return new ResourceLocation(Reference.MOD_ID, "animations/animation.wraithHand.json");
+        return new ResourceLocation(Reference.MOD_ID, "animations/animation.wraith_hand.json");
     }
 }
