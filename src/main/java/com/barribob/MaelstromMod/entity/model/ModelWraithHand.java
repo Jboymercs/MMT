@@ -8,7 +8,7 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class ModelWraithHand extends AnimatedGeoModel<EntityWraithHand> {
     @Override
     public ResourceLocation getModelLocation(EntityWraithHand entityWraithHand) {
-        return new ResourceLocation(Reference.MOD_ID, "geo/entity/azure_wraith/wraithHand.geo.json");
+        return new ResourceLocation(Reference.MOD_ID, "geo/entity/azure_wraith/wraith_hand.geo.json");
     }
 
     @Override
