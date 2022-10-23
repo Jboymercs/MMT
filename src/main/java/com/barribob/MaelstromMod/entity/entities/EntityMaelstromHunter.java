@@ -19,6 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+import net.minecraftforge.event.world.NoteBlockEvent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -27,6 +28,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -62,6 +64,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     public static String ONE_IDLE = "idle";
 
     public static String TWO_WALK = "twoWalk";
+    public static String TWO_IDLE = "twoIdle";
 
     //DEATH AND SUMMON
     public static String SUMMON_ANIM = "summon";
@@ -69,6 +72,14 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     //PHASE 2
 
     public static String PHASE_TWO_CHANGE = "PhaseTwo";
+    public static String TWO_SWING = "twoSwing";
+    public static String TWO_MISSILES = "twoMissile";
+    public static String TWO_SWING_SHOOT = "twoSwingShoot";
+    public static String TWO_GLIDE = "twoGlide";
+    public static String TWO_LEAP = "twoLeap";
+
+    // PHASE 3
+    public static String PHASE_THREE_CHANGE = "PhaseThree";
 
     protected static final DataParameter<Boolean> AOEATTACK = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
 
@@ -79,6 +90,8 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     protected static final DataParameter<Boolean> PHASETHREE = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Boolean> PHASE_CHANGE = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
+
+    protected static final DataParameter<Boolean> TENTACLE_WHIP1 = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
 
 
     private AnimationFactory hunterFactory = new AnimationFactory(this);
@@ -110,7 +123,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         this.phaseHandler();
 
         if (this.isPhaseChanging()) {
-            
+
             this.motionZ = 0;
             this.motionX = 0;
 
@@ -131,6 +144,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         this.dataManager.register(PHASETWO, Boolean.valueOf(false));
         this.dataManager.register(PHASETHREE, Boolean.valueOf(false));
         this.dataManager.register(PHASE_CHANGE, Boolean.valueOf(false));
+        this.dataManager.register(TENTACLE_WHIP1, Boolean.valueOf(false));
     }
 
     //Data Manager Booleans
@@ -166,12 +180,19 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     public boolean isPhaseChanging() {
         return this.dataManager.get(PHASE_CHANGE);
     }
+    public void setTentacleWhip1(Boolean value) {
+        this.dataManager.set(TENTACLE_WHIP1, Boolean.valueOf(value));
+    }
+    public boolean isTentacleWhip1() {
+        return this.dataManager.get(TENTACLE_WHIP1);
+    }
     //Data Manager Booleans End
 
     public void phaseHandler() {
         float currentHealth = this.getHealth() / this.getMaxHealth();
-        int phaseNumber = 1;
-        //Adding a float instead of a value, that way if any configuration changes are made it'll change it here as well to flow fluidly.
+        //The Phase Handler, will handle between phase changes, with Phase 2 starting at below 20%
+        // Phase 3 starting at below 10%
+
 
         if (this.isPhaseOne() && currentHealth < 0.2) {
                 this.heal(this.getMaxHealth());
@@ -199,7 +220,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     @Override
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
         //Reference The Knight's code to see how this works
-        if (!this.isfightMode() && !this.isSummonAnim()) {
+        if (!this.isfightMode() && !this.isSummonAnim() && !this.isPhaseChanging()) {
             float HealthChange = this.getHealth()/ this.getMaxHealth();
             double distance = Math.sqrt(distanceSq);
 
@@ -222,8 +243,12 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
 
             //Phase Two Attacks Handler
             if (this.isPhaseTwo()) {
-                List<Consumer<EntityLivingBase>> attacks2 = new ArrayList<>(Arrays.asList());
+                List<Consumer<EntityLivingBase>> attacks2 = new ArrayList<>(Arrays.asList(tentacleSwing, bladeDash, fastSwingShoot, whipCharge));
                 double[] weights2 = {
+                        (distance < 5) ? 1 /distance : 0, // Phase Two Simple Swing
+                        (distance > 7) ? distance * 0.08 : 0, // Phase Two Leap Distance Attack
+                        (distance < 5) ? 1/distance : 0, // Phase Two Simple Swing + Shoot Twice
+                        (distance < 7 && distance > 3) ? 1/distance : 0 // Phase Two Dash Towards
 
                 };
                 prevAttack = ModRandom.choice(attacks2, rand, weights2).next();
@@ -243,6 +268,120 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
 
         return isBlockedbyAnimation() ? 45 : 20;
     }
+
+    // Phase Two Abilities
+    private final Consumer<EntityLivingBase> whipCharge = (target) -> {
+        this.setfightMode(true);
+        this.setArcleap(true);
+        addEvent(() -> {
+            ModUtils.leapTowards(this, target.getPositionVector(), 1.2f, 0.2f);
+        }, 7);
+
+        addEvent(() -> {
+            Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.5, 1.5, 0)));
+            DamageSource source = ModDamageSource.builder()
+                    .type(ModDamageSource.MOB)
+                    .directEntity(this)
+                    .element(getElement()).build();
+            float damage = getAttack() * getConfigFloat("hunter_tentacle");
+            ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.8f, 0, false);
+            playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP , 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
+        }, 20);
+
+        addEvent(() -> EntityMaelstromHunter.super.setfightMode(false), 33);
+        addEvent(() -> EntityMaelstromHunter.super.setArcleap(false), 33);
+    };
+    private final Consumer<EntityLivingBase> fastSwingShoot = (target) -> {
+        this.setfightMode(true);
+        this.setSlashing(true);
+        addEvent(() -> {
+            Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(4, 1.5, 0)));
+            DamageSource source = ModDamageSource.builder()
+                    .type(ModDamageSource.MOB)
+                    .directEntity(this)
+                    .element(getElement()).build();
+            float damage = getAttack() * getConfigFloat("hunter_tentacle");
+            ModUtils.handleAreaImpact(1f, (e) -> damage, this, offset, source, 0.4f, 0, false);
+            playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP , 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
+        }, 12);
+
+        addEvent(() -> {
+            float pelletCount = 10;
+            for (int i = 0; i < pelletCount; i++) {
+                float damage = this.getAttack() * getConfigFloat("hunter_shotgun");
+                ProjectileBullet bullet = new ProjectileBullet(world, this, damage, null);
+
+                Vec3d pos = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.3, 1.3, 0)));
+                Vec3d targetPos = new Vec3d(ModRandom.getFloat(3), ModRandom.getFloat(3), ModRandom.getFloat(3)).add(target.getPositionVector());
+                Vec3d velocity = targetPos.subtract(pos).normalize().scale(0.8);
+                bullet.setPosition(pos.x, pos.y, pos.z);
+                bullet.setTravelRange(5f);
+                bullet.shoot(targetPos.x, targetPos.y, targetPos.z, 0.0f, 0);
+                ModUtils.setEntityVelocity(bullet, velocity);
+                world.spawnEntity(bullet);
+            }
+            playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8F);
+        }, 20);
+
+        addEvent(()-> {
+            float pelletCount = 10;
+            for (int i = 0; i < pelletCount; i++) {
+                float damage = this.getAttack() * getConfigFloat("hunter_shotgun");
+                ProjectileBullet bullet = new ProjectileBullet(world, this, damage, null);
+
+                Vec3d pos = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.3, 1.3, 0)));
+                Vec3d targetPos = new Vec3d(ModRandom.getFloat(3), ModRandom.getFloat(3), ModRandom.getFloat(3)).add(target.getPositionVector());
+                Vec3d velocity = targetPos.subtract(pos).normalize().scale(0.8);
+                bullet.setPosition(pos.x, pos.y, pos.z);
+                bullet.setTravelRange(5f);
+                bullet.shoot(targetPos.x, targetPos.y, targetPos.z, 0.0f, 0);
+                ModUtils.setEntityVelocity(bullet, velocity);
+                world.spawnEntity(bullet);
+            }
+            playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8F);
+        }, 28);
+
+        addEvent(() -> EntityMaelstromHunter.super.setSlashing(false), 40);
+        addEvent(() -> EntityMaelstromHunter.super.setfightMode(false), 40);
+    };
+    private final Consumer<EntityLivingBase> bladeDash = (target) -> {
+        this.setfightMode(true);
+        this.setEvading(true);
+        addEvent(() -> {
+            ModUtils.leapTowards(this, target.getPositionVector(), 1.5f, 0.6f);
+        }, 10);
+        addEvent(() -> {
+            Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1, 1.5, 0)));
+            DamageSource source = ModDamageSource.builder()
+                    .type(ModDamageSource.MOB)
+                    .directEntity(this)
+                    .element(getElement()).build();
+            float damage = getAttack() * getConfigFloat("hunter_blade");
+            ModUtils.handleAreaImpact(0.8f, (e) -> damage, this, offset, source, 0.7f, 0, false);
+            playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP , 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
+        }, 26);
+        addEvent(() -> EntityMaelstromHunter.super.setfightMode(false), 40);
+        addEvent(() -> EntityMaelstromHunter.super.setEvading(false), 40);
+    };
+    private final Consumer<EntityLivingBase> tentacleSwing = (target) -> {
+        this.setfightMode(true);
+        this.setTentacleWhip1(true);
+        addEvent(() -> {
+            ModUtils.leapTowards(this, target.getPositionVector(), 0.3f, 0.1f);
+        }, 20);
+        addEvent(() -> {
+            Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(3, 1.0, 0)));
+            DamageSource source = ModDamageSource.builder()
+                    .type(ModDamageSource.MOB)
+                    .directEntity(this)
+                    .element(getElement()).build();
+            float damage = getAttack() * getConfigFloat("hunter_tentacle");
+            ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.7f, 0, false);
+            playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP , 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
+        }, 25);
+        addEvent(() -> EntityMaelstromHunter.super.setfightMode(false), 40);
+        addEvent(() -> this.setTentacleWhip1(false), 40);
+    };
     //Phase One Abilities
     private final Consumer<EntityLivingBase> AoeAttack = (target) -> {
       this.setfightMode(true);
@@ -426,12 +565,38 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         animationData.addAnimationController(new AnimationController(this, "hunter_movement", 0, this::predicateHunter));
         animationData.addAnimationController(new AnimationController(this, "hunter_summonDeath", 0, this::predicateSummonDeath));
         animationData.addAnimationController(new AnimationController(this, "hunter_phases", 0, this::predicatePhaseChange));
+        animationData.addAnimationController(new AnimationController(this, "hunter_phaseTwo", 0, this::predicatePhaseTwo));
+        animationData.addAnimationController(new AnimationController(this, "hunter_movement2", 0, this::predicateHunter2));
 
     }
 
+    private <E extends IAnimatable> PlayState predicateHunter2(AnimationEvent<E> event) {
+        if (!this.isPhaseChanging()) {
+            if (event.isMoving()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_WALK, true));
+            } else {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_IDLE, true));
+
+            }
+        }
+        //Determines PlayState
+        if (this.isPhaseThree()) {
+            return PlayState.STOP;
+        }
+        if (this.isPhaseOne()) {
+            return PlayState.STOP;
+        }
+        if (this.isfightMode()) {
+            event.getController().markNeedsReload();
+            return PlayState.STOP;
+        }
+        else {
+            return PlayState.CONTINUE;
+        }
+    }
     private <E extends IAnimatable>PlayState predicateHunter(AnimationEvent<E> event) {
-        //checking to see if it is in the middle of Death or Summon Anim
-        if (!this.isSummonAnim() && !this.isDeath()) {
+        //checking to see if it's in SummonAnim
+        if (!this.isSummonAnim() && !this.isPhaseChanging()) {
             if (this.isPhaseOne()) {
                 //Checking to see if it's in combat animation
                 if (event.isMoving() && !this.isfightMode()) {
@@ -439,34 +604,37 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
 
                 } else {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(ONE_IDLE, true));
-                }
 
-            }
-            if (this.isPhaseTwo()) {
-                if (event.isMoving() && !this.isfightMode()) {
-                    event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_WALK, true));
                 }
-                // IDLE ANIMATION
 
             }
         }
-
-        return PlayState.CONTINUE;
-    }
-    private <E extends IAnimatable> PlayState predicatePhaseChange(AnimationEvent<E> event) {
-
-        if (this.isPhaseChanging() && this.isPhaseTwo()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(PHASE_TWO_CHANGE, false));
+        //Determines PlayState
+        if (this.isPhaseTwo()) {
+            return PlayState.STOP;
+        }
+        else {
             return PlayState.CONTINUE;
         }
-
+    }
+    private <E extends IAnimatable> PlayState predicatePhaseChange(AnimationEvent<E> event) {
+        if (this.isPhaseChanging()) {
+            if (this.isPhaseTwo()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(PHASE_TWO_CHANGE, false));
+                return PlayState.CONTINUE;
+            }
+            if(this.isPhaseThree()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(PHASE_THREE_CHANGE, false));
+                return PlayState.CONTINUE;
+            }
+        }
         event.getController().markNeedsReload();
         return PlayState.STOP;
     }
 
 
     private <E extends IAnimatable>PlayState predicatePhaseOne(AnimationEvent<E> event) {
-        if (!this.isDeath()) {
+        if (!this.isPhaseChanging()) {
             if (this.isPhaseOne()) {
                 if (this.isStriking()) {
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(SIMPLE_ATTACK, false));
@@ -494,6 +662,33 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
                 }
 
             }
+
+        }
+
+        event.getController().markNeedsReload();
+        return PlayState.STOP;
+    }
+    private <E extends IAnimatable> PlayState predicatePhaseTwo(AnimationEvent<E> event) {
+        if (this.isPhaseTwo() && !this.isPhaseChanging()) {
+            if (this.isTentacleWhip1()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_SWING, false));
+                return PlayState.CONTINUE;
+            }
+            if (this.isEvading()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_LEAP, false));
+                return PlayState.CONTINUE;
+            }
+            if (this.isArcLeaping()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_GLIDE, false));
+                return PlayState.CONTINUE;
+            }
+            if (this.isSlashing()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_SWING_SHOOT, false));
+                return PlayState.CONTINUE;
+            }
+
+
+
 
         }
 
