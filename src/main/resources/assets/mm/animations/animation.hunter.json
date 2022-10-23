@@ -3895,7 +3895,7 @@
 				}
 			}
 		},
-		"animation.hunter.switchPhase2": {
+		"PhaseTwo": {
 			"animation_length": 3.75,
 			"bones": {
 				"Torso": {
@@ -4267,7 +4267,7 @@
 				}
 			}
 		},
-		"animation.hunter.p2walk": {
+		"twoWalk": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {

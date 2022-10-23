@@ -57,12 +57,18 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     public static String AOE_ATTACK = "oneOverAttack";
     public static String RANGE_TELEPORT = "oneTeleport";
 
-    //BASIC MOVEMENTS PHASE 1
+    //BASIC MOVEMENTS ALL PHASES
     public static String ONE_WALK = "walk";
     public static String ONE_IDLE = "idle";
 
+    public static String TWO_WALK = "twoWalk";
+
     //DEATH AND SUMMON
     public static String SUMMON_ANIM = "summon";
+
+    //PHASE 2
+
+    public static String PHASE_TWO_CHANGE = "PhaseTwo";
 
     protected static final DataParameter<Boolean> AOEATTACK = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
 
@@ -71,6 +77,8 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     protected static final DataParameter<Boolean> PHASETWO = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
 
     protected static final DataParameter<Boolean> PHASETHREE = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
+
+    protected static final DataParameter<Boolean> PHASE_CHANGE = EntityDataManager.createKey(EntityMaelstromHunter.class, DataSerializers.BOOLEAN);
 
 
     private AnimationFactory hunterFactory = new AnimationFactory(this);
@@ -93,20 +101,19 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         super(worldIn);
         this.setSize(0.9f, 2.9f);
         this.healthScaledAttackFactor = 0.3;
+        this.setPhaseone(true);
     }
     @Override
     public void onUpdate() {
         super.onUpdate();
         this.bossInfo.setPercent(this.getHealth()/ this.getMaxHealth());
+        this.phaseHandler();
 
-        if (PhaseNumber == 1) {
-            this.setPhaseone(true);
-        }
-        if (PhaseNumber == 2) {
-            this.setPhasetwo(true);
-        }
-        if (PhaseNumber == 3) {
-            this.setPhasethree(true);
+        if (this.isPhaseChanging()) {
+            
+            this.motionZ = 0;
+            this.motionX = 0;
+
         }
     }
 
@@ -123,6 +130,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         this.dataManager.register(PHASEONE, Boolean.valueOf(false));
         this.dataManager.register(PHASETWO, Boolean.valueOf(false));
         this.dataManager.register(PHASETHREE, Boolean.valueOf(false));
+        this.dataManager.register(PHASE_CHANGE, Boolean.valueOf(false));
     }
 
     //Data Manager Booleans
@@ -150,7 +158,43 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
     public boolean isPhaseThree() {
         return this.dataManager.get(PHASETHREE);
     }
+
+    public void setPhaseChange(boolean value) {
+        this.dataManager.set(PHASE_CHANGE, Boolean.valueOf(value));
+    }
+
+    public boolean isPhaseChanging() {
+        return this.dataManager.get(PHASE_CHANGE);
+    }
     //Data Manager Booleans End
+
+    public void phaseHandler() {
+        float currentHealth = this.getHealth() / this.getMaxHealth();
+        int phaseNumber = 1;
+        //Adding a float instead of a value, that way if any configuration changes are made it'll change it here as well to flow fluidly.
+
+        if (this.isPhaseOne() && currentHealth < 0.2) {
+                this.heal(this.getMaxHealth());
+                this.setPhasetwo(true);
+                this.setPhaseChange(true);
+                this.setPhaseone(false);
+                System.out.println("set to Phase 2");
+                addEvent(() -> {
+                this.setPhaseChange(false);
+                }, 75);
+        }
+        if (this.isPhaseTwo() && currentHealth < 0.1) {
+            this.heal(this.getMaxHealth());
+            this.setPhasethree(true);
+            this.setPhaseChange(true);
+            this.setPhasetwo(false);
+            System.out.println("set to Phase 3");
+            addEvent(() -> {
+                this.setPhaseChange(false);
+            }, 60);
+        }
+    }
+
 
     @Override
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
@@ -160,7 +204,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
             double distance = Math.sqrt(distanceSq);
 
             //Phase One Attacks Handler
-            if (!this.isPhaseTwo() && !this.isPhaseThree()) {
+            if (this.isPhaseOne()) {
                 List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleStrike, leapAttack, simpleStrikeRanged, teleportShoot, DashAttack, AoeAttack));
                 double[] weights = {
                         (distance < 4) ? 1 / distance : 0, // Phase One Simple Strike
@@ -370,27 +414,7 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
 
     }
 
-    public int PhaseNumber = 1;
-    @Override
-    public void onDeath(DamageSource cause) {
-        if (this.isPhaseOne()) {
-            this.setHealth(300.0f * getElement().id);
-            PhaseNumber = 2;
-            this.setPhasetwo(true);
-            this.setPhaseone(false);
-        }
-        if (this.isPhaseTwo() && PhaseNumber == 2) {
-            this.setHealth(getMaxHealth());
-            PhaseNumber = 3;
-            this.setPhasethree(true);
-            this.setPhasetwo(false);
 
-        }
-        if (this.isPhaseThree() && PhaseNumber == 3) {
-            this.setDead();
-        }
-    super.onDeath(cause);
-    }
 
     public void teleportRandom(double x, double y, double z) {
         this.setPosition(x + ModRandom.getFloat(5), y, z + ModRandom.getFloat(5));
@@ -401,25 +425,43 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         animationData.addAnimationController(new AnimationController(this, "hunter_phaseOne", 0, this::predicatePhaseOne));
         animationData.addAnimationController(new AnimationController(this, "hunter_movement", 0, this::predicateHunter));
         animationData.addAnimationController(new AnimationController(this, "hunter_summonDeath", 0, this::predicateSummonDeath));
+        animationData.addAnimationController(new AnimationController(this, "hunter_phases", 0, this::predicatePhaseChange));
 
     }
 
     private <E extends IAnimatable>PlayState predicateHunter(AnimationEvent<E> event) {
         //checking to see if it is in the middle of Death or Summon Anim
         if (!this.isSummonAnim() && !this.isDeath()) {
-            //Checking to see if it's in combat animation
-            if (event.isMoving() &&  !this.isfightMode()) {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(ONE_WALK, true));
+            if (this.isPhaseOne()) {
+                //Checking to see if it's in combat animation
+                if (event.isMoving() && !this.isfightMode()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(ONE_WALK, true));
+
+                } else {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(ONE_IDLE, true));
+                }
 
             }
-            else {
-                event.getController().setAnimation(new AnimationBuilder().addAnimation(ONE_IDLE, true));
-            }
+            if (this.isPhaseTwo()) {
+                if (event.isMoving() && !this.isfightMode()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_WALK, true));
+                }
+                // IDLE ANIMATION
 
+            }
         }
 
-
         return PlayState.CONTINUE;
+    }
+    private <E extends IAnimatable> PlayState predicatePhaseChange(AnimationEvent<E> event) {
+
+        if (this.isPhaseChanging() && this.isPhaseTwo()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(PHASE_TWO_CHANGE, false));
+            return PlayState.CONTINUE;
+        }
+
+        event.getController().markNeedsReload();
+        return PlayState.STOP;
     }
 
 
