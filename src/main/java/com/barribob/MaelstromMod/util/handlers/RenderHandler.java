@@ -153,5 +153,7 @@ public class RenderHandler {
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);
+        // Hunter Missile
+        RenderingRegistry.registerEntityRenderingHandler(EntityHunterMissile.class, RenderHunterMissile::new);
     }
 }

@@ -15,6 +15,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
@@ -243,12 +244,13 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
 
             //Phase Two Attacks Handler
             if (this.isPhaseTwo()) {
-                List<Consumer<EntityLivingBase>> attacks2 = new ArrayList<>(Arrays.asList(tentacleSwing, bladeDash, fastSwingShoot, whipCharge));
+                List<Consumer<EntityLivingBase>> attacks2 = new ArrayList<>(Arrays.asList(tentacleSwing, bladeDash, fastSwingShoot, whipCharge, summonMissiles));
                 double[] weights2 = {
                         (distance < 5) ? 1 /distance : 0, // Phase Two Simple Swing
                         (distance > 7) ? distance * 0.08 : 0, // Phase Two Leap Distance Attack
                         (distance < 5) ? 1/distance : 0, // Phase Two Simple Swing + Shoot Twice
-                        (distance < 7 && distance > 3) ? 1/distance : 0 // Phase Two Dash Towards
+                        (distance < 7 && distance > 3) ? 1/distance : 0, // Phase Two Dash Towards
+                        (distance > 7) ? distance * 0.08 : 0 // Phase Two Summon Missiles
 
                 };
                 prevAttack = ModRandom.choice(attacks2, rand, weights2).next();
@@ -269,6 +271,31 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         return isBlockedbyAnimation() ? 45 : 20;
     }
 
+    private final Consumer<EntityLivingBase> summonMissiles = (target) -> {
+        this.setfightMode(true);
+        this.setAoeAttack(true);
+        addEvent(() -> {
+            if (target.isEntityAlive()) {
+                Vec3d summonPos = this.getPositionVector();
+                BlockPos posToo = new BlockPos(summonPos.x + 2, summonPos.y + 5, summonPos.z);
+                EntityHunterMissile missile1 = new EntityHunterMissile(this.world);
+                missile1.setPosition(posToo.getX(), posToo.getY(), posToo.getZ());
+                this.world.spawnEntity(missile1);
+
+            }
+
+            if (target.isEntityAlive()) {
+                Vec3d summonPos = this.getPositionVector();
+                BlockPos posToo = new BlockPos(summonPos.x - 2, summonPos.y + 5, summonPos.z);
+                EntityHunterMissile missile1 = new EntityHunterMissile(this.world);
+                missile1.setPosition(posToo.getX(), posToo.getY(), posToo.getZ());
+                this.world.spawnEntity(missile1);
+
+            }
+        }, 19);
+        addEvent(() -> this.setAoeAttack(false), 40);
+        addEvent(() -> EntityMaelstromHunter.super.setfightMode(false), 40);
+    };
     // Phase Two Abilities
     private final Consumer<EntityLivingBase> whipCharge = (target) -> {
         this.setfightMode(true);
@@ -684,6 +711,10 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
             }
             if (this.isSlashing()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_SWING_SHOOT, false));
+                return PlayState.CONTINUE;
+            }
+            if (this.isAoeAttack()) {
+                event.getController().setAnimation(new AnimationBuilder().addAnimation(TWO_MISSILES, false));
                 return PlayState.CONTINUE;
             }
 
