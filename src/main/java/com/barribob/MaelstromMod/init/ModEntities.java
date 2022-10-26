@@ -190,6 +190,7 @@ public class ModEntities {
         registerEntity("crimson_crystal", EntityCrimsonCrystal.class, PROJECTILE_START_ID++, 60);
         registerEntity("knight_slash", ProjectileKnightSlash.class, PROJECTILE_START_ID++, 40);
         registerEntity("hunter_missile", EntityHunterMissile.class, PROJECTILE_START_ID++, 60);
+        registerEntity("missile_projectile", ProjectileMissile.class, PROJECTILE_START_ID++, 60);
 
 
 

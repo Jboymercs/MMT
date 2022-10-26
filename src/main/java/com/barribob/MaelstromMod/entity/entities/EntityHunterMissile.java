@@ -48,6 +48,11 @@ public class EntityHunterMissile extends Entity implements IAnimatable {
         this.setSize(0.5f, 0.5f);
 
     }
+    public EntityHunterMissile(World worldIn, EntityLeveledMob shootingEntity) {
+        super(worldIn);
+        this.shootingEntity = shootingEntity;
+        this.setSize(0.5f, 0.5f);
+    }
 
     @Override
     public void entityInit() {
