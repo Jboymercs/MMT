@@ -230,6 +230,12 @@ tile.maelstrom_stonebrick_stairs.name=Maelstrom Stonebrick Stairs
 tile.maelstrom_stonebrick_fence.name=Maelstrom Stonebrick Fence
 tile.azure_portal.name=Fracture Portal
 
+
+//�����������������������������������������������������������
+// Nether
+//�����������������������������������������������������������
+tile.fiery_stonebrick.name=Fiery Stonebrick
+
 //�����������������������������������������������������������
 // Maelstrom Fortress Blocks
 //�����������������������������������������������������������
