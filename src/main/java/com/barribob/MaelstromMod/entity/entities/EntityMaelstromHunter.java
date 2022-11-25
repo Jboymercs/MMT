@@ -137,6 +137,8 @@ public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack
         this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 20, 15, 0.1f));
     }
 
+
+
     @Override
     public void entityInit() {
         super.entityInit();

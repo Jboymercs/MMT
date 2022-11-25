@@ -7,6 +7,7 @@ import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityCrimsonCrystal;
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityMaelstromGauntlet;
 import com.barribob.MaelstromMod.entity.entities.npc.*;
 import com.barribob.MaelstromMod.entity.entities.EntityPlayerBase;
+import com.barribob.MaelstromMod.entity.entities.overworld.EntityNetherKnight;
 import com.barribob.MaelstromMod.entity.model.*;
 import com.barribob.MaelstromMod.entity.projectile.*;
 import com.barribob.MaelstromMod.entity.render.*;
@@ -150,6 +151,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityWraithHand.class, RenderWraithHand::new);
         //Maelstrom Hunter
         RenderingRegistry.registerEntityRenderingHandler(EntityMaelstromHunter.class, RenderMaelstromHunter::new);
+        // Nether Knight - Overworld
+        RenderingRegistry.registerEntityRenderingHandler(EntityNetherKnight.class, RenderNetherKnight::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);

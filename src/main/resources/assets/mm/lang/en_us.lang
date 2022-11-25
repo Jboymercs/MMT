@@ -369,6 +369,7 @@ entity.azure_beetle.name=Fracture Beetle
 entity.azure_wraith.name=Spirit Wraith
 entity.maelstrom_hunter.name=Maelstrom Hunter
 entity.wraith_hand.name=Wraith Hand
+entity.nether_knight.name=Nether Knight
 
 //�����������������������������������������������������������
 // Projectiles
