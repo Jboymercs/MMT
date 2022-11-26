@@ -234,7 +234,11 @@ tile.azure_portal.name=Fracture Portal
 //�����������������������������������������������������������
 // Nether
 //�����������������������������������������������������������
-tile.fiery_stonebrick.name=Fiery Stonebrick
+tile.fiery_stonebrick.name=Burnt Stonebrick
+tile.fiery_stonebrick_decor.name=Tempered Burnt Stonebrick
+tile.fiery_stone_stairs.name=Burnt Stonebrick Stairs
+tile.fiery_stone_slab_double.name=Doubled Burnt Slab
+tile.fiery_stone_slab_half.name=Burnt Stonebrick Slab
 
 //�����������������������������������������������������������
 // Maelstrom Fortress Blocks

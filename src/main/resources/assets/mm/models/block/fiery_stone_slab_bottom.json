@@ -1,0 +1,9 @@
+{
+  "parent": "block/half_slab",
+  "textures":
+  {
+    "bottom": "mm:blocks/fiery_stonebrick",
+    "top": "mm:blocks/fiery_stonebrick",
+    "side": "mm:blocks/fiery_stonebrick"
+  }
+}

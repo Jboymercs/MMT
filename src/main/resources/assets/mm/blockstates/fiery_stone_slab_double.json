@@ -1,0 +1,6 @@
+{
+  "variants":
+  {
+    "variant=default": { "model": "mm:fiery_stone_slab_double" }
+  }
+}
