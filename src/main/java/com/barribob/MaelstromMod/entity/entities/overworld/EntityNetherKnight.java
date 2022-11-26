@@ -252,9 +252,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                         for (int i = 0; i < 180; i += 60) {
                         addEvent(() -> {
                             ProjectileMonolithFireball meteor = new ProjectileMonolithFireball(world, this, this.getAttack() * this.getConfigFloat("nether_knight_fireball"), null);
-                            Vec3d pos = target.getPositionVector().add(ModUtils.yVec(ModRandom.range(20, 25)));
+                            Vec3d pos = target.getPositionVector().add(ModUtils.yVec(ModRandom.range(14, 16)));
                             meteor.setPosition(pos.x, pos.y, pos.z);
-                            meteor.shoot(this, 90, 0, 0.0F, 0.5f, 0);
+                            meteor.shoot(this, 90, 0, 0.0F, 0.3f, 0);
                             meteor.motionX -= this.motionX;
                             meteor.motionZ -= this.motionZ;
                             meteor.setTravelRange(100f);
