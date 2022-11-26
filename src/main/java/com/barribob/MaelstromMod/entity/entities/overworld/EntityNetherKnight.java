@@ -124,9 +124,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             this.motionZ = 0;
             this.motionY = 0;
         }
-        if (!this.isFightMode()) {
-            this.moveTowards();
-        }
+
     }
 
 
