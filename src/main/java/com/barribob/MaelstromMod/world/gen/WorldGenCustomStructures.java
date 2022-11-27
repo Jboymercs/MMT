@@ -15,6 +15,8 @@ import com.barribob.MaelstromMod.util.handlers.LootTableHandler;
 import com.barribob.MaelstromMod.world.biome.BiomeCliffSwamp;
 import com.barribob.MaelstromMod.world.dimension.crimson_kingdom.WorldGenCrimsonKingdomChunk;
 import com.barribob.MaelstromMod.world.dimension.dark_nexus.WorldGenDarkNexus;
+import com.barribob.MaelstromMod.world.dimension.nether.ChunkGeneratorNether;
+import com.barribob.MaelstromMod.world.dimension.nether.DimensionNether;
 import com.barribob.MaelstromMod.world.dimension.nexus.DimensionNexus;
 import com.barribob.MaelstromMod.world.gen.cliff.WorldGenCliffLedge;
 import com.barribob.MaelstromMod.world.gen.cliff.WorldGenCliffStructureLedge;
@@ -25,6 +27,7 @@ import com.barribob.MaelstromMod.world.gen.foliage.WorldGenCliffShrub;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenSwampVines;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenWaterfall;
 import com.barribob.MaelstromMod.world.gen.maelstrom_castle.WorldGenMaelstromCastle;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.MapGenNetherFortress;
 import com.barribob.MaelstromMod.world.gen.nexus.WorldGenCrimsonTower;
 import com.barribob.MaelstromMod.world.gen.nexus.WorldGenNexusIslands;
 import net.minecraft.init.Blocks;
@@ -34,9 +37,14 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeHell;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 import java.util.ArrayList;
@@ -303,6 +311,17 @@ public class WorldGenCustomStructures implements IWorldGenerator {
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         int x = chunkX * 16;
         int z = chunkZ * 16;
+
+        if(chunkProvider.isChunkGeneratedAt(chunkX, chunkZ)) {
+            switch (world.provider.getDimension()) {
+                case -1:
+                    new ChunkGeneratorNether(world, world.getSeed(), true, "");
+                    break;
+            }
+
+        }
+
+
         if (world.provider.getDimension() == ModConfig.world.crimson_kingdom_dimension_id) {
             int chunkModX = Math.floorMod(chunkX, DimensionNexus.NexusStructureSpacing);
             int chunkModZ = Math.floorMod(chunkZ, DimensionNexus.NexusStructureSpacing);
@@ -360,7 +379,14 @@ public class WorldGenCustomStructures implements IWorldGenerator {
                         BiomeInit.AZURE_LIGHT.getClass());
             }
         }
+
+
     }
+
+    public static final int STRUCTURE_SPACING_CHUNKS = 25;
+    public static final int FORTRESS_NUMBER = 0;
+
+
 
     /**
      * Generates a structure in the chunk based if in the specific biome

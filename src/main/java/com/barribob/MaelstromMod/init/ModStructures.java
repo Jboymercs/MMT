@@ -10,6 +10,7 @@ import com.barribob.MaelstromMod.world.gen.maelstrom_stronghold.MapGenMaelstromS
 import com.barribob.MaelstromMod.world.gen.maelstrom_stronghold.StrongholdTemplate;
 import com.barribob.MaelstromMod.world.gen.mineshaft.AzureMineshaftTemplate;
 import com.barribob.MaelstromMod.world.gen.mineshaft.MapGenAzureMineshaft;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.FortressTemplateK;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
 public class ModStructures {
@@ -24,5 +25,6 @@ public class ModStructures {
         MapGenStructureIO.registerStructureComponent(RuinsTemplate.class, "GRP");
         MapGenStructureIO.registerStructure(MapGenHoleTemple.Start.class, "Hole Temple");
         MapGenStructureIO.registerStructureComponent(HoleTempleTemplate.class, "HTP");
+        MapGenStructureIO.registerStructureComponent(FortressTemplateK.class, "Nether Knight Fortress");
     }
 }

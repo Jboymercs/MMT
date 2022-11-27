@@ -6,6 +6,7 @@ import com.barribob.MaelstromMod.world.dimension.azure_dimension.DimensionAzure;
 import com.barribob.MaelstromMod.world.dimension.cliff.DimensionCliff;
 import com.barribob.MaelstromMod.world.dimension.crimson_kingdom.DimensionCrimsonKingdom;
 import com.barribob.MaelstromMod.world.dimension.dark_nexus.DimensionDarkNexus;
+import com.barribob.MaelstromMod.world.dimension.nether.DimensionNether;
 import com.barribob.MaelstromMod.world.dimension.nexus.DimensionNexus;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -19,6 +20,8 @@ public class ModDimensions {
     public static final DimensionType DARK_NEXUS = DimensionType.register("dark_nexus", "_dark_nexus", ModConfig.world.dark_nexus_dimension_id, DimensionDarkNexus.class, false);
     public static final DimensionType CRIMSON_KINGDOM = DimensionType.register("crimson_kingdom", "_crimson_kingdom", ModConfig.world.crimson_kingdom_dimension_id, DimensionCrimsonKingdom.class, false);
 
+    public static final DimensionType NETHER_ADDITIONS = DimensionType.register("nether", "_nether", -1, DimensionNether.class, false);
+
     public static void registerDimensions() {
         if(!ModConfig.world.disableDimensions) {
             DimensionManager.registerDimension(ModConfig.world.fracture_dimension_id, AZURE);
@@ -26,6 +29,7 @@ public class ModDimensions {
             DimensionManager.registerDimension(ModConfig.world.cliff_dimension_id, CLIFF);
             DimensionManager.registerDimension(ModConfig.world.dark_nexus_dimension_id, DARK_NEXUS);
             DimensionManager.registerDimension(ModConfig.world.crimson_kingdom_dimension_id, CRIMSON_KINGDOM);
+
         }
     }
 }

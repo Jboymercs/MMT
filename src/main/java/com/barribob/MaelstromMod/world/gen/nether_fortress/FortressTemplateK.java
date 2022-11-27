@@ -11,7 +11,6 @@ import com.barribob.MaelstromMod.util.Element;
 import com.barribob.MaelstromMod.util.handlers.LevelHandler;
 import com.barribob.MaelstromMod.util.handlers.LootTableHandler;
 import com.barribob.MaelstromMod.world.gen.ModStructureTemplate;
-import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.Rotation;
@@ -25,10 +24,10 @@ import java.util.Random;
 /**
 * The Nether Fortress that will hold the Fallen Nether Apostle, will also have Fiery Remnants and some decent loot to it.
  */
-public class FortressTemplate extends ModStructureTemplate {
+public class FortressTemplateK extends ModStructureTemplate {
 
 
-    public FortressTemplate(TemplateManager manager, String type, BlockPos pos, Rotation rotation, int distance, boolean overwriteIn) {
+    public FortressTemplateK(TemplateManager manager, String type, BlockPos pos, Rotation rotation, int distance, boolean overwriteIn) {
         super(manager, type, pos, distance, rotation, overwriteIn);
     }
 
@@ -92,6 +91,7 @@ public class FortressTemplate extends ModStructureTemplate {
                 worldIn.setBlockToAir(pos);
             }
         }
+        // Mob Spawner for Nether Knight
         else if (function.startsWith("boss")) {
             worldIn.setBlockState(pos, ModBlocks.BOSS_SPAWNER.getDefaultState(), 2);
             TileEntity tile = worldIn.getTileEntity(pos);
