@@ -4,7 +4,7 @@ import com.barribob.MaelstromMod.Main;
 import com.barribob.MaelstromMod.gui.MaelstromCreativeTab;
 import com.barribob.MaelstromMod.init.ModBlocks;
 import com.barribob.MaelstromMod.util.IHasModel;
-import javafx.beans.property.Property;
+//import javafx.beans.property.Property; #package doesn't exist for me, so I can't build the mod with this not commented out -- FakeDrayn
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPurpurSlab;
 import net.minecraft.block.BlockSlab;

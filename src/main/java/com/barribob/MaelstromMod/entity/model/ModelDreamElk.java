@@ -110,7 +110,7 @@ public class ModelDreamElk extends ModelBase {
         this.backLeftThigh = new ModelRenderer(this, 78, 29);
         this.backLeftThigh.setRotationPoint(4.0F, 9.0F, 11.0F);
         this.backLeftThigh.addBox(-2.5F, -2.0F, -2.5F, 4, 9, 5, 0.0F);
-        this.rightEar = new ModelRenderer(this, 60, 0);
+        this.rightEar = new ModelRenderer(this, 70, 0);
         this.rightEar.setRotationPoint(0.0F, 0.0F, -0.0F);
         this.rightEar.addBox(-4.25F, -4.0F, 2.7F, 2, 2, 1, 0.0F);
         this.backLeftLeg = new ModelRenderer(this, 78, 43);
@@ -229,7 +229,7 @@ public class ModelDreamElk extends ModelBase {
         this.horn6.setRotationPoint(6.1F, -4.4F, 8.3F);
         this.horn6.addBox(0.0F, 0.0F, 0.0F, 4, 1, 1, 0.0F);
         this.setRotateAngle(horn6, 0.091106186954104F, -1.4100515026862188F, -2.1855012893472994F);
-        this.leftEar = new ModelRenderer(this, 60, 0);
+        this.leftEar = new ModelRenderer(this, 70, 0);
         this.leftEar.setRotationPoint(0.0F, 2.8F, -0.0F);
         this.leftEar.addBox(2.45F, -6.9F, 2.8F, 2, 2, 1, 0.0F);
         this.mane = new ModelRenderer(this, 58, 0);
