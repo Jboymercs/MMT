@@ -22,14 +22,6 @@
 						"1.3333": {
 							"vector": [0, 0, 360]
 						}
-					},
-					"position": {
-						"0.0": {
-							"vector": [0, 16, 0]
-						},
-						"1.3333": {
-							"vector": [0, 16, 0]
-						}
 					}
 				},
 				"FireRingInner": {
@@ -78,14 +70,6 @@
 						},
 						"1.3333": {
 							"vector": [0, 0, 360]
-						}
-					},
-					"position": {
-						"0.0": {
-							"vector": [0, 16, 0]
-						},
-						"1.3333": {
-							"vector": [0, 16, 0]
 						}
 					},
 					"scale": {
@@ -139,6 +123,7 @@
 			}
 		},
 		"death": {
+			"loop": "hold_on_last_frame",
 			"animation_length": 1.33333,
 			"bones": {
 				"FireRingOuter": {
@@ -157,14 +142,6 @@
 						},
 						"1.3333": {
 							"vector": [0, 0, 360]
-						}
-					},
-					"position": {
-						"0.0": {
-							"vector": [0, 16, 0]
-						},
-						"1.3333": {
-							"vector": [0, 16, 0]
 						}
 					},
 					"scale": {

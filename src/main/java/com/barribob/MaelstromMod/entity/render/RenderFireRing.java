@@ -3,16 +3,18 @@ package com.barribob.MaelstromMod.entity.render;
 import com.barribob.MaelstromMod.entity.entities.EntityMaelstromKnight;
 import com.barribob.MaelstromMod.entity.entities.overworld.EntityFireRing;
 import com.barribob.MaelstromMod.entity.model.ModelFireRing;
+import com.barribob.MaelstromMod.entity.render.geo.RenderAbstractGeoEntity;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
-public class RenderFireRing extends GeoEntityRenderer<EntityFireRing> {
+public class RenderFireRing extends RenderAbstractGeoEntity<EntityFireRing> {
 
 
     public RenderFireRing(RenderManager renderManager) {
         super(renderManager, new ModelFireRing());
+        this.shadowSize = 0.0f;
     }
 
     @Override

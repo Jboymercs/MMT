@@ -8,6 +8,7 @@ import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.util.ModUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -96,7 +97,8 @@ public class EntityFireRing extends EntityLeveledMob implements IAnimatable, IAt
 
     public void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 0.0f, 60, 16, 0.0f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 0.0f, 60, 13, 0.0f));
+        this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 18, 1.0f));
         this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 1, true, false, null));
     }
 
@@ -157,7 +159,7 @@ public class EntityFireRing extends EntityLeveledMob implements IAnimatable, IAt
         this.setDeathAnim(true);
 
         addEvent(this::setDead, 24);
-        addEvent(() -> this.setDeathAnim(false), 24);
+        addEvent(() -> this.setDeathAnim(false), 28);
     }
 
     @Override
@@ -172,7 +174,7 @@ public class EntityFireRing extends EntityLeveledMob implements IAnimatable, IAt
         if(this.isDeathAnim()) {
 
             addEvent(() -> this.setDeathAnim(false), 24);
-            addEvent(this::setDead, 24);
+            addEvent(this::setDead, 28);
 
         }
         super.onDeath(cause);
