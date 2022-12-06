@@ -548,13 +548,31 @@ public final class ModUtils {
         }
     }
 
-    public static void moveTowards(EntityLivingBase entity, Vec3d target) {
+    public static void moveTowards(EntityLivingBase entity, Vec3d target, double speedIn) {
         Vec3d dir = target.subtract(entity.getPositionVector()).normalize();
         Vec3d move = new Vec3d(dir.x, dir.y, dir.z).normalize();
-        entity.motionX += move.x;
-        entity.motionY += move.y;
-        entity.motionZ += move.z;
+        if(entity.motionX > speedIn) {
+            entity.motionX -= move.x;
+        }
+        if(entity.motionX < speedIn) {
+            entity.motionX += move.x;
+        }
+        if(entity.motionZ > speedIn) {
+            entity.motionZ -= move.z;
+        }
+        if(entity.motionZ < speedIn) {
+            entity.motionZ += move.z;
+        }
+        if(entity.motionY > speedIn) {
+            entity.motionY -= move.y;
+        }
+        if(entity.motionY < speedIn) {
+            entity.motionY += move.y;
+        }
+
     }
+
+
 
     /**
      * Calls a function that linearly interpolates between two points. Includes both ends of the line
