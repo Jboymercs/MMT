@@ -105,7 +105,7 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
             addEvent(() -> {
                 Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.3, 1, 0)));
                 Vec3d myPos = getPositionVector();
-                Vec3d targetPos = getAttackTarget().getPositionVector();
+                Vec3d targetPos = target.getPositionVector();
                 Vec3d dir = targetPos.subtract(myPos).normalize();
                 AtomicReference<Vec3d> spawnPos = new AtomicReference<>(myPos);
                 int spawn1 = 2;
@@ -131,7 +131,7 @@ public class EntityAzureWraith extends EntityLeveledMob implements IAnimatable, 
 
             addEvent(() -> {
                 Vec3d myPos = getPositionVector();
-                Vec3d targetPos = getAttackTarget().getPositionVector();
+                Vec3d targetPos = target.getPositionVector();
                 Vec3d dir = targetPos.subtract(myPos).normalize();
                 AtomicReference<Vec3d> spawnPos = new AtomicReference<>(myPos);
                 int spawn2 = 4;

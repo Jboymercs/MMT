@@ -305,7 +305,7 @@ public class EntityChaosKnight extends EntityMaelstromMob implements IAttack, Di
     @Override
     protected void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0f, 60, 5, 0.5f));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0f, 60, 15, 0.5f));
     }
 
     @Override

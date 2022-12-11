@@ -14,7 +14,13 @@ public class ModelNetherKnight extends AnimatedGeoModel<EntityNetherKnight> {
 
     @Override
     public ResourceLocation getTextureLocation(EntityNetherKnight entityNetherKnight) {
-        return new ResourceLocation(Reference.MOD_ID, "textures/entity/overworld/nether_knight.png");
+
+        if(entityNetherKnight.hitOpener) {
+            return new ResourceLocation(Reference.MOD_ID, "textures/entity/overworld/nether_knight.png");
+        }
+
+            return new ResourceLocation(Reference.MOD_ID, "textures/entity/overworld/nether_knight_1.png");
+
     }
 
     @Override

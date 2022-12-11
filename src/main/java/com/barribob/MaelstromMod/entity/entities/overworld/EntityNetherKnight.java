@@ -16,10 +16,7 @@ import com.barribob.MaelstromMod.util.ModUtils;
 import com.barribob.MaelstromMod.util.handlers.ParticleManager;
 import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -34,6 +31,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -49,6 +47,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -58,7 +57,7 @@ import java.util.function.Consumer;
 /**
  * The first vanilla dimension boss to be implemented in, A magical fiery knight that derives it's magic from chaotic energy.
  */
-public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAnimatable, IEntityMultiPart {
+public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAnimatable, IEntityMultiPart, IPitch {
 
     private final BossInfoServer bossInfo = (new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6));
     private AnimationFactory factory = new AnimationFactory(this);
@@ -75,6 +74,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     private static final DataParameter<Boolean> AOE_STRIKE = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> LEAP_ATTACK = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SWINGVARIANT = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Float> LOOK = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.FLOAT);
     private final String WALK_ANIM = "walk";
     private final String IDLE_ANIM = "idle";
     private final String SIMPLE_STRIKE = "swing";
@@ -85,18 +85,31 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     private final String LEAP_ANIM = "leap";
     private final String SWING_VARIANT = "swingVariant";
 
-    private final MultiPartEntityPart frontCore = new MultiPartEntityPart(this, "frontCore", 0.5f, 0.5f);
-    private final MultiPartEntityPart backCore = new MultiPartEntityPart(this, "backCore", 0.5f, 0.5f);
-    private final MultiPartEntityPart model = new MultiPartEntityPart(this, "model", 1.0f, 3.4f);
+
+    private final MultiPartEntityPart model = new MultiPartEntityPart(this, "model", 0.8f, 0.7f);
+    private final MultiPartEntityPart lArm = new MultiPartEntityPart(this, "leftArm", 0.45f, 1.8f);
+    private final MultiPartEntityPart rArm = new MultiPartEntityPart(this, "rightArm", 0.45f, 1.8f);
+    private final MultiPartEntityPart knight = new MultiPartEntityPart(this, "knight", 0f, 0f);
+
+    private final MultiPartEntityPart lLeg = new MultiPartEntityPart(this, "leftLeg", 0.45f, 1.5f);
+    private final MultiPartEntityPart rLeg = new MultiPartEntityPart(this, "rightLeg", 0.5f, 1.5f);
+    private final MultiPartEntityPart core = new MultiPartEntityPart(this, "core", 0.7f, 0.4f);
+    private final MultiPartEntityPart chestLower = new MultiPartEntityPart(this, "lower", 0.7f, 0.5f);
+
+    private final MultiPartEntityPart[] hitboxParts;
+
+    public boolean hitOpener;
+    public int hitTimer = 0;
 
 
     private Consumer<EntityLivingBase> prevAttacks;
 
     public EntityNetherKnight(World worldIn) {
         super(worldIn);
-        this.setSize(1.0f, 3.4f);
         this.isImmuneToFire = true;
         this.isImmuneToExplosions();
+        this.hitboxParts = new MultiPartEntityPart[]{model, knight, rArm, lArm, rLeg, lLeg, core, chestLower};
+        this.setSize(0.3f, 3.4f);
 
 
     }
@@ -112,6 +125,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         this.dataManager.register(AOE_STRIKE, Boolean.valueOf(false));
         this.dataManager.register(LEAP_ATTACK, Boolean.valueOf(false));
         this.dataManager.register(SWINGVARIANT, Boolean.valueOf(false));
+        this.dataManager.register(LOOK, 0f);
     }
 
     public void setFightMode(boolean value) {
@@ -152,16 +166,124 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     @Override
     public void onUpdate() {
         super.onUpdate();
-
+        this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 
         if (this.isSwingMode()) {
             this.motionX = 0;
             this.motionZ = 0;
             this.motionY = 0;
         }
+        EntityLivingBase target = this.getAttackTarget();
+        if(target != null) {
+            boolean hasGround = false;
+            if(!world.isRemote && this.isFightMode()) {
+                AxisAlignedBB box = getEntityBoundingBox().grow(1.25, 0.1, 1.25).offset(0, 0.1, 0);
+                ModUtils.destroyBlocksInAABB(box, world, this);
+            }
+            for(int i = 0; i > -10; i--) {
+                if(!world.isAirBlock(getPosition().add(new BlockPos(0, i, 0)))) {
+                    hasGround = true;
+                }
+            }
+
+            if(!hasGround && motionY < -1) {
+                this.setImmovable(true);
+            } else if (this.isImmovable()) {
+                this.setImmovable(false);
+            }
+        }
+        if(!hitOpener) {
+            hitTimer++;
+        }
+        if(hitTimer > 500) {
+            hitOpener = true;
+        }
 
 
 
+
+
+
+
+        }
+
+        @Override
+        public void onEntityUpdate() {
+        super.onEntityUpdate();
+        if(this.hitOpener) {
+            if (rand.nextInt(20) == 0) {
+                world.setEntityState(this, ModUtils.THIRD_PARTICLE_BYTE);
+            }
+        }
+        }
+
+        private void setHitBoxPos(Entity entity, Vec3d offset) {
+        Vec3d lookVel = ModUtils.getLookVec(this.getPitch(), this.renderYawOffset);
+        Vec3d center = this.getPositionVector().add(ModUtils.yVec(1.7));
+
+        Vec3d position = center.subtract(ModUtils.Y_AXIS.add(ModUtils.getAxisOffset(lookVel, offset)));
+        ModUtils.setEntityPosition(entity, position);
+
+        }
+
+        @Override
+        public void onLivingUpdate() {
+        super.onLivingUpdate();
+            Vec3d[] avec3d = new Vec3d[this.hitboxParts.length];
+            for (int j = 0; j < this.hitboxParts.length; ++j) {
+                avec3d[j] = new Vec3d(this.hitboxParts[j].posX, this.hitboxParts[j].posY, this.hitboxParts[j].posZ);
+            }
+
+            this.setHitBoxPos(model, new Vec3d(0, 1.95, 0));
+            this.setHitBoxPos(rArm, new Vec3d(0, 0.5, 0.6 ));
+            this.setHitBoxPos(lArm, new Vec3d(0, 0.5, -0.6));
+            this.setHitBoxPos(lLeg, new Vec3d(0, -0.7, -0.225));
+            this.setHitBoxPos(rLeg, new Vec3d(0, -0.7, 0.225));
+            this.setHitBoxPos(core, new Vec3d(0, 1.525, 0));
+            this.setHitBoxPos(chestLower, new Vec3d(0, 1.025, 0));
+
+            Vec3d knightPos = this.getPositionVector();
+            ModUtils.setEntityPosition(knight, knightPos);
+
+            for (int l = 0; l < this.hitboxParts.length; ++l) {
+                this.hitboxParts[l].prevPosX = avec3d[l].x;
+                this.hitboxParts[l].prevPosY = avec3d[l].y;
+                this.hitboxParts[l].prevPosZ = avec3d[l].z;
+            }
+
+        }
+
+        private boolean attackCore;
+
+        @Override
+        public final boolean attackEntityFromPart(@Nonnull MultiPartEntityPart part,@Nonnull DamageSource source, float damage) {
+        if(part == this.core && this.hitOpener) {
+            this.attackCore = true;
+            return this.attackEntityFrom(source, damage);
+        }
+        if(damage > 0.0f && !source.isUnblockable()) {
+            if(!source.isProjectile()) {
+                Entity entity = source.getImmediateSource();
+                if (entity instanceof EntityLivingBase) {
+                    this.blockUsingShield((EntityLivingBase) entity);
+                }
+            }
+
+           this.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 1.0f, 0.6f + ModRandom.getFloat(0.2f));
+            return false;
+        }
+        return false;
+        }
+
+        @Override
+        public final boolean attackEntityFrom(DamageSource source, float amount) {
+        if(!this.attackCore && !source.isUnblockable()) {
+            return false;
+        }
+        this.hitOpener = false;
+        this.hitTimer = 0;
+        this.attackCore = false;
+        return super.attackEntityFrom(source, amount);
         }
 
 
@@ -246,6 +368,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
             });
         }
+        if(id == ModUtils.THIRD_PARTICLE_BYTE) {
+            Vec3d motion = new Vec3d(ModRandom.getFloat(0.1f), 0 * 0.2, ModRandom.getFloat(0.1f));
+            ParticleManager.spawnCustomSmoke(world, this.getPositionVector().add(ModRandom.randVec()).add(ModUtils.yVec(2.3)), ModColors.YELLOW, motion);
+        }
 
 
         super.handleStatusUpdate(id);
@@ -256,31 +382,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
      */
 
 
-    //Switch to onUpdate
-    @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
-        EntityLivingBase target = this.getAttackTarget();
-        if(target != null) {
-            boolean hasGround = false;
-            if(!world.isRemote && this.isFightMode()) {
-                AxisAlignedBB box = getEntityBoundingBox().grow(0.25, 0.1, 0.25).offset(0, 0.1, 0);
-                ModUtils.destroyBlocksInAABB(box, world, this);
-            }
-            for(int i = 0; i > -10; i--) {
-                if(!world.isAirBlock(getPosition().add(new BlockPos(0, i, 0)))) {
-                    hasGround = true;
-                }
-            }
 
-            if(!hasGround && motionY < -1) {
-                this.setImmovable(true);
-            } else if (this.isImmovable()) {
-                this.setImmovable(false);
-            }
-        }
-
-    }
 
 
 
@@ -302,7 +404,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                     (distance > 5) ? 1.3 / distance : 0, // Stab Dash
                     (distance > 12 && prevAttacks != summonFire) ? distance * 0.02 : 0, // Summon Fireballs
                     (distance > 12 && HealthChange < 0.65 && prevAttacks != fireRings) ? distance * 0.02 : 0, // Summon Fire Rings @ 65% health
-                    (distance < 5 && HealthChange < 0.50) ? 1/distance : 0, // AOE Attack @ 50% health
+                    (distance < 5 && HealthChange < 0.40 && prevAttacks != aoeAttack) ? 1.1 / distance : 0, // AOE Attack @ 50% health
                     (distance > 12) ? distance * 0.02 : 0, // Leap Attack
                     (distance < 5 && prevAttacks != swingVariant) ? 1 / distance : 0 // Swing Multi Strike
             };
@@ -597,6 +699,11 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         return world.setBlockState(pos, Blocks.FIRE.getDefaultState());
     }
 
+    @Override
+    public Entity[] getParts() {
+        return this.hitboxParts;
+    }
+
 
     @Override
     public void readEntityFromNBT(NBTTagCompound compound) {
@@ -657,8 +764,20 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         return null;
     }
 
+
+
     @Override
-    public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-        return false;
+    public void setPitch(Vec3d look) {
+        float prevLook = this.getPitch();
+        float newLook = (float) ModUtils.toPitch(look);
+        float deltaLook = 5;
+        float clampedLook = MathHelper.clamp(newLook, prevLook - deltaLook, prevLook + deltaLook);
+        this.dataManager.set(LOOK, clampedLook);
+
+    }
+
+    @Override
+    public float getPitch() {
+        return this.dataManager == null ? 0 : this.dataManager.get(LOOK);
     }
 }
