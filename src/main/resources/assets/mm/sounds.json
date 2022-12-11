@@ -299,6 +299,16 @@
 			}
 		]
 	},
+	"entity.nether_knight.knight_slash_three": {
+		"category": "entity",
+		"subtitle": "entity.nether_knight.knight_slash_three",
+		"sounds": [
+			{
+				"name": "mm:entity/nether_knight/knight_slash_three",
+				"steam": true
+			}
+		]
+	},
 	"entity.navigator.rally": {
 		"category": "entity",
 		"subtitle": "entity.navigator.rally",

@@ -1,6 +1,7 @@
 package com.barribob.MaelstromMod.entity.entities.overworld;
 
 import akka.japi.pf.FI;
+import com.barribob.MaelstromMod.entity.ai.EntityAIFollowAttackers;
 import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.entities.EntityLeveledMob;
 import com.barribob.MaelstromMod.entity.projectile.ProjectileMonolithFireball;
@@ -13,9 +14,11 @@ import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModRandom;
 import com.barribob.MaelstromMod.util.ModUtils;
 import com.barribob.MaelstromMod.util.handlers.ParticleManager;
+import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -31,6 +34,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -148,7 +152,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     @Override
     public void onUpdate() {
         super.onUpdate();
-        this.bossInfo.setPercent(this.getHealth()/ this.getMaxHealth());
+
 
         if (this.isSwingMode()) {
             this.motionX = 0;
@@ -157,14 +161,18 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         }
 
 
+
         }
+
+
+
 
 
 
     @Override
     public void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 20, 24F, 0.1F));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 40, 24F, 0.1F));
         this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
@@ -248,7 +256,31 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
      */
 
 
+    //Switch to onUpdate
+    @Override
+    public void onLivingUpdate() {
+        super.onLivingUpdate();
+        EntityLivingBase target = this.getAttackTarget();
+        if(target != null) {
+            boolean hasGround = false;
+            if(!world.isRemote && this.isFightMode()) {
+                AxisAlignedBB box = getEntityBoundingBox().grow(0.25, 0.1, 0.25).offset(0, 0.1, 0);
+                ModUtils.destroyBlocksInAABB(box, world, this);
+            }
+            for(int i = 0; i > -10; i--) {
+                if(!world.isAirBlock(getPosition().add(new BlockPos(0, i, 0)))) {
+                    hasGround = true;
+                }
+            }
 
+            if(!hasGround && motionY < -1) {
+                this.setImmovable(true);
+            } else if (this.isImmovable()) {
+                this.setImmovable(false);
+            }
+        }
+
+    }
 
 
 
@@ -268,10 +300,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             double[] weights = {
                     (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Strike
                     (distance > 5) ? 1.3 / distance : 0, // Stab Dash
-                    (distance > 12 && prevAttacks != summonFire) ? distance * 0.08 : 0, // Summon Fireballs
-                    (distance > 12 && HealthChange < 0.65 && prevAttacks != fireRings) ? distance * 0.08 : 0, // Summon Fire Rings @ 65% health
+                    (distance > 12 && prevAttacks != summonFire) ? distance * 0.02 : 0, // Summon Fireballs
+                    (distance > 12 && HealthChange < 0.65 && prevAttacks != fireRings) ? distance * 0.02 : 0, // Summon Fire Rings @ 65% health
                     (distance < 5 && HealthChange < 0.50) ? 1/distance : 0, // AOE Attack @ 50% health
-                    (distance > 12) ? distance * 0.11 : 0, // Leap Attack
+                    (distance > 12) ? distance * 0.02 : 0, // Leap Attack
                     (distance < 5 && prevAttacks != swingVariant) ? 1 / distance : 0 // Swing Multi Strike
             };
 
@@ -279,7 +311,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             prevAttacks = ModRandom.choice(attacks, rand, weights).next();
             prevAttacks.accept(target);
         }
-        return (prevAttacks == summonFire || prevAttacks == fireRings) ? 140 : 20 ;
+        return (prevAttacks == summonFire || prevAttacks == fireRings) ? 140 : 40 ;
     }
     private final Consumer<EntityLivingBase> swingVariant = (target) -> {
       this.setFightMode(true);
@@ -313,7 +345,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
 
           addEvent(()-> {
-              ModUtils.leapTowards(this, grabPos, 0.8f, 0.2f);
+              ModUtils.leapTowards(this, grabPos, 0.7f, 0.2f);
 
               for(int fi = 0; fi < 7; fi += 1) {
                   addEvent(()-> {
@@ -337,7 +369,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                   .build();
           float damage = getAttack() * getConfigFloat("nether_knight_swing");
           ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.8f, 0, false);
-          playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP , 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
+
       }, 70);
       addEvent(()-> {
           Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.8, 1.5, 0)));
@@ -374,7 +406,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
               addEvent(() -> {
                   double distance = getDistance(targetPos.x, targetPos.y, targetPos.z);
 
-                  ModUtils.leapTowards(this, targetPos, (float) (0.55 * Math.sqrt(distance)), 0.5f);
+                  ModUtils.leapTowards(this, targetPos, (float) (0.55 * Math.sqrt(distance)), 0.9f);
               }, 23);
           }, 5);
           addEvent(() -> {
@@ -518,7 +550,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             BlockPos facePos = new BlockPos(grabPos.x, grabPos.y + 2, grabPos.z);
             addEvent(()-> {
                 this.facePosition(facePos, 180.0f, 0.0f);
-                ModUtils.leapTowards(this, grabPos, 1.8f, 0.2f);
+                ModUtils.leapTowards(this, grabPos, 1.5f, 0.2f);
             }, 20);
         }, 20);
         addEvent(()->{
@@ -611,6 +643,8 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
         return angle + f;
     }
+
+
 
     @Override
     public void removeTrackingPlayer(EntityPlayerMP player) {
