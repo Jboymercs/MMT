@@ -17,9 +17,10 @@ public class ModelNetherKnight extends AnimatedGeoModel<EntityNetherKnight> {
 
         if(entityNetherKnight.hitOpener) {
             return new ResourceLocation(Reference.MOD_ID, "textures/entity/overworld/nether_knight.png");
+        } else  {
+            return new ResourceLocation(Reference.MOD_ID, "textures/entity/overworld/nether_knight_1.png");
         }
 
-            return new ResourceLocation(Reference.MOD_ID, "textures/entity/overworld/nether_knight_1.png");
 
     }
 
