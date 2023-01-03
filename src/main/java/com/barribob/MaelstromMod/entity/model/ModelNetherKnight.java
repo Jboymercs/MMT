@@ -22,6 +22,7 @@ public class ModelNetherKnight extends AnimatedGeoModel<EntityNetherKnight> {
         }
 
 
+
     }
 
     @Override

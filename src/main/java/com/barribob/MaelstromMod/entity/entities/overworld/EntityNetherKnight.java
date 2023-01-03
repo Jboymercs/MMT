@@ -81,6 +81,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     protected static final DataParameter<Float> LOOK = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.FLOAT);
 
     protected static final DataParameter<Boolean> STUNNED = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
+
+    public boolean rangeMode = true;
+    public boolean meleeMode = false;
     private final String WALK_ANIM = "walk";
     private final String IDLE_ANIM = "idle";
     private final String SIMPLE_STRIKE = "swing";
@@ -208,17 +211,74 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                 this.setImmovable(false);
             }
         }
-        if(!this.isStunned()) {
-            hitOpener = false;
-        }
-        if(this.isStunned()) {
-            hitOpener = true;
-        }
+
         this.isBlocking();
 
         if(!world.isRemote && this.isLeaping()) {
             AxisAlignedBB box = getEntityBoundingBox().grow(1.0, 0.12, 1.0).offset(0, 0.12, 0);
             ModUtils.destroyBlocksInAABB(box, world, this);
+        }
+        float meleeChange = 0;
+        float rangeChange = 0;
+
+        // Knight mode selector theatrics
+        if(target != null && !world.isRemote) {
+            double distSq = this.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
+            double distance = Math.sqrt(distSq);
+            double currentHealth = this.getHealth() / this.getMaxHealth();
+            double healthValue = 1;
+
+            //Ranged
+            if(rangeMode && !meleeMode) {
+
+                if(distance < 10) {
+                    hitOpener = false;
+                }
+
+                if( currentHealth != healthValue) {
+                    meleeMode = true;
+                    healthValue = currentHealth * healthValue;
+                    rangeMode = false;
+
+
+                }
+                if(rangeChange >= 600) {
+                    meleeMode = true;
+                    rangeMode = false;
+                }
+                else{
+                    rangeChange++;
+                    meleeChange = 0;
+                }
+                hitOpener = true;
+            }
+            //Melee
+            if(meleeMode && !rangeMode) {
+                if(currentHealth != healthValue) {
+                    rangeMode = true;
+                    healthValue = currentHealth * healthValue;
+                    meleeMode = false;
+                }
+                //Stunning
+                if(!this.isStunned()) {
+                    hitOpener = false;
+                }
+                if(this.isStunned()) {
+                    hitOpener = true;
+                }
+                if(meleeChange >= 600) {
+                    rangeMode = true;
+                    meleeMode = false;
+                } else {
+                    meleeChange++;
+                    rangeChange = 0;
+                }
+            }
+            // Used if any case there isn't a selection or it is bugged
+            if(!meleeMode && !rangeMode) {
+                rangeMode = true;
+            }
+
         }
 
         }
@@ -255,6 +315,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             addEvent(()-> stunCounter = 0, 80);
         }
         }
+
 
         @Override
         public void onLivingUpdate() {
@@ -395,6 +456,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         event.getController().markNeedsReload();
         return PlayState.STOP;
     }
+    // Ranged Mode Attacks - Summon Fire Rings, Summon Fire balls, Fire Blade
+    //Transistion to Melee Mode - Leap Attack
+    // Melee Mode Attacks - AOE Attack, Swing Variant + Dash, SimpleSwipe
+    //Transistion to Ranged Mode - Target Throw
 
 
 
@@ -439,24 +504,39 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
     @Override
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
-
+        double distance = Math.sqrt(distanceSq);
+        double HealthChange = this.getHealth() / this.getMaxHealth();
         if (!this.isFightMode() && !this.isStunned()) {
-            double distance = Math.sqrt(distanceSq);
-            double HealthChange = this.getHealth() / this.getMaxHealth();
-            List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, stabAttack, summonFire, fireRings, aoeAttack, leapAttack, swingVariant));
-            double[] weights = {
-                    (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Strike
-                    (distance > 5) ? 1.1 / distance : 0, // Stab Dash
-                    (distance > 12 && prevAttacks != summonFire) ? distance * 0.02 : 0, // Summon Fireballs
-                    (distance > 12 && HealthChange < 0.65 && prevAttacks != fireRings) ? distance * 0.02 : 0, // Summon Fire Rings @ 65% health
-                    (distance < 5 && HealthChange < 0.40 && prevAttacks != aoeAttack) ? 1.1 / distance : 0, // AOE Attack @ 50% health
-                    (distance > 12) ? distance * 0.02 : 0, // Leap Attack
-                    (distance < 5 && prevAttacks != swingVariant) ? 1 / distance : 0 // Swing Multi Strike
+
+            //Ranged Attack set
+            if(rangeMode) {
+            List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(summonFire, fireRings, stabAttack));
+            double[]weights = {
+                    (distance > 9 && prevAttacks != summonFire) ? distance * 0.02 : 0, // Summon Fire balls
+                    (distance > 9 && prevAttacks != fireRings) ? distance * 0.02 : 0, // Summon Fire Rings
+                    (distance < 9) ? 1.1 / distance : 0 // Stab Dash
+
             };
+              prevAttacks = ModRandom.choice(attacks, rand, weights).next();
+              prevAttacks.accept(target);
+
+            }
+            //Melee Attack set
+            if(meleeMode) {
+                List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, swingVariant, aoeAttack, leapAttack));
+                double[]weights = {
+                        (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Swing
+                        (distance < 6 && prevAttacks != swingVariant) ? 1 / distance : 0,// Swing Variant
+                        (distance < 5 && prevAttacks != aoeAttack) ? 1 / distance : 0, // Aoe Attack
+                        (distance > 6) ? distance * 0.02 : 0 // Leap Attack
+
+                };
+                prevAttacks = ModRandom.choice(attacks, rand, weights).next();
+                prevAttacks.accept(target);
+
+            }
 
 
-            prevAttacks = ModRandom.choice(attacks, rand, weights).next();
-            prevAttacks.accept(target);
         }
         return (prevAttacks == summonFire || prevAttacks == fireRings) ? 140 : 40 ;
     }
@@ -691,15 +771,15 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
 
         addEvent(() -> {
-                        for (int i = 0; i < 180; i += 60) {
+                        for (int i = 0; i < 180; i += 40) {
                         addEvent(() -> {
                             ProjectileMonolithFireball meteor = new ProjectileMonolithFireball(world, this, this.getAttack() * this.getConfigFloat("nether_knight_fireball"), null);
                             Vec3d pos = target.getPositionVector().add(ModUtils.yVec(ModRandom.range(14, 16)));
                             meteor.setPosition(pos.x, pos.y, pos.z);
-                            meteor.shoot(this, 90, 0, 0.0F, 0.3f, 0);
+                            meteor.shoot(this, 90, 0, 0.0F, 0.5f, 0);
                             meteor.motionX -= this.motionX;
                             meteor.motionZ -= this.motionZ;
-                            meteor.setTravelRange(100f);
+                            meteor.setTravelRange(40f);
                             world.spawnEntity(meteor);
 
                         }, i);

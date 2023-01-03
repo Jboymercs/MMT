@@ -39,7 +39,7 @@ import java.util.function.Consumer;
 /**
  * This is a very big class, with multiple parts to it, I will try to break it down the best I can
  */
-public class EntityMaelstromHunter extends EntityMaelstromMob implements IAttack, IAnimatable {
+public class    EntityMaelstromHunter extends EntityMaelstromMob implements IAttack, IAnimatable {
     /**
      * The first Lush Dungeon Boss, content of this guy will be removed entirely before public release of Initial
      * Textures, Animations, AI done by UnseenDontRun
