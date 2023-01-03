@@ -191,8 +191,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         if(target != null) {
             boolean hasGround = false;
             if(!world.isRemote && this.isFightMode()) {
-                AxisAlignedBB box = getEntityBoundingBox().grow(1.25, 0.1, 1.25).offset(0, 0.1, 0);
+                if (this.isSwingVariant() || this.isStabMode()) {
+                    AxisAlignedBB box = getEntityBoundingBox().grow(1.25, 0.1, 1.25).offset(0, 0.1, 0);
                 ModUtils.destroyBlocksInAABB(box, world, this);
+            }
             }
             for(int i = 0; i > -10; i--) {
                 if(!world.isAirBlock(getPosition().add(new BlockPos(0, i, 0)))) {
@@ -225,7 +227,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         public void onEntityUpdate() {
         super.onEntityUpdate();
         if(this.hitOpener) {
-            if (rand.nextInt(20) == 0) {
+            if (rand.nextInt(10) == 0) {
                 world.setEntityState(this, ModUtils.THIRD_PARTICLE_BYTE);
             }
         }
@@ -664,8 +666,8 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             for(int tick = 0; tick < 15; tick += 5) {
                 addEvent(()-> {
                     EntityFireRing fireRing = new EntityFireRing(this.world);
-                    Vec3d spawnPos = this.getPositionVector();
-                    BlockPos pos = new BlockPos(spawnPos.x + ModRandom.range(-10, 10), spawnPos.y + 7, spawnPos.z + ModRandom.range(-10, 10));
+                    Vec3d spawnPos = target.getPositionVector();
+                    BlockPos pos = new BlockPos(spawnPos.x + ModRandom.range(-15, 15), spawnPos.y + 4, spawnPos.z + ModRandom.range(-15, 15));
                     fireRing.setPosition(pos.getX(), pos.getY(), pos.getZ());
                     this.world.spawnEntity(fireRing);
                 }, tick);
