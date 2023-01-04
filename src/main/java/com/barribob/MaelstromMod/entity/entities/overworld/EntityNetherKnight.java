@@ -218,8 +218,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             AxisAlignedBB box = getEntityBoundingBox().grow(1.0, 0.12, 1.0).offset(0, 0.12, 0);
             ModUtils.destroyBlocksInAABB(box, world, this);
         }
-        float meleeChange = 0;
-        float rangeChange = 0;
 
         // Knight mode selector theatrics
         if(target != null && !world.isRemote) {
@@ -228,37 +226,37 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             double currentHealth = this.getHealth() / this.getMaxHealth();
             double healthValue = 1;
 
+
+
+            if(hurtTime > 0) {
+
+                if(rangeMode && !meleeMode) {
+                    meleeMode = true;
+                    rangeMode = false;
+                    System.out.println("set to Melee");
+                }
+
+                else if (meleeMode) {
+                    rangeMode = true;
+                    meleeMode = false;
+                    System.out.println("set to Ranged");
+                }
+
+            }
+
+
             //Ranged
             if(rangeMode && !meleeMode) {
-
                 if(distance < 10) {
                     hitOpener = false;
+                } else if (distance > 10) {
+                    hitOpener = true;
                 }
 
-                if( currentHealth != healthValue) {
-                    meleeMode = true;
-                    healthValue = currentHealth * healthValue;
-                    rangeMode = false;
 
-
-                }
-                if(rangeChange >= 600) {
-                    meleeMode = true;
-                    rangeMode = false;
-                }
-                else{
-                    rangeChange++;
-                    meleeChange = 0;
-                }
-                hitOpener = true;
             }
             //Melee
             if(meleeMode && !rangeMode) {
-                if(currentHealth != healthValue) {
-                    rangeMode = true;
-                    healthValue = currentHealth * healthValue;
-                    meleeMode = false;
-                }
                 //Stunning
                 if(!this.isStunned()) {
                     hitOpener = false;
@@ -266,17 +264,14 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                 if(this.isStunned()) {
                     hitOpener = true;
                 }
-                if(meleeChange >= 600) {
-                    rangeMode = true;
-                    meleeMode = false;
-                } else {
-                    meleeChange++;
-                    rangeChange = 0;
-                }
+
             }
             // Used if any case there isn't a selection or it is bugged
             if(!meleeMode && !rangeMode) {
                 rangeMode = true;
+            }
+            if(healthValue < 0) {
+                System.out.println("Entity Dead");
             }
 
         }
@@ -509,7 +504,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         if (!this.isFightMode() && !this.isStunned()) {
 
             //Ranged Attack set
-            if(rangeMode) {
+            if(rangeMode && !meleeMode) {
             List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(summonFire, fireRings, stabAttack));
             double[]weights = {
                     (distance > 9 && prevAttacks != summonFire) ? distance * 0.02 : 0, // Summon Fire balls
@@ -522,7 +517,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
             }
             //Melee Attack set
-            if(meleeMode) {
+            if(meleeMode && !rangeMode) {
                 List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, swingVariant, aoeAttack, leapAttack));
                 double[]weights = {
                         (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Swing
