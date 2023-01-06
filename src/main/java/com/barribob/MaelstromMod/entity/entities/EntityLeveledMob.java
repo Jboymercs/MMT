@@ -12,9 +12,7 @@ import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.MoverType;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -29,6 +27,7 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
 import java.util.PriorityQueue;
 
 /**
@@ -340,5 +339,17 @@ public abstract class EntityLeveledMob extends EntityCreature implements IAnimat
     @Override
     public boolean isBeingRidden() {
         return super.isBeingRidden() || (getMobConfig().hasPath("can_be_pushed") && !getMobConfig().getBoolean("can_be_pushed"));
+    }
+
+    public List<EntityLivingBase> getEntitiesNearbyListed(double distanceX, double distanceY, double distanceZ, double radius) {
+        return getEntitiesNearby(EntityLivingBase.class, distanceX, distanceY, distanceZ, radius);
+    }
+
+    public <T extends Entity> List<T> getEntitiesNearby(Class<T> entityClass, double r) {
+        return world.getEntitiesWithinAABB(entityClass, getEntityBoundingBox().grow(r, r, r), e -> e != this && getDistance(e) <= r + e.width / 2f);
+    }
+
+    public <T extends Entity> List<T> getEntitiesNearby(Class<T> entityClass, double dX, double dY, double dZ, double r) {
+        return world.getEntitiesWithinAABB(entityClass, getEntityBoundingBox().grow(dX, dY, dZ), e -> e != this && getDistance(e) <= r + e.width / 2f && e.posY <= posY + dY);
     }
 }
