@@ -798,6 +798,11 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     private final Consumer<EntityLivingBase> simpleSwing = (target) -> {
         this.setFightMode(true);
         this.setSwingMode(true);
+        addEvent(() -> {
+            Vec3d vector = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.5, 1.5 , -3.1)));
+            ParticleManager.spawnEffect(world, vector, ModColors.FIREBALL_ORANGE);
+
+        }, 31);
 
             addEvent(() -> {
                 targetShieldUse = true;
@@ -828,8 +833,17 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             addEvent(()-> {
                 Vec3d offsetPos = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.5, 2, 0)));
 
-                ModUtils.moveTowards(target, offsetPos, 0.3);
+                Entity entity = this.world.getEntityByID(EntityPlayer.FLAGS.getId());
+                        if(entity instanceof EntityLivingBase) {
+                            EntityLivingBase targetGrabbed = this.getAttackTarget();
+                         targetGrabbed = (EntityLivingBase)entity;
+
+                            targetGrabbed.motionX += (Math.signum(this.posX - targetGrabbed.posX) * 0.5 - targetGrabbed.motionX) * 0.5;
+                            targetGrabbed.motionZ += (Math.signum(this.posZ - targetGrabbed.posZ) * 0.5 - targetGrabbed.motionZ) * 0.5;
+                        }
                     System.out.println("Please work");
+
+
 
             }, t);
 
@@ -874,6 +888,13 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         }
 
         super.readEntityFromNBT(compound);
+    }
+    public boolean isGrabbed(EntityLivingBase target) {
+        List<EntityLivingBase> entities = this.getEntitiesNearbyListed(9, 9, 9, 9);
+        target.getDistance(this);
+
+
+        return false;
     }
 
 
