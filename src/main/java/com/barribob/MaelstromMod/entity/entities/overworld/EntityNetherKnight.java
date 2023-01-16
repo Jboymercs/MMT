@@ -214,7 +214,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         this.isBlocking();
 
         if(!world.isRemote && this.isLeaping()) {
-            AxisAlignedBB box = getEntityBoundingBox().grow(1.0, 0.12, 1.0).offset(0, 0.12, 0);
+            AxisAlignedBB box = getEntityBoundingBox().grow(1.0, 0.22, 1.0).offset(0, 0.12, 0);
             ModUtils.destroyBlocksInAABB(box, world, this);
         }
 
@@ -799,8 +799,14 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         this.setFightMode(true);
         this.setSwingMode(true);
         addEvent(() -> {
-            Vec3d vector = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.5, 1.5 , -3.1)));
-            ParticleManager.spawnEffect(world, vector, ModColors.FIREBALL_ORANGE);
+            for(int i = 0; i < 11; i += 1) {
+                addEvent(() -> {
+                    Vec3d vector = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.5, 1.5 , -3.1)));
+
+                    ParticleManager.spawnEffect(world, new Vec3d(vector.x , vector.y , vector.z ), ModColors.FIREBALL_ORANGE);
+                }, i);
+            }
+
 
         }, 31);
 

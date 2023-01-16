@@ -87,10 +87,12 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
     animationData.addAnimationController(new AnimationController(this, "player_idle", 0, this::predicatePlayerIdle));
     }
 
+    // Idle
     private <E extends IAnimatable> PlayState predicatePlayerIdle(AnimationEvent<E> event) {
         event.getController().setAnimation(new AnimationBuilder().addAnimation(IDLE_ANIM, true));
         return PlayState.CONTINUE;
     }
+    // Leg Handler
     private <E extends IAnimatable>PlayState predicatePlayerLegsHandler(AnimationEvent<E> event) {
         if (event.isMoving() && !this.isRunning()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(LEGS_WALK_ANIM, true));
@@ -105,6 +107,7 @@ public class EntityPlayerBase extends EntityMaelstromMob implements IAnimatable,
 
     }
 
+    //Arms Handler
     private <E extends IAnimatable>PlayState predicatePlayerArmsHandler(AnimationEvent<E> event) {
         if (event.isMoving() && !this.isfightMode() && !this.isRunning()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(ARMS_WALK_ANIM, true));
