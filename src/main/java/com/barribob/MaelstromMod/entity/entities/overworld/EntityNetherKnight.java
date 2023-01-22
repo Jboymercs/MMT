@@ -50,10 +50,12 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import com.google.common.base.Predicate;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Consumer;
+
 
 /**
  * The first vanilla dimension boss to be implemented in, A magical fiery knight that derives it's magic from chaotic energy.
@@ -78,6 +80,8 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     protected static final DataParameter<Float> LOOK = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.FLOAT);
 
     protected static final DataParameter<Boolean> STUNNED = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
+
+    protected static final DataParameter<Boolean> PULL = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
 
     public boolean rangeMode = true;
     public boolean meleeMode = false;
@@ -138,6 +142,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         this.dataManager.register(SWINGVARIANT, Boolean.valueOf(false));
         this.dataManager.register(LOOK, 0f);
         this.dataManager.register(STUNNED, Boolean.valueOf(false));
+        this.dataManager.register(PULL, Boolean.valueOf(false));
     }
 
     public void setFightMode(boolean value) {
@@ -177,7 +182,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     public void setStunned(boolean value) {this.dataManager.set(STUNNED, Boolean.valueOf(value));}
     public boolean isStunned() {return this.dataManager.get(STUNNED);}
 
-    public boolean grabState = false;
+    public void setPulled(boolean value) {this.dataManager.set(PULL, Boolean.valueOf(value));}
+
+    public boolean isPulled() {return this.dataManager.get(PULL);}
+
 
     @Override
     public void onUpdate() {
@@ -206,9 +214,14 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
             if(!hasGround && motionY < -1) {
                 this.setImmovable(true);
+            } else if (this.isPulled()) {
+                this.motionX = 0;
+                this.motionY = 0;
+                this.motionZ = 0;
             } else if (this.isImmovable()) {
                 this.setImmovable(false);
             }
+
         }
 
         this.isBlocking();
@@ -273,15 +286,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
             }
             // Draws player towards the Apostle
-            if(grabState) {
-
-
-
-
-
-
-            }
-
 
         }
 
@@ -344,6 +348,24 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                 this.hitboxParts[l].prevPosX = avec3d[l].x;
                 this.hitboxParts[l].prevPosY = avec3d[l].y;
                 this.hitboxParts[l].prevPosZ = avec3d[l].z;
+            }
+
+            Predicate<EntityLivingBase> selection = entityLivingBase -> !(entityLivingBase instanceof EntityNetherKnight);
+            List<EntityLivingBase> stack = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(8D), selection);
+
+            if(this.isPulled() && this.isFightMode()) {
+                for(EntityLivingBase livingBase : stack) {
+                    if (livingBase instanceof EntityPlayer) {
+                        this.world.setEntityState(this, (byte) 5);
+                        if(this.canEntityBeSeen(livingBase) && this.world.isRemote && !this.isBeingRidden()) {
+                            Vec3d offset = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.0, 2.0, 0)));
+                            double d0 = (offset.x - livingBase.posX) * 0.05;
+                            double d2 = (offset.y - livingBase.posY) * 0.05;
+                            double d1 = (this.posZ - livingBase.posZ) * 0.05;
+                            livingBase.addVelocity(d0, d2, d1);
+                        }
+                    }
+                }
             }
 
         }
@@ -834,42 +856,24 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
         addEvent(()-> {
         // Start grab
+        this.setPulled(true);
 
-        for(int t = 0; t < 24; t+=1) {
-            addEvent(()-> {
-                Vec3d offsetPos = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.5, 2, 0)));
-
-                Entity entity = this.world.getEntityByID(EntityPlayer.FLAGS.getId());
-                        if(entity instanceof EntityLivingBase) {
-                            EntityLivingBase targetGrabbed = this.getAttackTarget();
-                         targetGrabbed = (EntityLivingBase)entity;
-
-                            targetGrabbed.motionX += (Math.signum(this.posX - targetGrabbed.posX) * 0.5 - targetGrabbed.motionX) * 0.5;
-                            targetGrabbed.motionZ += (Math.signum(this.posZ - targetGrabbed.posZ) * 0.5 - targetGrabbed.motionZ) * 0.5;
-                        }
-                    System.out.println("Please work");
-
-
-
-            }, t);
-
-        }
 
         }, 20);
 
         addEvent(()-> {
         //End grab
-
+        this.setPulled(false);
         }, 44);
         addEvent(() -> {
 
-            Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(2.0, 1.5, 0)));
+            Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(0.0, 0.5, 0)));
             DamageSource source = ModDamageSource.builder()
                     .type(ModDamageSource.MOB)
                     .directEntity(this)
                     .disablesShields().build();
             float damage = getAttack() * getConfigFloat("nether_knight_stab");
-            ModUtils.handleAreaImpact(1.3f, (e) -> damage, this, offset, source, 0.9f, 0, false);
+            ModUtils.handleAreaImpact(3.0f, (e) -> damage, this, offset, source, 2.0f, 0, false);
 
         }, 47);
 
