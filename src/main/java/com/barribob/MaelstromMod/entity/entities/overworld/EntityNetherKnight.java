@@ -235,7 +235,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         if(target != null && !world.isRemote) {
             double distSq = this.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
             double distance = Math.sqrt(distSq);
-            double currentHealth = this.getHealth() / this.getMaxHealth();
             double healthValue = 1;
 
 
@@ -257,27 +256,13 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             }
 
 
-            //Ranged
-            if(rangeMode && !meleeMode) {
-                if(distance < 10) {
-                    hitOpener = false;
-                } else if (distance > 10) {
-                    hitOpener = true;
-                }
-
-
+            if(distance < 10 && rangeMode) {
+                hitOpener = false;
             }
-            //Melee
-            if(meleeMode && !rangeMode) {
-                //Stunning
-                if(!this.isStunned()) {
-                    hitOpener = false;
-                }
-                if(this.isStunned()) {
-                    hitOpener = true;
-                }
-
+            if(this.isStunned() || (distance > 10 && rangeMode) ) {
+                hitOpener = true;
             }
+
             // Used if any case there isn't a selection or it is bugged
             if(!meleeMode && !rangeMode) {
                 rangeMode = true;
@@ -483,9 +468,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         return PlayState.STOP;
     }
     // Ranged Mode Attacks - Summon Fire Rings, Summon Fire balls, Fire Blade
-    //Transistion to Melee Mode - Leap Attack
-    // Melee Mode Attacks - AOE Attack, Swing Variant + Dash, SimpleSwipe
-    //Transistion to Ranged Mode - Target Throw
+    //Transistion to Melee Mode - Leap Attack - DONE
+    // Melee Mode Attacks - AOE Attack, Swing Variant + Dash, SimpleSwipe, Quick Dash - DONE
+    //Transistion to Ranged Mode - Target Throw - DONE
 
 
 
@@ -513,14 +498,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         super.handleStatusUpdate(id);
     }
 
-    /**
-     * Move Speed for when the entity is in combat only, this will allow the entity to seemingly move quicker in combat. This will allow you to make the knight slower, or faster.
-     */
-
-
-
-
-
 
 
     @Override
@@ -531,7 +508,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     @Override
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
         double distance = Math.sqrt(distanceSq);
-        double HealthChange = this.getHealth() / this.getMaxHealth();
+        double HealthChange = this.getHealth() / this.getMaxHealth(); //TBU
         if (!this.isFightMode() && !this.isStunned()) {
 
             //Ranged Attack set
@@ -539,8 +516,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(summonFire, fireRings, stabAttack));
             double[]weights = {
                     (distance > 9 && prevAttacks != summonFire) ? distance * 0.02 : 0, // Summon Fire balls
-                    (distance > 9 && prevAttacks != fireRings) ? distance * 0.02 : 0, // Summon Fire Rings
+                    (distance > 9 && prevAttacks != fireRings) ? distance * 0.02 : 0, // Summon Fire Rings (maybe totems instead?)
                     (distance < 9) ? 1.1 / distance : 0 // Grab Attack
+                    //one more attack
 
             };
               prevAttacks = ModRandom.choice(attacks, rand, weights).next();
@@ -549,12 +527,14 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             }
             //Melee Attack set
             if(meleeMode && !rangeMode) {
-                List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, swingVariant, aoeAttack, leapAttack));
+                List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, swingVariant, aoeAttack, leapAttack, quickDash));
                 double[]weights = {
-                        (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Swing
-                        (distance < 6 && prevAttacks != swingVariant) ? 1 / distance : 0,// Swing Variant
-                        (distance < 5 && prevAttacks != aoeAttack) ? 1 / distance : 0, // Aoe Attack
-                        (distance > 6) ? distance * 0.02 : 0 // Leap Attack
+                        (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Swing + starts from left
+                        (distance < 6 && prevAttacks != swingVariant) ? 1 / distance : 0,// Swing Variant + starts from right
+                        (distance < 5 && prevAttacks != aoeAttack) ? 1 / distance : 0, // Aoe Attack + starts from right
+                        (distance > 9) ? distance * 0.02 : 0, // Leap Attack
+                        (distance > 5 && distance < 9) ? 0.02 : 0 // Quick Dash
+                        //some dash sorts to close distance
 
                 };
                 prevAttacks = ModRandom.choice(attacks, rand, weights).next();
@@ -564,8 +544,27 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
 
         }
-        return (rangeMode) ? 100 : 20 ;
+        return (rangeMode) ? 80 : 15 ;
     }
+    // Quick Dash
+    private final Consumer<EntityLivingBase> quickDash = (target) -> {
+      this.setFightMode(true);
+      Vec3d targetPos = target.getPositionVector();
+      //this will be used to close small gaps but not far enough like the Leap
+    addEvent(()-> {
+        ModUtils.leapTowards(this, targetPos, 0.9f, 0.3f);
+        for(int i = 0; i < 12; i++) {
+            addEvent(()-> {
+                BlockPos thisLocation = new BlockPos(this.posX, this.posY, this.posZ);
+                this.setBlockToFire(thisLocation);
+            }, i);
+        }
+    }, 18);
+
+      addEvent(() -> {
+          this.setFightMode(false);
+      }, 40);
+    };
     // Swing Variant REDONE
     private final Consumer<EntityLivingBase> swingVariant = (target) -> {
       this.setFightMode(true);
@@ -873,7 +872,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                     .directEntity(this)
                     .disablesShields().build();
             float damage = getAttack() * getConfigFloat("nether_knight_stab");
-            ModUtils.handleAreaImpact(3.0f, (e) -> damage, this, offset, source, 2.0f, 0, false);
+            ModUtils.handleAreaImpact(3.0f, (e) -> damage, this, offset, source, 1.5f, 0, false);
 
         }, 47);
 
