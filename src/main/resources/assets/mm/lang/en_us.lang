@@ -381,6 +381,7 @@ entity.maelstrom_hunter.name=Maelstrom Hunter
 entity.wraith_hand.name=Wraith Hand
 entity.nether_knight.name=Fallen Nether Apostle
 entity.fire_ring.name=Fire Ring
+entity.fire_abberrant.name=Abberrant Spirit
 
 //�����������������������������������������������������������
 // Projectiles

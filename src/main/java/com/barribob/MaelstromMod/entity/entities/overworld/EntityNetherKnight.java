@@ -898,13 +898,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
         super.readEntityFromNBT(compound);
     }
-    public boolean isGrabbed(EntityLivingBase target) {
-        List<EntityLivingBase> entities = this.getEntitiesNearbyListed(9, 9, 9, 9);
-        target.getDistance(this);
 
-
-        return false;
-    }
 
 
 
