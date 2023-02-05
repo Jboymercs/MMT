@@ -292,6 +292,7 @@ public class EntityAbberrant extends EntityLeveledMob implements IAnimatable, IA
           ModUtils.setEntityVelocity(projectile, velocity);
           this.getLookVec();
           world.spawnEntity(projectile);
+          playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
 
 
       }, 20);
@@ -331,6 +332,7 @@ public class EntityAbberrant extends EntityLeveledMob implements IAnimatable, IA
                           .directEntity(this)
                           .disablesShields().build();
                   ModUtils.handleAreaImpact(2.8f, (e) -> damage, this, pos, source, 0.4f, 0, false);
+                  playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.5f);
               }, i);
           }
 
@@ -345,6 +347,7 @@ public class EntityAbberrant extends EntityLeveledMob implements IAnimatable, IA
                             .directEntity(this)
                             .disablesShields().build();
                     ModUtils.handleAreaImpact(2.8f, (e) -> damage, this, pos, source, 0.4f, 0, false);
+                    playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.5f);
                 }, i);
             }
 
@@ -356,6 +359,15 @@ public class EntityAbberrant extends EntityLeveledMob implements IAnimatable, IA
       }, 85);
 
     };
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        EntityLivingBase target = this.getAttackTarget();
+        if ( target instanceof EntityAbberrant || target instanceof EntityNetherKnight ) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
+    }
 
 
 

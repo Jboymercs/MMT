@@ -372,6 +372,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         public final boolean attackEntityFrom(DamageSource source, float amount) {
         if(!this.attackCore && !source.isUnblockable()) {
             return false;
+
         }
         this.hitOpener = false;
         this.hitTimer = 0;
