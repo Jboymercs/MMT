@@ -15,7 +15,7 @@ import com.barribob.MaelstromMod.packets.MessageEmptySwing;
 import com.barribob.MaelstromMod.packets.MessageExtendedReachAttack;
 import com.barribob.MaelstromMod.packets.MessageSyncConfig;
 import com.barribob.MaelstromMod.player.PlayerMeleeAttack;
-import com.barribob.MaelstromMod.renderer.InputOverrides;
+import com.barribob.MaelstromMod.util.handlers.renderer.InputOverrides;
 import com.barribob.MaelstromMod.util.*;
 import com.barribob.MaelstromMod.util.handlers.ArmorHandler;
 import com.barribob.MaelstromMod.util.teleporter.NexusToOverworldTeleporter;

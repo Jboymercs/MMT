@@ -143,7 +143,7 @@ public class ModEntities {
         registerEntityWithID("wraith_hand", EntityWraithHand.class, ENTITY_START_ID++, 100, azure);
         registerEntityWithID("nether_knight", EntityNetherKnight.class, ENTITY_START_ID++, 100, crimson_maelstrom);
         registerEntityWithID("fire_ring", EntityFireRing.class, ENTITY_START_ID++, 100, crimson_maelstrom);
-        registerEntityWithID("fire_abberrant", EntityAbberrant.class, ENTITY_START_ID++, 100, crimson_maelstrom);
+        registerEntityWithID("fire_abberrant", EntityAbberrant.class, ENTITY_START_ID++, 110, crimson_maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);
@@ -197,6 +197,7 @@ public class ModEntities {
         registerEntity("knight_slash", ProjectileKnightSlash.class, PROJECTILE_START_ID++, 40);
         registerEntity("hunter_missile", EntityHunterMissile.class, PROJECTILE_START_ID++, 60);
         registerEntity("missile_projectile", ProjectileMissile.class, PROJECTILE_START_ID++, 60);
+        registerEntity("abberrant_projectile", ProjectileAbberrantAttack.class, PROJECTILE_START_ID++, 30);
 
 
 

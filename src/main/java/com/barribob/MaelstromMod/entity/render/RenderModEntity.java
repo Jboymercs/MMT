@@ -3,7 +3,7 @@ package com.barribob.MaelstromMod.entity.render;
 import com.barribob.MaelstromMod.config.ModConfig;
 import com.barribob.MaelstromMod.entity.entities.EntityLeveledMob;
 import com.barribob.MaelstromMod.entity.entities.EntityMaelstromMob;
-import com.barribob.MaelstromMod.renderer.ITarget;
+import com.barribob.MaelstromMod.util.handlers.renderer.ITarget;
 import com.barribob.MaelstromMod.util.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;

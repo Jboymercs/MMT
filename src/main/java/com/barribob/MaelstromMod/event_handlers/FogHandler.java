@@ -1,7 +1,7 @@
 package com.barribob.MaelstromMod.event_handlers;
 
 import com.barribob.MaelstromMod.config.ModConfig;
-import com.barribob.MaelstromMod.renderer.CliffCloudRenderer;
+import com.barribob.MaelstromMod.util.handlers.renderer.CliffCloudRenderer;
 import com.barribob.MaelstromMod.util.ModColors;
 import com.barribob.MaelstromMod.util.ModUtils;
 import net.minecraft.client.Minecraft;

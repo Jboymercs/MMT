@@ -14,7 +14,7 @@ import com.barribob.MaelstromMod.entity.util.DirectionalRender;
 import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.init.ModBlocks;
 import com.barribob.MaelstromMod.packets.MessageDirectionForRender;
-import com.barribob.MaelstromMod.renderer.ITarget;
+import com.barribob.MaelstromMod.util.handlers.renderer.ITarget;
 import com.barribob.MaelstromMod.util.ModColors;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModRandom;

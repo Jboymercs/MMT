@@ -1,4 +1,4 @@
-package com.barribob.MaelstromMod.renderer;
+package com.barribob.MaelstromMod.util.handlers.renderer;
 
 import net.minecraft.util.math.Vec3d;
 
