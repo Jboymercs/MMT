@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.ChunkGeneratorHell;
@@ -19,7 +20,7 @@ public class ChunkGeneratorNether extends WorldChunkGenerator {
 
     public ChunkGeneratorNether(World worldIn, long seed, boolean mapFeaturesEnabledIn, String generatorOptions) {
         super(worldIn, seed, mapFeaturesEnabledIn, generatorOptions, Blocks.NETHERRACK, Blocks.LAVA, null);
-        MapGenStructure[] structures = {new MapGenNetherFortress(STRUCTURE_SPACING_CHUNKS, FORTRESS_NUMBER, 5, this)};
+
         this.structures = structures;
 
     }

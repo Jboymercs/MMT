@@ -27,25 +27,29 @@ import com.barribob.MaelstromMod.world.gen.foliage.WorldGenCliffShrub;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenSwampVines;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenWaterfall;
 import com.barribob.MaelstromMod.world.gen.maelstrom_castle.WorldGenMaelstromCastle;
-import com.barribob.MaelstromMod.world.gen.nether_fortress.MapGenNetherFortress;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.*;
 import com.barribob.MaelstromMod.world.gen.nexus.WorldGenCrimsonTower;
 import com.barribob.MaelstromMod.world.gen.nexus.WorldGenNexusIslands;
+import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeHell;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.ChunkGeneratorHell;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import org.lwjgl.Sys;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,6 +60,7 @@ import java.util.Random;
  */
 public class WorldGenCustomStructures implements IWorldGenerator {
     public static final WorldGenStructure MAELSTROM_CASTLE = new WorldGenMaelstromCastle("maelstrom_castle/maelstrom_castle");
+
 
     public static final WorldGenStructure AZURE_HOUSE_1 = new WorldGenStructure("azure/house_1") {
         @Override
@@ -274,7 +279,7 @@ public class WorldGenCustomStructures implements IWorldGenerator {
         }
     }
 
-    ;
+
 
     private static WorldGenStructure[] cliffSwampRuins = {WITCH_HUT, MAELSTROM_RUINS, CLIFF_TEMPLE, new CliffMaelstromStructure("brazier"),
             new CliffMaelstromStructure("gazebo"), new CliffMaelstromStructure("holy_tower"), new CliffMaelstromStructure("ruined_building"),
@@ -307,19 +312,24 @@ public class WorldGenCustomStructures implements IWorldGenerator {
         }
     };
 
+
+
     @Override
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         int x = chunkX * 16;
         int z = chunkZ * 16;
 
-        if(chunkProvider.isChunkGeneratedAt(chunkX, chunkZ)) {
-            switch (world.provider.getDimension()) {
-                case -1:
-                    new ChunkGeneratorNether(world, world.getSeed(), true, "");
-                    break;
-            }
+      if(world.provider.getDimension() == 0) {
+
+        if(canStructureSpawn(chunkX, chunkZ, world, 80)) {
+            Class<?> NETHER = Biomes.HELL.getBiomeClass();
+            //Generate the NetherFortress, Reading Works
+            System.out.println("Starting Dungeon");
+            new WorldGenStartTemple(chunkX, chunkZ).generate(world, world.rand, new BlockPos(x, 90, z));
+
 
         }
+      }
 
 
         if (world.provider.getDimension() == ModConfig.world.crimson_kingdom_dimension_id) {
@@ -386,7 +396,33 @@ public class WorldGenCustomStructures implements IWorldGenerator {
     public static final int STRUCTURE_SPACING_CHUNKS = 25;
     public static final int FORTRESS_NUMBER = 0;
 
+    public static boolean canStructureSpawn(int chunkX, int chunkZ, World world, int frequency) {
+        if (frequency <= 0) {
+            return false;
+        } else {
+            int realFreq = 101 - frequency;
+            int maxDistanceBetween = realFreq + 8;
+            int i = chunkX;
+            int j = chunkZ;
+            if (chunkX < 0) {
+                chunkX -= maxDistanceBetween - 1;
+            }
 
+            if (chunkZ < 0) {
+                chunkZ -= maxDistanceBetween - 1;
+            }
+
+            int k = chunkX / maxDistanceBetween;
+            int l = chunkZ / maxDistanceBetween;
+            Random random = world.setRandomSeed(k, l, 14357617);
+            k *= maxDistanceBetween;
+            l *= maxDistanceBetween;
+            k += random.nextInt(maxDistanceBetween - 8);
+            l += random.nextInt(maxDistanceBetween - 8);
+            return i == k && j == l;
+        }
+
+    }
 
     /**
      * Generates a structure in the chunk based if in the specific biome
@@ -419,4 +455,6 @@ public class WorldGenCustomStructures implements IWorldGenerator {
         }
         return false;
     }
+
+
 }

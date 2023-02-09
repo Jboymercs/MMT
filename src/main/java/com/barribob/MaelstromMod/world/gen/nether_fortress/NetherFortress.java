@@ -3,12 +3,16 @@ package com.barribob.MaelstromMod.world.gen.nether_fortress;
 import com.barribob.MaelstromMod.util.GenUtils;
 import com.barribob.MaelstromMod.util.ModRandom;
 import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.world.dimension.WorldChunkGenerator;
+import com.barribob.MaelstromMod.world.dimension.cliff.ChunkGeneratorCliff;
 import com.barribob.MaelstromMod.world.dimension.nether.ChunkGeneratorNether;
 import com.google.common.collect.Lists;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.template.TemplateManager;
 import org.lwjgl.Sys;
@@ -24,17 +28,17 @@ public class NetherFortress {
 
     private TemplateManager manager;
 
-    private ChunkGeneratorNether provider;
+    private WorldChunkGenerator provider;
 
-    private static final int SIZE = 10;
+    private static final int SIZE = 5;
 
     private int requiredGroundHeight = 60;
 
     private static final List<Tuple<Rotation, BlockPos>> CROSS_POS = Lists.newArrayList(new Tuple(Rotation.NONE, new BlockPos(0, 0, 0)),
-            new Tuple(Rotation.CLOCKWISE_90, new BlockPos(13, 0, 0)), new Tuple(Rotation.COUNTERCLOCKWISE_90, new BlockPos(0, 0, 13)));
+            new Tuple(Rotation.CLOCKWISE_90, new BlockPos(32, 0, 0)), new Tuple(Rotation.COUNTERCLOCKWISE_90, new BlockPos(0, 0, 32)));
 
 
-    public NetherFortress(World world, TemplateManager manager, ChunkGeneratorNether provider, List<StructureComponent> components) {
+    public NetherFortress(World world, TemplateManager manager, WorldChunkGenerator provider, List<StructureComponent> components) {
         this.components = components;
         this.world = world;
         this.manager = manager;
@@ -42,7 +46,7 @@ public class NetherFortress {
     }
 
     public void startFortress(BlockPos pos, Rotation rot) {
-        FortressTemplateK template = new FortressTemplateK(manager, "nk_boss_room_north", pos, rot, 0, true);
+        FortressTemplateK template = new FortressTemplateK(manager, "nf_boss", pos, rot, 0, true);
         if (GenUtils.getGroundHeight(template, provider, rot) > requiredGroundHeight && ModUtils.chunksGenerated(template.getBoundingBox(), world)) {
             components.add(template);
             generateCross(template, BlockPos.ORIGIN, rot);
@@ -53,7 +57,7 @@ public class NetherFortress {
     }
 
     public boolean generateCross(FortressTemplateK parent, BlockPos pos, Rotation rot) {
-        String[] rooms = {"nk_intersection_1", "nk_intersection_2"};
+        String[] rooms = {"nf_entry"};
         FortressTemplateK template = addAdjustmentPiece(parent, pos, ModRandom.choice(rooms), rot);
 
         if(template.isCollidingExcParent(manager, parent, components) || template.getDistance() > SIZE || ModUtils.chunksGenerated(template.getBoundingBox(), world)) {
@@ -82,14 +86,14 @@ public class NetherFortress {
     }
 
     private boolean generateHalls(FortressTemplateK parent, BlockPos pos, Rotation rotation) {
-        String[] rooms = {"nk_hall_e_1", "nk_hall_e_2", "nk_hall_n_1", "nk_hall_n_2", "nk_room_north_south", "nk_room_west_east"};
+        String[] rooms = {"nf_halls", "nf_city"};
         FortressTemplateK template1 = addAdjustmentPiece(parent, pos, ModRandom.choice(rooms), rotation);
 
         if(template1.isCollidingExcParent(manager, parent, components) || template1.getDistance() > SIZE || ModUtils.chunksGenerated(template1.getBoundingBox(), world)) {
             return false;
         }
 
-        if(GenUtils.getGroundHeight(template1, provider, rotation) < requiredGroundHeight) {
+        if(GenUtils.getGroundHeight(parent, provider, rotation) < requiredGroundHeight) {
             return this.generateEnd(parent, pos, rotation);
         }
 
@@ -119,7 +123,7 @@ public class NetherFortress {
     }
 
     private boolean generateEnd(FortressTemplateK parent, BlockPos pos, Rotation rot) {
-        FortressTemplateK template = addAdjustmentPiece(parent, pos, "nk_balcony_any", rot);
+        FortressTemplateK template = addAdjustmentPiece(parent, pos, "nf_city", rot);
         if(template.isCollidingExcParent(manager, parent, components) || template.getDistance() > SIZE || ModUtils.chunksGenerated(template.getBoundingBox(), world)) {
             return false;
 

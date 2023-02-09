@@ -1,18 +1,22 @@
 package com.barribob.MaelstromMod.world.gen.nether_fortress;
 
+import com.barribob.MaelstromMod.world.dimension.WorldChunkGenerator;
+import com.barribob.MaelstromMod.world.dimension.cliff.ChunkGeneratorCliff;
 import com.barribob.MaelstromMod.world.dimension.nether.ChunkGeneratorNether;
 import com.barribob.MaelstromMod.world.gen.MapGenModStructure;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProviderHell;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureStart;
 
 import java.util.Random;
 
 public class MapGenNetherFortress extends MapGenModStructure {
-        ChunkGeneratorNether provider;
+        WorldChunkGenerator provider;
 
-    public MapGenNetherFortress(int spacing, int offset, int odds, ChunkGeneratorNether provider) {
+    public MapGenNetherFortress(int spacing, int offset, int odds, WorldChunkGenerator provider) {
         super(spacing, offset, odds);
         this.provider = provider;
         System.out.println("Loaded in MapGenFortress");
@@ -29,13 +33,13 @@ public class MapGenNetherFortress extends MapGenModStructure {
     }
 
     public static class Start extends StructureStart{
-        ChunkGeneratorNether provider;
+        WorldChunkGenerator provider;
 
         public Start() {
 
         }
 
-        public Start(World worldIn, Random rand, int chunkX, int chunkZ, ChunkGeneratorNether provider) {
+        public Start(World worldIn, Random rand, int chunkX, int chunkZ, WorldChunkGenerator provider) {
             super(chunkX, chunkZ);
             this.provider = provider;
             this.create(worldIn, rand, chunkX, chunkZ);

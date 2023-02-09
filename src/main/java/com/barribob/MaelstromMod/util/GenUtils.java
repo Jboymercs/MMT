@@ -6,10 +6,13 @@ import com.barribob.MaelstromMod.world.gen.ModStructureTemplate;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
+import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GenUtils {
     public static int getGroundHeight(ModStructureTemplate template, WorldChunkGenerator gen, Rotation rotation) {
@@ -20,6 +23,8 @@ public class GenUtils {
         int corner4 = getGroundHeight(new BlockPos(box.minX, 0, box.minZ), gen, rotation);
         return Math.min(Math.min(corner3, corner4), Math.max(corner2, corner1));
     }
+
+
 
     /*
      * From MapGenEndCity: determines the ground height
@@ -78,6 +83,19 @@ public class GenUtils {
                 }
             }
         }
+    }
+
+    private static final Random RAND = new Random();
+
+    public static int randomBetween(int min, int max) {
+        return randomBetween(min, max, RAND);
+    }
+
+    public static int randomBetween(int min, int max, Random rand) {
+        if (min >= max) {
+            return min;
+        }
+        return min + rand.nextInt(max - min + 1);
     }
 
     public static int getTerrainVariation(World world, int x, int z, int sizeX, int sizeZ) {

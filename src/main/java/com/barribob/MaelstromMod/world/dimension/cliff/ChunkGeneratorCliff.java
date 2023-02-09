@@ -5,6 +5,7 @@ import com.barribob.MaelstromMod.world.dimension.WorldChunkGenerator;
 import com.barribob.MaelstromMod.world.gen.WorldGenLongVein;
 import com.barribob.MaelstromMod.world.gen.cliff.MapGenHoleTemple;
 import com.barribob.MaelstromMod.world.gen.golden_ruins.MapGenGoldenRuins;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.MapGenNetherFortress;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

@@ -2,6 +2,7 @@ package com.barribob.MaelstromMod.world.gen.nether_fortress;
 
 import com.barribob.MaelstromMod.entity.entities.EntityAzureWraith;
 import com.barribob.MaelstromMod.entity.entities.EntityMaelstromShielder;
+import com.barribob.MaelstromMod.entity.entities.overworld.EntityAbberrant;
 import com.barribob.MaelstromMod.entity.entities.overworld.EntityNetherKnight;
 import com.barribob.MaelstromMod.entity.tileentity.MobSpawnerLogic.MobSpawnData;
 import com.barribob.MaelstromMod.entity.tileentity.TileEntityMobSpawner;
@@ -50,6 +51,23 @@ public class FortressTemplateK extends ModStructureTemplate {
                 }
             }
         }
+        //Special Loot Chest Midtier
+        if (function.startsWith("special_chest")) {
+            worldIn.setBlockToAir(pos);
+            BlockPos blockPos = pos.down();
+            if (rand.nextFloat() < 0.3) {
+                if (sbb.isVecInside(blockPos)) {
+                    TileEntity tileEntity = worldIn.getTileEntity(blockPos);
+
+                    if (tileEntity instanceof TileEntityChest) {
+                        ((TileEntityChest) tileEntity).setLootTable(LootTableHandler.GOLDEN_RUINS, rand.nextLong()); // To be changed
+                    }
+                }
+                else {
+                    worldIn.setBlockToAir(blockPos);
+                }
+            }
+        }
         // Spawner for Final Chest
         else if (function.startsWith("final_chest")) {
             worldIn.setBlockToAir(pos);
@@ -76,8 +94,8 @@ public class FortressTemplateK extends ModStructureTemplate {
                 if (tile instanceof TileEntityMobSpawner) {
                     ((TileEntityMobSpawner) tile).getSpawnerBaseLogic().setData(
                             new MobSpawnData[]{
-                                    new MobSpawnData(ModEntities.getID(EntityMaelstromShielder.class), Element.GOLDEN, 1), // to be changed
-                                    new MobSpawnData(ModEntities.getID(EntityAzureWraith.class), Element.NONE, 1)   // to be changed
+                                    new MobSpawnData(ModEntities.getID(EntityAbberrant.class), Element.NONE, 1), // Abberrant
+
 
                             },
                             new int[]{1, 1},
@@ -108,6 +126,6 @@ public class FortressTemplateK extends ModStructureTemplate {
 
     @Override
     public String templateLocation() {
-        return "nether_knight_dungeon";
+        return "nether";
     }
 }
