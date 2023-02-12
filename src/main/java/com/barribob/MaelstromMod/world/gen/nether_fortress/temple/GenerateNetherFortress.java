@@ -1,4 +1,4 @@
-package com.barribob.MaelstromMod.world.gen.nether_fortress;
+package com.barribob.MaelstromMod.world.gen.nether_fortress.temple;
 
 import com.barribob.MaelstromMod.entity.entities.overworld.EntityNetherKnight;
 import com.barribob.MaelstromMod.entity.tileentity.MobSpawnerLogic;
@@ -6,28 +6,22 @@ import com.barribob.MaelstromMod.entity.tileentity.TileEntityMobSpawner;
 import com.barribob.MaelstromMod.init.ModBlocks;
 import com.barribob.MaelstromMod.init.ModEntities;
 import com.barribob.MaelstromMod.util.Element;
-import com.barribob.MaelstromMod.util.GenUtils;
-import com.barribob.MaelstromMod.util.ModRandom;
-import com.barribob.MaelstromMod.util.ModUtils;
 import com.barribob.MaelstromMod.util.handlers.LevelHandler;
-import com.barribob.MaelstromMod.world.gen.WorldGenStructure;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.bridge.WorldGenNetherBridge;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.bridge.WorldGenNetherBridgeN;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.bridge.WorldGenNetherBridgeS;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.bridge.WorldGenNetherBridgeW;
 import com.barribob.MaelstromMod.world.gen.vanilla.WorldGenNetherBase;
-import com.google.common.collect.Lists;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraft.world.gen.structure.template.TemplateManager;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class GenerateNetherFortress extends WorldGenNetherBase {
 
-    private static WorldGenStructure[] rooms = {new WorldGenFortressRoom("nether/nf_entry")};
+
 
     /**
      * @param name The name of the structure to load in the nbt file

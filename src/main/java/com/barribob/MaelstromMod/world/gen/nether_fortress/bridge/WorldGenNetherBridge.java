@@ -1,14 +1,13 @@
-package com.barribob.MaelstromMod.world.gen.nether_fortress;
+package com.barribob.MaelstromMod.world.gen.nether_fortress.bridge;
 
 import com.barribob.MaelstromMod.util.ModRandom;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.end.WorldGenEndE;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.tower.WorldGenNetherTowerE;
 import com.barribob.MaelstromMod.world.gen.vanilla.WorldGenNetherBase;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 public class WorldGenNetherBridge extends WorldGenNetherBase {
@@ -26,31 +25,26 @@ public class WorldGenNetherBridge extends WorldGenNetherBase {
         super.generateStructure(world, pos, Rotation.NONE);
 
     }
+    boolean hasSpawned = false;
 
-    public boolean genSuccess;
 
     @Override
     protected void handleDataMarker(String function, BlockPos pos, World world, Random random) {
-        int generation = random.nextInt(3);
+        float value = ModRandom.getFloat(6);
+        int generation = random.nextInt(6);
 
-        if(generation == 0) {
+
             if(function.startsWith("connect")) {
-                genSuccess = true;
-                new WorldGenNetherBridge(0).generate(world, world.rand, pos);
-            } else {
-                genSuccess = true;
-                new WorldGenEndE(0).generate(world, world.rand, pos);
+                if(generation == 0 && !hasSpawned) {
+                    new WorldGenNetherBridge(0).generate(world, world.rand, pos);
+                    hasSpawned = true;
+                }
+                if(generation != 0) {
+                    BlockPos pos1 = pos.add(new BlockPos(0, 0, -2));
+                    new WorldGenNetherTowerE(0).generate(world, world.rand, pos1);
+                    hasSpawned = false;
+                }
             }
-
-
-
-        }
-        if(!genSuccess) {
-            if(function.startsWith("connect")) {
-                BlockPos pos1 = pos.add(new BlockPos(0, 0, -2));
-                new WorldGenNetherTowerE(0).generate(world, world.rand, pos1);
-            }
-        }
 
 
 

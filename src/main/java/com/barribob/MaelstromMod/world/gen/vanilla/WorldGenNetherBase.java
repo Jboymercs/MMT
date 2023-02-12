@@ -1,5 +1,6 @@
 package com.barribob.MaelstromMod.world.gen.vanilla;
 
+import com.barribob.MaelstromMod.entity.entities.EntityLeveledMob;
 import com.barribob.MaelstromMod.util.ModUtils;
 import com.barribob.MaelstromMod.world.gen.WorldGenStructure;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +26,7 @@ public class WorldGenNetherBase extends WorldGenStructure {
     public boolean generate(World worldIn, Random random, BlockPos blockPos) {
         return super.generate(worldIn, random, blockPos.add(new BlockPos(0, yOffset, 0)));
     }
+
 
     @Override
     public int getYGenHeight(World world, int x, int z) {

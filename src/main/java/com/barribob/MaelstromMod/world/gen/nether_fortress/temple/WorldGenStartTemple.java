@@ -1,4 +1,4 @@
-package com.barribob.MaelstromMod.world.gen.nether_fortress;
+package com.barribob.MaelstromMod.world.gen.nether_fortress.temple;
 
 import com.barribob.MaelstromMod.world.gen.vanilla.WorldGenNetherBase;
 import net.minecraft.util.Rotation;

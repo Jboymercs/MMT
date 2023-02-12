@@ -1,22 +1,20 @@
-package com.barribob.MaelstromMod.world.gen.nether_fortress;
+package com.barribob.MaelstromMod.world.gen.nether_fortress.end;
 
 import com.barribob.MaelstromMod.world.gen.vanilla.WorldGenNetherBase;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class WorldGenEndE extends WorldGenNetherBase {
+public class WorldGenEndN extends WorldGenNetherBase {
     /**
      * @param name    The name of the structure to load in the nbt file
      * @param yOffset
      */
-    //End points, only found on towers
-    public WorldGenEndE(int yOffset) {
+    public WorldGenEndN( int yOffset) {
         super("nether/east_end", 0);
     }
-    @Override
     public void generateStructure(World world, BlockPos pos, Rotation rotation) {
-        super.generateStructure(world, pos, Rotation.NONE);
+        super.generateStructure(world, pos, Rotation.COUNTERCLOCKWISE_90);
 
     }
 }
