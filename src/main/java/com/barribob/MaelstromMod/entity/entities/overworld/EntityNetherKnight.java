@@ -2,6 +2,7 @@ package com.barribob.MaelstromMod.entity.entities.overworld;
 
 import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.entities.EntityLeveledMob;
+import com.barribob.MaelstromMod.entity.projectile.ProjectileAbberrantAttack;
 import com.barribob.MaelstromMod.entity.projectile.ProjectileMonolithFireball;
 import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.entity.util.IPitch;
@@ -73,6 +74,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
     protected static final DataParameter<Boolean> PULL = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
 
+    protected static final DataParameter<Boolean> DASH = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> OVER_SMASH = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
+    protected static final DataParameter<Boolean> SWING_V2 = EntityDataManager.createKey(EntityNetherKnight.class, DataSerializers.BOOLEAN);
+
     public boolean rangeMode = true;
     public boolean meleeMode = false;
     private final String WALK_ANIM = "walk";
@@ -85,7 +90,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     private final String LEAP_ANIM = "leap";
     private final String SWING_VARIANT = "swingVariant";
     private final String STUN_ANIM = "stunStatus";
-
+    private final String DASH_ANIM = "dash";
+    private final String SWING_V2_ANIM = "swingVariant2";
+    private final String OVER_SMASH_ANIM = "over_smash";
 
     private final MultiPartEntityPart model = new MultiPartEntityPart(this, "model", 0.8f, 0.7f);
     private final MultiPartEntityPart lArm = new MultiPartEntityPart(this, "leftArm", 0.45f, 1.8f);
@@ -100,11 +107,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     private final MultiPartEntityPart[] hitboxParts;
 
     public boolean hitOpener;
-    public int hitTimer = 0;
-
-    public float stunCounter = 0;
-
-    public boolean targetShieldUse;
 
 
     private Consumer<EntityLivingBase> prevAttacks;
@@ -133,6 +135,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         this.dataManager.register(LOOK, 0f);
         this.dataManager.register(STUNNED, Boolean.valueOf(false));
         this.dataManager.register(PULL, Boolean.valueOf(false));
+        this.dataManager.register(DASH, Boolean.valueOf(false));
+        this.dataManager.register(OVER_SMASH, Boolean.valueOf(false));
+        this.dataManager.register(SWING_V2, Boolean.valueOf(false));
     }
 
     public void setFightMode(boolean value) {
@@ -176,13 +181,22 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
     public boolean isPulled() {return this.dataManager.get(PULL);}
 
+    public boolean isDash() {return this.dataManager.get(DASH);}
+
+    public void setDash(boolean value) {this.dataManager.set(DASH, Boolean.valueOf(value));}
+
+    public boolean isOverSmash() {return this.dataManager.get(OVER_SMASH);}
+    public void setOverSmash(boolean value) {this.dataManager.set(OVER_SMASH, Boolean.valueOf(value));}
+    public boolean isSwing2() {return this.dataManager.get(SWING_V2);}
+    public void setSwingV2(boolean value) {this.dataManager.set(SWING_V2, Boolean.valueOf(value));}
+
 
     @Override
     public void onUpdate() {
         super.onUpdate();
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 
-        if (this.isSwingMode()) {
+        if (this.isSwingMode() || this.isOverSmash()) {
             this.motionX = 0;
             this.motionZ = 0;
             this.motionY = 0;
@@ -191,7 +205,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         if(target != null) {
             boolean hasGround = false;
             if(!world.isRemote && this.isFightMode()) {
-                if (this.isSwingVariant() || this.isStabMode()) {
+                if (this.isSwingVariant() || this.isStabMode() || this.isDash()) {
                     AxisAlignedBB box = getEntityBoundingBox().grow(1.25, 0.1, 1.25).offset(0, 0.1, 0);
                 ModUtils.destroyBlocksInAABB(box, world, this);
             }
@@ -214,10 +228,8 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
         }
 
-        this.isBlocking();
-
         if(!world.isRemote && this.isLeaping()) {
-            AxisAlignedBB box = getEntityBoundingBox().grow(1.0, 0.22, 1.0).offset(0, 0.12, 0);
+            AxisAlignedBB box = getEntityBoundingBox().grow(2, 0.12, 2).offset(0, 0, 0);
             ModUtils.destroyBlocksInAABB(box, world, this);
         }
 
@@ -225,42 +237,47 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         if(target != null && !world.isRemote) {
             double distSq = this.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
             double distance = Math.sqrt(distSq);
-            double healthValue = 1;
+            double healthValue = this.getHealth() / this.getMaxHealth();
 
 
-
-            if(hurtTime > 0) {
-
-                if(rangeMode && !meleeMode) {
-                    meleeMode = true;
-                    rangeMode = false;
-
-                }
-
-                else if (meleeMode) {
-                    rangeMode = true;
-                    meleeMode = false;
-
-                }
-
+            if(healthValue < 0.9 && healthValue > 0.6) {
+                //melee
+                meleeMode = true;
+                rangeMode = false;
+            }
+            if(healthValue < 0.6 && healthValue > 0.5) {
+                //ranged
+                rangeMode = true;
+                meleeMode = false;
+            }
+            if(healthValue < 0.5 && healthValue > 0.3) {
+                //melee
+                meleeMode = true;
+                rangeMode = false;
+            }
+            if(healthValue < 0.3 && healthValue > 0.2) {
+                //ranged
+                rangeMode = true;
+                meleeMode = false;
+            }
+            if(healthValue < 0.2) {
+                //melee
+                meleeMode = true;
+                rangeMode = false;
             }
 
 
-            if(distance < 10 && rangeMode) {
-                hitOpener = false;
-            }
-            if(this.isStunned() || (distance > 10 && rangeMode) ) {
+
+            if(meleeMode || (distance > 10 && rangeMode) ) {
                 hitOpener = true;
             }
-
+            else {
+                hitOpener = false;
+            }
             // Used if any case there isn't a selection or it is bugged
             if(!meleeMode && !rangeMode) {
                 rangeMode = true;
             }
-            if(healthValue < 0) {
-
-            }
-            // Draws player towards the Apostle
 
         }
 
@@ -270,10 +287,11 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         public void onEntityUpdate() {
         super.onEntityUpdate();
         if(this.hitOpener) {
-            if (rand.nextInt(10) == 0) {
+            if (rand.nextInt(8) == 0) {
                 world.setEntityState(this, ModUtils.THIRD_PARTICLE_BYTE);
             }
         }
+
         }
 
         private void setHitBoxPos(Entity entity, Vec3d offset) {
@@ -285,19 +303,8 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
         }
 
-        public void stunMeter() {
 
 
-        if(stunCounter >= 16) {
-            this.setStunned(true);
-            this.playSound(SoundEvents.BLOCK_GLASS_BREAK, 0.8f, 0.8f + ModRandom.getFloat(0.1f));
-
-            //play Animation
-            addEvent(()-> this.setStunned(false), 80);
-
-            addEvent(()-> stunCounter = 0, 80);
-        }
-        }
 
 
         @Override
@@ -342,8 +349,26 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                     }
                 }
             }
+        if(meleeMode && !this.isFightMode()) {
+            EntityLivingBase target = this.getAttackTarget();
+            if(target != null && !world.isRemote) {
+                double distSq = this.getDistanceSq(target.posX, target.getEntityBoundingBox().minY, target.posZ);
+                double distance = Math.sqrt(distSq);
+
+                if(distance > 5 && !this.isBeingRidden()) {
+                    double d0 = (target.posX - this.posX) * 0.01;
+                    double d1 = (target.posY - this.posY) * 0.0;
+                    double d2 = (target.posZ - this.posZ) * 0.01;
+                    this.addVelocity(d0, d1, d2);
+                }
+                if(isMovementBlocked()) {
+                    ModUtils.leapTowards(this, target.getPositionVector(), 0.3f, 0.5f);
+                }
+            }
+        }
 
         }
+
 
         private boolean attackCore;
 
@@ -354,7 +379,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             return this.attackEntityFrom(source, damage);
         }
         if(damage > 0.0f && !source.isUnblockable()) {
-            if(!source.isProjectile()) {
+            if(!source.isProjectile() || !source.isExplosion()) {
                 Entity entity = source.getImmediateSource();
                 if (entity instanceof EntityLivingBase) {
                     this.blockUsingShield((EntityLivingBase) entity);
@@ -374,8 +399,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
             return false;
 
         }
-        this.hitOpener = false;
-        this.hitTimer = 0;
+
         this.attackCore = false;
         return super.attackEntityFrom(source, amount);
         }
@@ -388,7 +412,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     @Override
     public void initEntityAI() {
         super.initEntityAI();
-        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 20, 24F, 0.1F));
+        this.tasks.addTask(4, new EntityAITimedAttack<>(this, 1.0, 40, 24F, 0.1F));
         this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
         this.tasks.addTask(8, new EntityAILookIdle(this));
         this.targetTasks.addTask(3, new EntityAIHurtByTarget(this, false));
@@ -452,6 +476,18 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                     event.getController().setAnimation(new AnimationBuilder().addAnimation(SWING_VARIANT, false));
                     return PlayState.CONTINUE;
                 }
+                if(this.isDash()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(DASH_ANIM, false));
+                    return PlayState.CONTINUE;
+                }
+                if(this.isOverSmash()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(OVER_SMASH_ANIM, false));
+                    return PlayState.CONTINUE;
+                }
+                if(this.isSwing2()) {
+                    event.getController().setAnimation(new AnimationBuilder().addAnimation(SWING_V2_ANIM, false));
+                    return PlayState.CONTINUE;
+                }
             }
 
 
@@ -500,7 +536,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
     public int startAttack(EntityLivingBase target, float distanceSq, boolean strafingBackwards) {
         double distance = Math.sqrt(distanceSq);
         double HealthChange = this.getHealth() / this.getMaxHealth(); //TBU
-        if (!this.isFightMode() && !this.isStunned()) {
+        if (!this.isFightMode()) {
 
             //Ranged Attack set
             if(rangeMode && !meleeMode) {
@@ -516,16 +552,19 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
               prevAttacks.accept(target);
 
             }
+
             //Melee Attack set
             if(meleeMode && !rangeMode) {
-                List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, swingVariant, aoeAttack, leapAttack, quickDash));
+                List<Consumer<EntityLivingBase>> attacks = new ArrayList<>(Arrays.asList(simpleSwing, swingVariant, aoeAttack, leapAttack, quickDash, Swing2, OverAttack));
                 double[]weights = {
                         (distance < 5 && prevAttacks != simpleSwing) ? 1 / distance : 0, // Simple Swing + starts from left
-                        (distance < 6 && prevAttacks != swingVariant) ? 1 / distance : 0,// Swing Variant + starts from right
-                        (distance < 5 && prevAttacks != aoeAttack) ? 1 / distance : 0, // Aoe Attack + starts from right
+                        (distance < 6 && prevAttacks != swingVariant && HealthChange < 0.6) ? 1 / distance : 0,// Swing Variant + starts from right
+                        (distance < 5 && prevAttacks != aoeAttack && HealthChange < 0.5) ? 1 / distance : 0, // Aoe Attack + starts from right
                         (distance > 9) ? distance * 0.02 : 0, // Leap Attack
-                        (distance > 5 && distance < 9) ? 0.02 : 0 // Quick Dash
-                        //some dash sorts to close distance
+                        (distance > 5 && distance < 9) ? distance * 0.021 : 0, // Quick Dash
+                        (distance < 6 && prevAttacks != Swing2) ? 1/ distance : 0, // Swing Var2
+                        (distance < 6 && prevAttacks != OverAttack) ? 1/ distance : 0 //Over Swing Small AOE
+
 
                 };
                 prevAttacks = ModRandom.choice(attacks, rand, weights).next();
@@ -535,15 +574,54 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
 
         }
-        return (rangeMode) ? 80 : 15 ;
+        return (rangeMode) ? 200 : (distance > 9) ? 140 : 20 ;
     }
+
+    //Over Attack
+    private final Consumer<EntityLivingBase> OverAttack = (target) -> {
+      this.setOverSmash(true);
+      this.setFightMode(true);
+      addEvent(()-> {
+          Vec3d pos = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(2.4,0,0)));
+          DamageSource source = ModDamageSource.builder().type(ModDamageSource.MOB).directEntity(this).build();
+          float damage = getAttack() * getConfigFloat("nether_knight_swing");
+          ModUtils.handleAreaImpact(1.4f, (e)-> damage, this, pos, source, 0.5f, 0, false);
+          this.world.newExplosion(this, pos.x, pos.y, pos.z, (float) getMobConfig().getDouble("nether_knight_explosion"), true, true);
+      }, 20);
+      addEvent(()-> {
+          this.setOverSmash(false);
+          this.setFightMode(false);
+      }, 44);
+    };
+    //Swing V2
+    private final Consumer<EntityLivingBase> Swing2 = (target) -> {
+      this.setSwingV2(true);
+      this.setFightMode(true);
+      addEvent(()-> {
+          ModUtils.leapTowards(this, target.getPositionVector(), 0.3f, 0.2f);
+      }, 18);
+      addEvent(()-> {
+        Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(2.0,1.5,0)));
+        DamageSource source = ModDamageSource.builder().type(ModDamageSource.MOB).directEntity(this).build();
+        float damage = getAttack() * getConfigFloat("nether_knight_swing");
+        ModUtils.handleAreaImpact(1.2f, (e)-> damage, this, offset, source, 0.3f, 0, false);
+          playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
+      }, 22);
+
+      addEvent(()-> {
+        this.setSwingV2(false);
+        this.setFightMode(false);
+      }, 35);
+    };
+
     // Quick Dash
     private final Consumer<EntityLivingBase> quickDash = (target) -> {
+            this.setDash(true);
       this.setFightMode(true);
       Vec3d targetPos = target.getPositionVector();
       //this will be used to close small gaps but not far enough like the Leap
     addEvent(()-> {
-        ModUtils.leapTowards(this, targetPos, 0.9f, 0.3f);
+        ModUtils.leapTowards(this, targetPos, 0.7f, 0.3f);
         for(int i = 0; i < 12; i++) {
             addEvent(()-> {
                 BlockPos thisLocation = new BlockPos(this.posX, this.posY, this.posZ);
@@ -554,16 +632,16 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
       addEvent(() -> {
           this.setFightMode(false);
+          this.setDash(false);
       }, 40);
     };
+
     // Swing Variant REDONE
     private final Consumer<EntityLivingBase> swingVariant = (target) -> {
       this.setFightMode(true);
       this.setSwingvariant(true);
 
           addEvent(() -> {
-              if(!this.isStunned()) {
-                  targetShieldUse = true;
                   Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.8, 1.5, 0)));
                   DamageSource source = ModDamageSource.builder()
                           .type(ModDamageSource.MOB)
@@ -572,19 +650,14 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                   float damage = getAttack() * getConfigFloat("nether_knight_swing");
                   ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.4f, 0, false);
                   playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
-                  addEvent(() -> targetShieldUse = false, 5);
-              }
           }, 27);
 
           addEvent(() -> {
-              if(!this.isStunned()) {
                   ModUtils.leapTowards(this, target.getPositionVector(), 0.5f, 0.2f);
-              }
           }, 32);
 
 
           addEvent(() -> {
-              if(!this.isStunned()) {
                   Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.8, 1.5, 0)));
                   DamageSource source = ModDamageSource.builder()
                           .type(ModDamageSource.MOB)
@@ -594,13 +667,12 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                   float damage = getAttack() * getConfigFloat("nether_knight_swing");
                   ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.4f, 0, false);
                   playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
-              }
+
 
           }, 39);
 
 
           addEvent(() -> {
-              if(!this.isStunned()) {
                   Vec3d grabPos = new Vec3d(target.posX, target.posY, target.posZ);
 
 
@@ -609,24 +681,17 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
                       for (int fi = 0; fi < 7; fi += 1) {
                           addEvent(() -> {
-
                               Vec3d targetPos = this.getPositionVector();
                               BlockPos fireDest = new BlockPos(targetPos.x, targetPos.y, targetPos.z);
                               this.setBlockToFire(fireDest);
-
-
                           }, fi);
                       }
 
-
                   }, 18);
-              }
           }, 44);
 
 
           addEvent(() -> {
-              if(!this.isStunned()) {
-                  targetShieldUse = true;
                   Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.2, 1.5, 0)));
                   DamageSource source = ModDamageSource.builder()
                           .type(ModDamageSource.MOB)
@@ -634,14 +699,11 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                           .build();
                   float damage = getAttack() * getConfigFloat("nether_knight_swing");
                   ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.8f, 0, false);
-                  addEvent(() -> targetShieldUse = false, 3);
-              }
+
           }, 63);
 
 
           addEvent(() -> {
-                      if(!this.isStunned()) {
-                          targetShieldUse = true;
                           Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.8, 1.5, 0)));
                           DamageSource source = ModDamageSource.builder()
                                   .type(ModDamageSource.MOB)
@@ -650,8 +712,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                           float damage = getAttack() * getConfigFloat("nether_knight_swing");
                           ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.4f, 0, false);
                           playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
-                          addEvent(() -> targetShieldUse = false, 5);
-                      }
           }, 76);
 
       addEvent(()-> this.setSwingvariant(false), 104);
@@ -706,8 +766,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
       this.setAoeStrike(true);
 
           addEvent(() -> {
-              if(!this.isStunned()) {
-                  targetShieldUse = true;
                   Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(2.0, 1.5, 0)));
                   DamageSource source = ModDamageSource.builder()
                           .type(ModDamageSource.MOB)
@@ -716,20 +774,15 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                   float damage = getAttack() * getConfigFloat("nether_knight_swing");
                   ModUtils.handleAreaImpact(1.3f, (e) -> damage, this, offset, source, 0.5f, 0, false);
                   playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
-                  addEvent(() -> targetShieldUse = false, 5);
-              }
           }, 22);
 
 
             addEvent(() -> {
-                if(!this.isStunned()) {
                     world.setEntityState(this, ModUtils.SECOND_PARTICLE_BYTE);
-                }
             }, 40);
 
 
             addEvent(() -> {
-                        if(!this.isStunned()) {
                             Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(1.0, 0, 0)));
                             DamageSource source = ModDamageSource.builder()
                                     .type(ModDamageSource.MOB)
@@ -740,7 +793,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
 
                             playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 1.5f, 1.0f / getRNG().nextFloat() * 0.4f + 0.4f);
 
-                        }
             }, 43);
 
       addEvent(() -> this.setAoeStrike(false), 66);
@@ -760,13 +812,17 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         }, 40);
 
         addEvent(()-> {
-            for(int tick = 0; tick < 15; tick += 5) {
+            for(int tick = 0; tick < 180; tick += 20) {
                 addEvent(()-> {
-                    EntityFireRing fireRing = new EntityFireRing(this.world);
-                    Vec3d spawnPos = target.getPositionVector();
-                    BlockPos pos = new BlockPos(spawnPos.x + ModRandom.range(-15, 15), spawnPos.y + 4, spawnPos.z + ModRandom.range(-15, 15));
-                    fireRing.setPosition(pos.getX(), pos.getY(), pos.getZ());
-                    this.world.spawnEntity(fireRing);
+                    ProjectileAbberrantAttack projectile = new ProjectileAbberrantAttack(this.world, this, this.getAttack());
+                    Vec3d pos = this.getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(ModRandom.getFloat(8) -2,7,ModRandom.getFloat(8) - 2)));
+                    Vec3d targetPos = new Vec3d(target.posX + ModRandom.getFloat(3) -1, target.posY, target.posZ + ModRandom.getFloat(3) -1);
+                    Vec3d velocity = targetPos.subtract(pos).normalize().scale(0.45f);
+                    projectile.setPosition(pos.x, pos.y, pos.z);
+                    projectile.setTravelRange(20f);
+                    ModUtils.setEntityVelocity(projectile, velocity);
+                    world.spawnEntity(projectile);
+                    playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
                 }, tick);
             }
         }, 44);
@@ -823,7 +879,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         }, 31);
 
             addEvent(() -> {
-                targetShieldUse = true;
                 Vec3d offset = getPositionVector().add(ModUtils.getRelativeOffset(this, new Vec3d(2.2, 1.5, 0)));
                 DamageSource source = ModDamageSource.builder()
                         .type(ModDamageSource.MOB)
@@ -832,7 +887,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                 float damage = getAttack() * getConfigFloat("nether_knight_swing");
                 ModUtils.handleAreaImpact(1.5f, (e) -> damage, this, offset, source, 0.5f, 0, false);
                 playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 1.0f, 1.0f / getRNG().nextFloat() * 0.4f + 0.8f);
-                addEvent(() -> targetShieldUse = false, 5);
             }, 34);
 
         addEvent(() -> this.setSwingMode(false), 58);
@@ -941,25 +995,7 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         return null;
     }
 
-    public boolean isBlocking() {
-        EntityLivingBase target = this.getAttackTarget();
 
-
-        if(target != null) {
-            ItemStack itemStack = target.getHeldItem(target.getActiveHand());
-            if (itemStack.getItem() instanceof ItemShield) {
-                double distanceSQ = this.getDistance(target.posX, target.posY, target.posZ);
-                double distance = Math.sqrt(distanceSQ);
-                if(targetShieldUse && distance < 3) {
-                    this.stunCounter++;
-                    this.stunMeter();
-                    return true;
-                }
-            }
-            return false;
-        }
-        return false;
-    }
 
 
     @Override

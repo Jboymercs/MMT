@@ -32,6 +32,7 @@ public class WorldGenNetherTowerS extends WorldGenNetherBase {
     @Override
     protected void handleDataMarker(String function, BlockPos pos, World world, Random random) {
         float value = ModRandom.getFloat(6);
+        float value2 = ModRandom.getFloat(6);
             if(function.startsWith("east")) {
                     new WorldGenEndE(0).generate(world, world.rand, pos);
             }

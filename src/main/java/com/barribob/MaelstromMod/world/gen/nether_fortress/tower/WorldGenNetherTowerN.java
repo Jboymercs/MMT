@@ -7,6 +7,7 @@ import com.barribob.MaelstromMod.world.gen.nether_fortress.bridge.WorldGenNether
 import com.barribob.MaelstromMod.world.gen.nether_fortress.end.WorldGenEndE;
 import com.barribob.MaelstromMod.world.gen.nether_fortress.end.WorldGenEndN;
 import com.barribob.MaelstromMod.world.gen.nether_fortress.end.WorldGenEndW;
+import com.barribob.MaelstromMod.world.gen.nether_fortress.stronghold.WorldGenStronghold;
 import com.barribob.MaelstromMod.world.gen.vanilla.WorldGenNetherBase;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -31,13 +32,20 @@ public class WorldGenNetherTowerN extends WorldGenNetherBase {
     @Override
     protected void handleDataMarker(String function, BlockPos pos, World world, Random random) {
         float value = ModRandom.getFloat(6);
+        float value2 = ModRandom.getFloat(6);
         if(function.startsWith("east")) {
 
             if(value < 6) {
                 new WorldGenEndE(0).generate(world, world.rand, pos);
             }
             if(value > 6) {
-                new WorldGenNetherBridge(0).generate(world, world.rand, pos);
+                if(value2 < 6) {
+                    BlockPos posS = pos.add(new BlockPos(0,-22,-12));
+                    new WorldGenStronghold(0).generate(world, world.rand, posS);
+                }
+                if(value2 > 6) {
+                    new WorldGenNetherBridge(0).generate(world, world.rand, pos);
+                }
             }
 
         }

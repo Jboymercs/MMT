@@ -130,14 +130,12 @@ public class EntityAbberrant extends EntityLeveledMob implements IAnimatable, IA
         super.onEntityUpdate();
         if(rangedMode) {
             if(rand.nextInt(300) == 0) {
-                System.out.println("Changed to Melee");
                 meleeMode = true;
                 rangedMode = false;
             }
         }
         if(meleeMode) {
             if(rand.nextInt(300) == 0) {
-                System.out.println("Changed to Ranged");
                 rangedMode = true;
                 meleeMode = false;
             }
@@ -154,7 +152,6 @@ public class EntityAbberrant extends EntityLeveledMob implements IAnimatable, IA
             if(meleeMode) {
                 if(distance > 3 && !this.isBeingRidden()) {
                     if(!this.isRanged()) {
-                        System.out.println("moving");
                         //Move to melee combat
                         double d0 = (target.posX - this.posX) * 0.025;
                         double d1 = (target.posY - this.posY) * 0.05;
