@@ -1,4 +1,4 @@
-package com.barribob.MaelstromMod.util.handlers.renderer;
+package com.barribob.MaelstromMod.renderer;
 
 import com.barribob.MaelstromMod.util.Reference;
 import net.minecraft.client.Minecraft;

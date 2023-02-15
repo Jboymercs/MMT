@@ -6,7 +6,7 @@ import com.barribob.MaelstromMod.entity.entities.EntityMaelstromMob;
 import com.barribob.MaelstromMod.entity.util.DirectionalRender;
 import com.barribob.MaelstromMod.entity.util.IPitch;
 import com.barribob.MaelstromMod.init.ModDimensions;
-import com.barribob.MaelstromMod.util.handlers.renderer.ITarget;
+import com.barribob.MaelstromMod.renderer.ITarget;
 import com.barribob.MaelstromMod.util.*;
 import com.barribob.MaelstromMod.util.handlers.ParticleManager;
 import com.barribob.MaelstromMod.util.handlers.SoundsHandler;

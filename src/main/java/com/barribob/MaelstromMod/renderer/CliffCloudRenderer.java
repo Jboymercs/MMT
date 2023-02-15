@@ -1,4 +1,4 @@
-package com.barribob.MaelstromMod.util.handlers.renderer;
+package com.barribob.MaelstromMod.renderer;
 
 import com.barribob.MaelstromMod.event_handlers.FogHandler;
 import com.barribob.MaelstromMod.util.ModColors;

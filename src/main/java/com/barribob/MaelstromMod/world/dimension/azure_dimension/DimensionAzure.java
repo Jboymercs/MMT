@@ -3,16 +3,20 @@ package com.barribob.MaelstromMod.world.dimension.azure_dimension;
 import com.barribob.MaelstromMod.config.ModConfig;
 import com.barribob.MaelstromMod.init.BiomeInit;
 import com.barribob.MaelstromMod.init.ModDimensions;
-import com.barribob.MaelstromMod.util.handlers.renderer.AzureSkyRenderHandler;
+import com.barribob.MaelstromMod.renderer.AzureSkyRenderHandler;
+import com.barribob.MaelstromMod.world.biome.BiomeProviderMultiple;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.BiomeProviderSingle;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * The Azure dimension attributes are defined here
@@ -22,9 +26,12 @@ public class DimensionAzure extends WorldProvider {
     @Override
     protected void init() {
         this.hasSkyLight = true;
-        this.biomeProvider = new BiomeProviderSingle(BiomeInit.AZURE);
-        this.world.setAllowedSpawnTypes(false, false);
-
+        this.biomeProvider = new BiomeProviderMultiple(this.world.getWorldInfo()) {
+            @Override
+            public List<Biome> getBiomesToSpawnIn() {
+                return Arrays.asList(new Biome[]{BiomeInit.AZURE, BiomeInit.AZURE_LIGHT, BiomeInit.AZURE_PLAINS});
+            }
+        };
     }
 
     @Override
@@ -44,7 +51,7 @@ public class DimensionAzure extends WorldProvider {
 
     @Override
     public boolean isSurfaceWorld() {
-        return false;
+        return true;
     }
 
     @Override

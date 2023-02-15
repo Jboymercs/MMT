@@ -3,7 +3,7 @@ package com.barribob.MaelstromMod.world.dimension.nexus;
 import com.barribob.MaelstromMod.config.ModConfig;
 import com.barribob.MaelstromMod.init.BiomeInit;
 import com.barribob.MaelstromMod.init.ModDimensions;
-import com.barribob.MaelstromMod.util.handlers.renderer.AzureSkyRenderHandler;
+import com.barribob.MaelstromMod.renderer.AzureSkyRenderHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;

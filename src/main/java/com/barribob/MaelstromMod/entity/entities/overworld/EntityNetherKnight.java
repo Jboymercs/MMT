@@ -291,6 +291,9 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
                 world.setEntityState(this, ModUtils.THIRD_PARTICLE_BYTE);
             }
         }
+            if(rand.nextInt(20) == 0) {
+                world.setEntityState(this, ModUtils.FOURTH_PARTICLE_BYTE);
+            }
 
         }
 
@@ -405,10 +408,6 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         }
 
 
-
-
-
-
     @Override
     public void initEntityAI() {
         super.initEntityAI();
@@ -519,6 +518,10 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         if(id == ModUtils.THIRD_PARTICLE_BYTE) {
             Vec3d motion = new Vec3d(ModRandom.getFloat(0.1f), 0 * 0.2, ModRandom.getFloat(0.1f));
             ParticleManager.spawnCustomSmoke(world, this.getPositionVector().add(ModRandom.randVec()).add(ModUtils.yVec(2.3)), ModColors.YELLOW, motion);
+        }
+        if(id == ModUtils.FOURTH_PARTICLE_BYTE) {
+            Vec3d motion = new Vec3d(ModRandom.getFloat(0.1f), 0 * 0.2, ModRandom.getFloat(0.1f));
+            ParticleManager.spawnSmoke2(world, this.getPositionVector(), ModColors.GREY, motion);
         }
 
 

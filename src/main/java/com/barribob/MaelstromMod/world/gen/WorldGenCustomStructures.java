@@ -16,10 +16,7 @@ import com.barribob.MaelstromMod.world.biome.BiomeCliffSwamp;
 import com.barribob.MaelstromMod.world.dimension.crimson_kingdom.WorldGenCrimsonKingdomChunk;
 import com.barribob.MaelstromMod.world.dimension.dark_nexus.WorldGenDarkNexus;
 import com.barribob.MaelstromMod.world.dimension.nexus.DimensionNexus;
-import com.barribob.MaelstromMod.world.gen.cliff.WorldGenCliffLedge;
-import com.barribob.MaelstromMod.world.gen.cliff.WorldGenCliffStructureLedge;
-import com.barribob.MaelstromMod.world.gen.cliff.WorldGenMaelstromCave;
-import com.barribob.MaelstromMod.world.gen.cliff.WorldGenSmallLedge;
+import com.barribob.MaelstromMod.world.gen.cliff.*;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenCliffMushroom;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenCliffShrub;
 import com.barribob.MaelstromMod.world.gen.foliage.WorldGenSwampVines;
@@ -67,6 +64,20 @@ public class WorldGenCustomStructures implements IWorldGenerator {
         }
 
         ;
+    };
+
+    public static final WorldGenStructure KNIGHT_HOLE = new WorldGenStructure("cliff/knight_hole") {
+        @Override
+        protected void handleDataMarker(String function, BlockPos pos, World worldIn, Random rand) {
+            if(function.startsWith("boss")) {
+                worldIn.setBlockState(pos, ModBlocks.BOSS_SPAWNER.getDefaultState(), 2);
+                TileEntity tileEntity = worldIn.getTileEntity(pos);
+
+                if(tileEntity instanceof TileEntityMobSpawner) {
+                    ((TileEntityMobSpawner) tileEntity).getSpawnerBaseLogic().setData(new MobSpawnData(ModEntities.getID(EntityMaelstromKnight.class), Element.GOLDEN), 1, LevelHandler.CLIFF_OVERWORLD, 6);
+                }
+            }
+        }
     };
 
     public static final WorldGenStructure WITCH_HUT = new WorldGenStructure("cliff/maelstrom_witch_hut") {
@@ -271,11 +282,11 @@ public class WorldGenCustomStructures implements IWorldGenerator {
 
 
 
-    private static WorldGenStructure[] cliffSwampRuins = {WITCH_HUT, MAELSTROM_RUINS, CLIFF_TEMPLE, new CliffMaelstromStructure("brazier"),
+    private static WorldGenStructure[] cliffSwampRuins = {KNIGHT_HOLE, WITCH_HUT, MAELSTROM_RUINS, CLIFF_TEMPLE, new CliffMaelstromStructure("brazier"),
             new CliffMaelstromStructure("gazebo"), new CliffMaelstromStructure("holy_tower"), new CliffMaelstromStructure("ruined_building"),
             new CliffMaelstromStructure("statue_of_nirvana"), new CliffMaelstromStructure("broken_arch"), new CliffMaelstromStructure("arch"),
             new CliffMaelstromStructure("ancient_houses")};
-    private static double[] cliffRuinsWeights = {0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0.1, 0.05, 0.1, 0.1, 0.3};
+    private static double[] cliffRuinsWeights = {0.1, 0.1, 0.1, 0.1, 0.1, 0.2, 0.1, 0.1, 0.05, 0.1, 0.1, 0.3};
 
     public static final WorldGenStructure invasionTower = new WorldGenStructure("invasion/invasion_tower") {
         @Override
@@ -326,6 +337,7 @@ public class WorldGenCustomStructures implements IWorldGenerator {
             int chunkModX = Math.floorMod(chunkX, DimensionNexus.NexusStructureSpacing);
             int chunkModZ = Math.floorMod(chunkZ, DimensionNexus.NexusStructureSpacing);
             new WorldGenCrimsonKingdomChunk(chunkModX, chunkModZ).generate(world, world.rand, new BlockPos(x + 8, 0, z + 8));
+
         } else if (world.provider.getDimension() == ModConfig.world.cliff_dimension_id) {
             int i = 2;
             if (chunkX % i == 0 && chunkZ % i == 0 && world.rand.nextInt(4) == 0) {

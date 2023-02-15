@@ -20,7 +20,7 @@ public class ModDimensions {
     public static final DimensionType DARK_NEXUS = DimensionType.register("dark_nexus", "_dark_nexus", ModConfig.world.dark_nexus_dimension_id, DimensionDarkNexus.class, false);
     public static final DimensionType CRIMSON_KINGDOM = DimensionType.register("crimson_kingdom", "_crimson_kingdom", ModConfig.world.crimson_kingdom_dimension_id, DimensionCrimsonKingdom.class, false);
 
-    public static final DimensionType NETHER_ADDITIONS = DimensionType.register("nether", "_nether", -1, DimensionNether.class, false);
+
 
     public static void registerDimensions() {
         if(!ModConfig.world.disableDimensions) {

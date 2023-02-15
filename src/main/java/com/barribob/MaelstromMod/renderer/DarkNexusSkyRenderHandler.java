@@ -1,4 +1,4 @@
-package com.barribob.MaelstromMod.util.handlers.renderer;
+package com.barribob.MaelstromMod.renderer;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
