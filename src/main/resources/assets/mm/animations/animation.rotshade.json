@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.model.walk": {
+		"walk": {
 			"loop": true,
 			"animation_length": 0.66667,
 			"bones": {
@@ -102,7 +102,7 @@
 				}
 			}
 		},
-		"animation.model.summon": {
+		"summon": {
 			"animation_length": 0.875,
 			"bones": {
 				"Torso": {
@@ -331,7 +331,7 @@
 				}
 			}
 		},
-		"animation.model.idle": {
+		"idle": {
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
@@ -413,7 +413,7 @@
 				}
 			}
 		},
-		"animation.model.strike": {
+		"pierce": {
 			"animation_length": 1.16667,
 			"bones": {
 				"Torso": {
@@ -598,7 +598,7 @@
 				}
 			}
 		},
-		"animation.model.overstrike": {
+		"leap": {
 			"animation_length": 2,
 			"bones": {
 				"Torso": {
@@ -930,7 +930,7 @@
 				}
 			}
 		},
-		"animation.model.swing": {
+		"swing": {
 			"animation_length": 1.25,
 			"bones": {
 				"Torso": {
