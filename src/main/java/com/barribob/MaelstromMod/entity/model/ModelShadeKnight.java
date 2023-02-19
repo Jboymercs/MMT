@@ -9,7 +9,7 @@ public class ModelShadeKnight extends AnimatedGeoModel<EntityShadeKnight> {
 
     @Override
     public ResourceLocation getModelLocation(EntityShadeKnight entityShadeKnight) {
-        return new ResourceLocation(Reference.MOD_ID, "geo/entity/rot/modelShade.geo.json");
+        return new ResourceLocation(Reference.MOD_ID, "geo/entity/rot/shademo.geo.json");
     }
 
     @Override
@@ -19,6 +19,6 @@ public class ModelShadeKnight extends AnimatedGeoModel<EntityShadeKnight> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(EntityShadeKnight entityShadeKnight) {
-        return new ResourceLocation(Reference.MOD_ID, "animations/animation.rot_shade.json");
+        return new ResourceLocation(Reference.MOD_ID, "animations/animation.rotshade.json");
     }
 }

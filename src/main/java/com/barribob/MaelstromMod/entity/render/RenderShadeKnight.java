@@ -26,4 +26,6 @@ public class RenderShadeKnight extends GeoEntityRenderer<EntityShadeKnight> {
         GlStateManager.disableBlend();
         GlStateManager.disableNormalize();
     }
+
+
 }
