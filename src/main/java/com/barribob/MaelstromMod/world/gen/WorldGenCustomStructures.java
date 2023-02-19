@@ -320,13 +320,13 @@ public class WorldGenCustomStructures implements IWorldGenerator {
         int x = chunkX * 16;
         int z = chunkZ * 16;
 
-      if(world.provider.getDimension() == 0) {
+      if(world.provider.getDimension() == -1) {
 
         if(canStructureSpawn(chunkX, chunkZ, world, 80)) {
             Class<?> NETHER = Biomes.HELL.getBiomeClass();
             //Generate the NetherFortress, Reading Works
-            System.out.println("Starting Dungeon");
-            new WorldGenStartTemple(chunkX, chunkZ).generate(world, world.rand, new BlockPos(x, 90, z));
+            //new WorldGenStartTemple(chunkX, chunkZ).generate(world, world.rand, new BlockPos(x, 90, z));
+            //Re-implement later
 
 
         }
