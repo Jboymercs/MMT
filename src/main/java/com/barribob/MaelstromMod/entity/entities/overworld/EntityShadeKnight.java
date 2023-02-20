@@ -3,11 +3,9 @@ package com.barribob.MaelstromMod.entity.entities.overworld;
 import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.entities.EntityLeveledMob;
 import com.barribob.MaelstromMod.entity.util.IAttack;
-import com.barribob.MaelstromMod.util.ModColors;
-import com.barribob.MaelstromMod.util.ModDamageSource;
-import com.barribob.MaelstromMod.util.ModRandom;
-import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.*;
 import com.barribob.MaelstromMod.util.handlers.ParticleManager;
+import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -21,6 +19,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.NoteBlockEvent;
@@ -223,6 +223,14 @@ public class EntityShadeKnight extends EntityLeveledMob implements IAnimatable, 
     }
 
     @Override
+    public boolean getCanSpawnHere() {
+        if(!SpawnUtil.isDay(world)) {
+            return super.getCanSpawnHere();
+        }
+        return false;
+    }
+
+    @Override
     public void registerControllers(AnimationData animationData) {
         animationData.addAnimationController(new AnimationController(this, "knight_idle", 0, this::PredicateIdle));
         animationData.addAnimationController(new AnimationController(this, "knight_attacks", 0, this::predicateAttack));
@@ -295,5 +303,10 @@ public class EntityShadeKnight extends EntityLeveledMob implements IAnimatable, 
     {
         return EnumCreatureAttribute.UNDEAD;
     }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) {return SoundEvents.ENTITY_PLAYER_HURT;}
 
+    @Override
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+        this.playSound(SoundEvents.BLOCK_METAL_STEP, 1.0F, 1.0F);
+    }
 }

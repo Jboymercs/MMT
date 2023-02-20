@@ -9,10 +9,7 @@ import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityCrimsonCrystal;
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityMaelstromGauntlet;
 import com.barribob.MaelstromMod.entity.entities.npc.*;
 import com.barribob.MaelstromMod.entity.entities.EntityPlayerBase;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityAbberrant;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityFireRing;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityNetherKnight;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityShadeKnight;
+import com.barribob.MaelstromMod.entity.entities.overworld.*;
 import com.barribob.MaelstromMod.entity.particleSpawners.ParticleSpawnerExplosion;
 import com.barribob.MaelstromMod.entity.particleSpawners.ParticleSpawnerRainbow;
 import com.barribob.MaelstromMod.entity.particleSpawners.ParticleSpawnerSwordSwing;
@@ -20,12 +17,18 @@ import com.barribob.MaelstromMod.entity.projectile.*;
 import com.barribob.MaelstromMod.entity.tileentity.*;
 import com.barribob.MaelstromMod.entity.util.*;
 import com.barribob.MaelstromMod.util.Reference;
+import com.barribob.MaelstromMod.util.SpawnUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.common.BiomeDictionary.Type;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -146,6 +149,7 @@ public class ModEntities {
         registerEntityWithID("fire_ring", EntityFireRing.class, ENTITY_START_ID++, 100, crimson_maelstrom);
         registerEntityWithID("fire_abberrant", EntityAbberrant.class, ENTITY_START_ID++, 110, crimson_maelstrom);
         registerEntityWithID("rot_knight", EntityShadeKnight.class, ENTITY_START_ID++, 110, maelstrom);
+        registerEntityWithID("phaser", EntityPhaser.class, ENTITY_START_ID++, 110, maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);
@@ -243,5 +247,21 @@ public class ModEntities {
 
     private static void registerTileEntity(Class<? extends TileEntity> entity, String name) {
         GameRegistry.registerTileEntity(entity, new ResourceLocation(Reference.MOD_ID + ":" + name));
+    }
+    //Used only for naturally spawning mobs that are found within the vanilla dimensions ONLY
+    public static void RegisterEntitySpawn() {
+
+        spawnRate(EntityShadeKnight.class, EnumCreatureType.MONSTER, 5,1, 2, Type.FOREST);
+        spawnRate(EntityPhaser.class, EnumCreatureType.MONSTER, 25, 1, 2, Type.FOREST);
+
+    }
+
+    private static void spawnRate(Class<? extends EntityLiving> entityClass, EnumCreatureType creatureType, int weight, int min, int max, Type biomesAllowed) {
+        for(Biome biome: BiomeDictionary.getBiomes(biomesAllowed)) {
+            if(biome != null && weight > 0) {
+                EntityRegistry.addSpawn(entityClass, weight, min, max, creatureType, biome);
+
+            }
+        }
     }
 }

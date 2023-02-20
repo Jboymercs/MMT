@@ -752,6 +752,41 @@ public final class ModUtils {
         }
     }
 
+    public static void destroyLowGradeBlocksInAABB(AxisAlignedBB box, World world, Entity entity) {
+        int i = MathHelper.floor(box.minX);
+        int j = MathHelper.floor(box.minY);
+        int k = MathHelper.floor(box.minZ);
+        int l = MathHelper.floor(box.maxX);
+        int i1 = MathHelper.floor(box.maxY);
+        int j1 = MathHelper.floor(box.maxZ);
+
+        for (int x = i; x <= l; ++x) {
+            for (int y = j; y <= i1; ++y) {
+                for (int z = k; z <= j1; ++z) {
+                    BlockPos blockpos = new BlockPos(x, y, z);
+                    IBlockState iblockstate = world.getBlockState(blockpos);
+                    Block block = iblockstate.getBlock();
+
+                    if (!block.isAir(iblockstate, world, blockpos) && iblockstate.getMaterial() != Material.FIRE && iblockstate.getMaterial() != Material.ROCK) {
+                        if (ForgeEventFactory.getMobGriefingEvent(world, entity)) {
+                            if (block != Blocks.COMMAND_BLOCK &&
+                                    block != Blocks.REPEATING_COMMAND_BLOCK &&
+                                    block != Blocks.CHAIN_COMMAND_BLOCK &&
+                                    block != Blocks.BEDROCK &&
+                                    !(block instanceof BlockLiquid)) {
+                                if (world.getClosestPlayer(blockpos.getX(), blockpos.getY(), blockpos.getZ(), 20, false) != null) {
+                                    world.destroyBlock(blockpos, false);
+                                } else {
+                                    world.setBlockToAir(blockpos);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Gets the look vector from pitch and yaw, where 0 pitch is forward, negative 90 pitch is down
      * Yaw is the negative rotation of the z vector.

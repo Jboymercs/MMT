@@ -382,7 +382,8 @@ entity.wraith_hand.name=Wraith Hand
 entity.nether_knight.name=Fallen Nether Apostle
 entity.fire_ring.name=Fire Ring
 entity.fire_abberrant.name=Abberrant Spirit
-entity.rot_knight.name=Shade of Mortality
+entity.rot_knight.name=Rot Knight
+entity.phaser.name=Skeleton Brute
 
 //�����������������������������������������������������������
 // Projectiles

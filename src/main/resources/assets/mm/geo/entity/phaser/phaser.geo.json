@@ -1,0 +1,86 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.unknown",
+				"texture_width": 64,
+				"texture_height": 64,
+				"visible_bounds_width": 3,
+				"visible_bounds_height": 3.5,
+				"visible_bounds_offset": [0, 1.25, 0]
+			},
+			"bones": [
+				{
+					"name": "Floor",
+					"pivot": [0, 0, 0]
+				},
+				{
+					"name": "Torso",
+					"parent": "Floor",
+					"pivot": [0, 20, 0],
+					"cubes": [
+						{"origin": [-4, 16, -2.5], "size": [8, 8, 5], "uv": [27, 26]}
+					]
+				},
+				{
+					"name": "LowerTorso",
+					"parent": "Torso",
+					"pivot": [0, 16, 0],
+					"cubes": [
+						{"origin": [-3, 12, -1.5], "size": [6, 4, 3], "uv": [0, 46]},
+						{"origin": [-3.5, 8, -2], "size": [7, 8, 4], "uv": [32, 11]}
+					]
+				},
+				{
+					"name": "HeadJoint",
+					"parent": "Torso",
+					"pivot": [0, 24, 0],
+					"cubes": [
+						{"origin": [-4, 24, -4], "size": [8, 8, 8], "uv": [0, 15]},
+						{"origin": [-4.5, 26.5, -4.5], "size": [9, 6, 9], "uv": [0, 0]}
+					]
+				},
+				{
+					"name": "LArm",
+					"parent": "Torso",
+					"pivot": [4, 23, 0],
+					"cubes": [
+						{"origin": [4, 18, -1], "size": [2, 6, 2], "uv": [0, 0]},
+						{"origin": [4, 22.5, -1.5], "size": [3, 2, 3], "uv": [48, 23]}
+					]
+				},
+				{
+					"name": "LArmJ",
+					"parent": "LArm",
+					"pivot": [5, 18, 0],
+					"cubes": [
+						{"origin": [3.5, 12, -1.5], "size": [3, 6, 3], "uv": [45, 46]},
+						{"origin": [5, 10, -4], "size": [0, 10, 8], "uv": [16, 31]},
+						{"origin": [1, 10, 0], "size": [8, 10, 0], "uv": [32, 39]}
+					]
+				},
+				{
+					"name": "RArm",
+					"parent": "Torso",
+					"pivot": [-4, 23, 0],
+					"cubes": [
+						{"origin": [-6, 18, -1], "size": [2, 6, 2], "uv": [0, 15]},
+						{"origin": [-7, 22.5, -1.5], "size": [3, 2, 3], "uv": [48, 39]},
+						{"origin": [-5, 23, -3], "size": [0, 5, 6], "pivot": [-4, 23, 0], "rotation": [0, 0, -15], "uv": [0, 35]}
+					]
+				},
+				{
+					"name": "RArmJ",
+					"parent": "RArm",
+					"pivot": [-5, 18, 0],
+					"cubes": [
+						{"origin": [-6.5, 12, -1.5], "size": [3, 6, 3], "uv": [18, 49]},
+						{"origin": [-5, 10, -4], "size": [0, 10, 8], "uv": [0, 23]},
+						{"origin": [-9, 10, 0], "size": [9, 10, 0], "uv": [36, 0]}
+					]
+				}
+			]
+		}
+	]
+}

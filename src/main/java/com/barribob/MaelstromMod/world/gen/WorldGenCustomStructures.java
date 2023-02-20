@@ -321,12 +321,6 @@ public class WorldGenCustomStructures implements IWorldGenerator {
         int x = chunkX * 16;
         int z = chunkZ * 16;
 
-        if(world.provider.getDimension() == 0) {
-            if(canStructureSpawn(chunkX, chunkZ, world, 80)) {
-                new WorldGenShadeRuins(chunkX, chunkZ).generate(world, world.rand, new BlockPos(0,30,0));
-                System.out.println("Spawned Structure");
-            }
-        }
 
       if(world.provider.getDimension() == -1) {
 

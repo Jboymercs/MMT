@@ -7,10 +7,7 @@ import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityCrimsonCrystal;
 import com.barribob.MaelstromMod.entity.entities.gauntlet.EntityMaelstromGauntlet;
 import com.barribob.MaelstromMod.entity.entities.npc.*;
 import com.barribob.MaelstromMod.entity.entities.EntityPlayerBase;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityAbberrant;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityFireRing;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityNetherKnight;
-import com.barribob.MaelstromMod.entity.entities.overworld.EntityShadeKnight;
+import com.barribob.MaelstromMod.entity.entities.overworld.*;
 import com.barribob.MaelstromMod.entity.model.*;
 import com.barribob.MaelstromMod.entity.projectile.*;
 import com.barribob.MaelstromMod.entity.render.*;
@@ -161,6 +158,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityAbberrant.class, RenderAbberrant::new);
         // ROT Shade - Overworld
         RenderingRegistry.registerEntityRenderingHandler(EntityShadeKnight.class,RenderShadeKnight::new);
+        // Phaser - Overworld
+        RenderingRegistry.registerEntityRenderingHandler(EntityPhaser.class, RenderPhaser::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);

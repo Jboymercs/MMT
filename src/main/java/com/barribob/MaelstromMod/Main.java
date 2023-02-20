@@ -74,6 +74,7 @@ public class Main {
         GameRegistry.registerWorldGenerator(new WorldGenCustomStructures(), 3);
 
         ModEntities.registerEntities();
+        ModEntities.RegisterEntitySpawn();
         proxy.init();
 
         ModBBAnimations.registerAnimations();
