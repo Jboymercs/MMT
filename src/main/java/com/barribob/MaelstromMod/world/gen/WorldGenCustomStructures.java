@@ -25,6 +25,8 @@ import com.barribob.MaelstromMod.world.gen.maelstrom_castle.WorldGenMaelstromCas
 import com.barribob.MaelstromMod.world.gen.nether_fortress.temple.WorldGenStartTemple;
 import com.barribob.MaelstromMod.world.gen.nexus.WorldGenCrimsonTower;
 import com.barribob.MaelstromMod.world.gen.nexus.WorldGenNexusIslands;
+import com.barribob.MaelstromMod.world.gen.overworld.WorldGenCastlePillar;
+import com.barribob.MaelstromMod.world.gen.overworld.WorldGenPillar;
 import com.barribob.MaelstromMod.world.gen.overworld.WorldGenShadeRuins;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
@@ -320,7 +322,12 @@ public class WorldGenCustomStructures implements IWorldGenerator {
     public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         int x = chunkX * 16;
         int z = chunkZ * 16;
+        if(world.provider.getDimension() == 0) {
+            if(canStructureSpawn(chunkX, chunkZ, world, 10)) {
+                new WorldGenCastlePillar().generate(world, world.rand, new BlockPos(x, 0, z));
 
+            }
+        }
 
       if(world.provider.getDimension() == -1) {
 

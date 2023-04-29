@@ -81,8 +81,6 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
     protected void initAnimation() {
         this.setSummonanim(true);
         if (this.isSummonAnim()) {
-            this.motionX = 0;
-            this.motionZ =0;
             addEvent(() -> EntityMaelstromKnight.super.setSummonanim(false), 40);
         }
     }
@@ -428,6 +426,10 @@ public class EntityMaelstromKnight extends EntityMaelstromMob implements IAnimat
         this.bossInfo.setPercent(this.getHealth()/ this.getMaxHealth());
 
         if (this.isfightMode() && !this.isEvading() && !this.isStriking() && !this.isArcLeaping()) {
+            this.motionZ = 0;
+            this.motionX = 0;
+        }
+        if(this.isSummonAnim()) {
             this.motionZ = 0;
             this.motionX = 0;
         }

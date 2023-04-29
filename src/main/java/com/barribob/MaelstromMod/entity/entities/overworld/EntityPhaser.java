@@ -6,6 +6,7 @@ import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModRandom;
 import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.SpawnUtil;
 import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -155,6 +156,14 @@ public class EntityPhaser extends EntityLeveledMob implements IAttack, IAnimatab
             this.setFightMode(false);
         }, 60);
     };
+
+    @Override
+    public boolean getCanSpawnHere() {
+        if(!SpawnUtil.isDay(world)) {
+            return super.getCanSpawnHere();
+        }
+        return false;
+    }
 
     @Override
     public void registerControllers(AnimationData animationData) {

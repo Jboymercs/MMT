@@ -308,5 +308,6 @@ public class EntityShadeKnight extends EntityLeveledMob implements IAnimatable, 
     @Override
     protected void playStepSound(BlockPos pos, Block blockIn) {
         this.playSound(SoundEvents.BLOCK_METAL_STEP, 1.0F, 1.0F);
+        this.playSound(SoundEvents.BLOCK_METAL_STEP, 1.0F, 1.0F);
     }
 }
