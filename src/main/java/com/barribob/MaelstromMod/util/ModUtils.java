@@ -488,6 +488,8 @@ public final class ModUtils {
         player.world.spawnEntity(particle);
     }
 
+
+
     /**
      * Provides multiple points in a circle via a callback
      *

@@ -117,9 +117,8 @@ public class EntityNetherKnight extends EntityLeveledMob implements IAttack, IAn
         this.isImmuneToExplosions();
         this.hitboxParts = new MultiPartEntityPart[]{model, knight, rArm, lArm, rLeg, lLeg, core, chestLower};
         this.setSize(0.3f, 3.4f);
-
-
     }
+
 
     @Override
     public void entityInit() {

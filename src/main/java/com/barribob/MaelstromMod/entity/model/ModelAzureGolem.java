@@ -5,7 +5,10 @@ import com.barribob.MaelstromMod.util.Reference;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.processor.IBone;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 /**
@@ -26,5 +29,18 @@ public class ModelAzureGolem extends AnimatedGeoModel<EntityAzureGolem> {
     @Override
     public ResourceLocation getAnimationFileLocation(EntityAzureGolem object) {
         return new ResourceLocation(Reference.MOD_ID, "animations/animation.azure_golem.json");
+    }
+    @Override
+    public void setLivingAnimations(EntityAzureGolem entity, Integer uniqueID, AnimationEvent customPredicate) {
+        super.setLivingAnimations(entity, uniqueID, customPredicate);
+        IBone head = this.getAnimationProcessor().getBone("head");
+        EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
+
+
+    }
+
+    @Override
+    public IBone getBone(String boneName) {
+        return super.getBone(boneName);
     }
 }
