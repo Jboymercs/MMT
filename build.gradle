@@ -70,7 +70,7 @@ dependencies {
     //compile "some.group:artifact:version"
 
     //Geckolib
-    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.12.2:3.0.30')
+    implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31')
     // real examples
     //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env

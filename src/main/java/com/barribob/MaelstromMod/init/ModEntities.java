@@ -150,6 +150,7 @@ public class ModEntities {
         registerEntityWithID("fire_abberrant", EntityAbberrant.class, ENTITY_START_ID++, 110, crimson_maelstrom);
         registerEntityWithID("rot_knight", EntityShadeKnight.class, ENTITY_START_ID++, 110, maelstrom);
         registerEntityWithID("phaser", EntityPhaser.class, ENTITY_START_ID++, 110, maelstrom);
+        registerEntityWithID("dhav", EntityDhav.class, ENTITY_START_ID++, 110, cliff_maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);

@@ -351,7 +351,7 @@ entity.herobrine_controller.name=Herobrine
 entity.nexus_gunsmith.name=Nexus Gunsmith
 entity.nexus_mage.name=Nexus Mage
 entity.nexus_armorer.name=Nexus Armorer
-entity.nexus_saiyan.name=Nexus Saiyan
+entity.nexus_saiyan.name=The Keeper
 entity.nexus_bladesmith.name=Nexus Bladesmith
 entity.golden_pillar.name=Golden Pillar
 entity.golden_boss.name=Statue of Nirvana
@@ -384,6 +384,7 @@ entity.fire_ring.name=Fire Ring
 entity.fire_abberrant.name=Abberrant Spirit
 entity.rot_knight.name=Rot Knight
 entity.phaser.name=Skeleton Brute
+entity.dhav.name=Dhvara
 
 //�����������������������������������������������������������
 // Projectiles
@@ -654,12 +655,12 @@ mm.dialog.herobrine_battle_5=That way, I can unlock the way to those annoying ma
 mm.dialog.herobrine_battle_6=And you can do your exploration or whatever. Everybody wins.
 mm.dialog.herobrine_battle_7=Pipe down, the battle's over.
 
-mm.dialog.herobrine_cliff_0=Do you have fragments for the next key? If not, then GTFO.
-mm.dialog.herobrine_cliff_1=Don't attack me you dweeb. Only I'm allowed to attack unprovoked.
+mm.dialog.herobrine_cliff_0=Do you have fragments for the next key? If not, then leave.
+mm.dialog.herobrine_cliff_1=Don't attack me you peasant. Only I'm allowed to attack unprovoked.
 mm.dialog.herobrine_cliff_2=Not bad. Now go get some more fragments for me.
 
-mm.dialog.herobrine_crimson_0=Do you have fragments for the next key? If not, then GTFO.
-mm.dialog.herobrine_crimson_1=How about you go left click some maelstrom instead?
+mm.dialog.herobrine_crimson_0=Do you have fragments for the next key? If not, then leave.
+mm.dialog.herobrine_crimson_1=How about you go find some maelstrom instead?
 
 mm.dialog.herobrine_crimson_dimension_0=Try taking on this dimension. I'm sure it won't be that bad.
 mm.dialog.herobrine_crimson_dimension_1=Guess you're too stupid to see that I'm ignoring you.
@@ -678,7 +679,7 @@ mm.dialog.azure_villager_3=We'll reward you handsomely for taking out the maelst
 mm.dialog.azure_villager_4=Have a look around the mineshaft for any useful gear and items.
 mm.dialog.azure_villager_5=Under the maelstrom growths, there is a core that spawns the maelstrom. Remove those!
 mm.dialog.azure_villager_6=Keep an eye out for the maelstrom fortress. That's where the boss is.
-mm.dialog.no_mana=Pleb, have no mana! Get some maelstrom minotaur horns, and I'll get you started.
+mm.dialog.no_mana=You don't have mana I see? Get some maelstrom minotaur horns, and I'll get you started.
 mm.dialog.mage_1=Good, that catalyst will unlock your mana.
 mm.dialog.mage_2=Any staff uses a certain amount of mana.
 mm.dialog.mage_3=Mana will slowly refill over time.

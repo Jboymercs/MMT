@@ -160,6 +160,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityShadeKnight.class,RenderShadeKnight::new);
         // Phaser - Overworld
         RenderingRegistry.registerEntityRenderingHandler(EntityPhaser.class, RenderPhaser::new);
+        // Dhav - Golden Valley
+        RenderingRegistry.registerEntityRenderingHandler(EntityDhav.class, RenderDhav::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);

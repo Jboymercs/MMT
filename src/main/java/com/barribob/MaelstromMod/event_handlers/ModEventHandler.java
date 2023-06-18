@@ -146,7 +146,7 @@ public class ModEventHandler {
     public static void onServerTick(TickEvent.WorldTickEvent event) {
         boolean correctTickPhase = event.side == Side.SERVER && event.phase == TickEvent.Phase.END;
         boolean isSuperflat = event.world.getWorldType().equals(WorldType.FLAT);
-        boolean isInOverworld = event.world.provider.getDimension() == 0;
+        boolean isInOverworld = event.world.provider.getDimension() == ModConfig.world.invasionDimension;
         if (!correctTickPhase || isSuperflat || !isInOverworld || !isInvasionEnabledViaGamestage) {
             return;
         }

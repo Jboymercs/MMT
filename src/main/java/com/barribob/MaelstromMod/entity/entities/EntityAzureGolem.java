@@ -183,7 +183,7 @@ public class EntityAzureGolem extends EntityLeveledMob implements IAttack, IAnim
     public void registerControllers(AnimationData animationData) {
        animationData.addAnimationController(new AnimationController(this, "controller_attack", 0, this::PredicateAttack));
        animationData.addAnimationController(new AnimationController(this, "controller_idle", 0, this::PredicateIdle));
-       animationData.addAnimationController(new AnimationController(this, "controller_run", 0, this::PredicateRun));
+       animationData.addAnimationController(new AnimationController(this, "controller_run", 10, this::PredicateRun));
     }
 
     private <E extends IAnimatable>PlayState PredicateAttack(AnimationEvent<E> event) {
@@ -220,12 +220,14 @@ public class EntityAzureGolem extends EntityLeveledMob implements IAttack, IAnim
 
             if ((!(event.getLimbSwingAmount() > -0.10F && event.getLimbSwingAmount() < 0.10F)) && !this.isRunning()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_WALK, true));
+
             }
             else {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_IDLE, true));
             }
+            return PlayState.CONTINUE;
         }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     @Override

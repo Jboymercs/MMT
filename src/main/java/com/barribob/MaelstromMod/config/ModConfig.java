@@ -143,6 +143,11 @@ public class ModConfig {
         @Config.Comment("The number of minutes before the invasion when a warning message is sent to the players.")
         @Config.RangeInt(min = 0, max = 60 * 20) // Max set to 20 hours
         public int warningInvasionTime = 10; // Default 10 minutes before invasion
+
+        @Config.LangKey(config + "invasion_dimension")
+        @Config.Comment("Change the dimension the Invasion tower can spawn in, used for modpack devs, please make sure you have the correct ID for the dimension, default: Overworld")
+        public int invasionDimension = 0;
+
     }
 
     public static class EntityCat {
