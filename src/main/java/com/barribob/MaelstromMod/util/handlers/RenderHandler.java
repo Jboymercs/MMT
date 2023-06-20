@@ -162,6 +162,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityPhaser.class, RenderPhaser::new);
         // Dhav - Golden Valley
         RenderingRegistry.registerEntityRenderingHandler(EntityDhav.class, RenderDhav::new);
+        // Void Blossom - Lush Dimension
+        RenderingRegistry.registerEntityRenderingHandler(EntityVoidBlossom.class, RenderVoidBlossom::new);
 
         //Projectile Like Entities
         RenderingRegistry.registerEntityRenderingHandler(EntityKnightCrystal.class, RenderKnightCrystal::new);
@@ -169,6 +171,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityHunterMissile.class, RenderHunterMissile::new);
         // Fire Ring
         RenderingRegistry.registerEntityRenderingHandler(EntityFireRing.class, RenderFireRing::new);
+        //Void Spike
+        RenderingRegistry.registerEntityRenderingHandler(EntityVoidSpike.class, RenderVoidSpike::new);
 
     }
 }

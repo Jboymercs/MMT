@@ -181,9 +181,9 @@ public class EntityAzureGolem extends EntityLeveledMob implements IAttack, IAnim
 
     @Override
     public void registerControllers(AnimationData animationData) {
-       animationData.addAnimationController(new AnimationController(this, "controller_attack", 0, this::PredicateAttack));
-       animationData.addAnimationController(new AnimationController(this, "controller_idle", 0, this::PredicateIdle));
-       animationData.addAnimationController(new AnimationController(this, "controller_run", 10, this::PredicateRun));
+       animationData.addAnimationController(new AnimationController(this, "controller_attack", 20, this::PredicateAttack));
+       animationData.addAnimationController(new AnimationController(this, "controller_idle", 20, this::PredicateIdle));
+       animationData.addAnimationController(new AnimationController(this, "controller_run", 20, this::PredicateRun));
     }
 
     private <E extends IAnimatable>PlayState PredicateAttack(AnimationEvent<E> event) {
@@ -205,10 +205,12 @@ public class EntityAzureGolem extends EntityLeveledMob implements IAttack, IAnim
     }
 
     private <E extends IAnimatable>PlayState PredicateRun(AnimationEvent<E> event) {
+        //Handles the running
         if(!this.isFightMode() && this.isRunning()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_RUN, true));
             return PlayState.CONTINUE;
         }
+        //Idle of Head Swinging
         if(!this.isFightMode() && this.isIdling()) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_IDLE_MOVEMENT, false));
             return PlayState.CONTINUE;
@@ -216,8 +218,9 @@ public class EntityAzureGolem extends EntityLeveledMob implements IAttack, IAnim
         return PlayState.STOP;
     }
     private<E extends IAnimatable>PlayState PredicateIdle(AnimationEvent<E> event) {
-        if(!this.isFightMode()) {
 
+        if(!this.isFightMode()) {
+            //Walk ANim
             if ((!(event.getLimbSwingAmount() > -0.10F && event.getLimbSwingAmount() < 0.10F)) && !this.isRunning()) {
                 event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_WALK, true));
 

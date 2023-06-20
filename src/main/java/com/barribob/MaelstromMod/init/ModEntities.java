@@ -94,21 +94,23 @@ public class ModEntities {
     public static Vec3i nexus = new Vec3i(15724287, 12501453, 0);
     public static Vec3i cliff = new Vec3i(0x999966, 0xe6e600, 0);
     public static Vec3i cliff_maelstrom = new Vec3i(6433126, 0xe6e600, 0);
-    public static Vec3i crimson_maelstrom = new Vec3i(6433126, 8111156, 0);
+    public static Vec3i crimson_maelstrom = new Vec3i(6433126, 0xeb4034, 0);
 
-
+    public static Vec3i lush_maelstrom = new Vec3i(6433126, 8111156, 0);
 
     private static final Map<Class<? extends Entity>, String> ID_MAP = new HashMap<>();
 
     public static void registerEntities() {
+        registerEntity("dream_elk", EntityDreamElk.class, DREAM_ELK_ID, 50, azure);
+        registerEntity("azure_villager", EntityAzureVillager.class, AZURE_VILLAGER_ID, 100, azure);
+        registerEntity("azure_golem", EntityAzureGolem.class, AZURE_GOLEM_ID, 70, azure);
+        registerEntityWithID("azure_beetle", EntityAzureBeetle.class, ENTITY_START_ID++, 100, azure);
+        registerEntityWithID("azure_wraith", EntityAzureWraith.class, ENTITY_START_ID++, 100, azure);
         registerEntityWithID("shade", EntityShade.class, SHADE_ID, 50, maelstrom);
         registerEntityWithID("horror", EntityHorror.class, HORROR_ID, 50, maelstrom);
-        registerEntity("dream_elk", EntityDreamElk.class, DREAM_ELK_ID, 50, azure);
         registerEntityWithID("maelstrom_crawler", EntityBeast.class, BEAST_ID, 100, maelstrom);
         registerEntity("maelstrom_illager", EntityMaelstromIllager.class, MAELSTROM_ILLAGER_ID, 50, maelstrom);
-        registerEntity("azure_villager", EntityAzureVillager.class, AZURE_VILLAGER_ID, 100, azure);
         registerEntityWithID("maelstrom_mage", EntityMaelstromMage.class, MAELSTROM_MAGE_ID, 50, maelstrom);
-        registerEntity("azure_golem", EntityAzureGolem.class, AZURE_GOLEM_ID, 70, azure);
         registerEntityWithID("floating_skull", EntityFloatingSkull.class, FLOATING_SKULL_ID, 50, maelstrom);
         registerEntity("herobrine_1", EntityHerobrineOne.class, HEROBRINE_1_ID, 50);
         registerEntityWithID("herobrine_controller", Herobrine.class, HEROBRINE_CONTROLLLER, 50, maelstrom);
@@ -128,6 +130,8 @@ public class ModEntities {
         registerEntity("monolith", EntityMonolith.class, ENTITY_START_ID++, 70, maelstrom);
         registerEntity("white_monolith", EntityWhiteMonolith.class, ENTITY_START_ID++, 70);
         registerEntityWithID("maelstrom_lancer", EntityMaelstromLancer.class, ENTITY_START_ID++, 50, maelstrom);
+        registerEntityWithID("maelstrom_navigator", EntityMaelstromNavigator.class, ENTITY_START_ID++, 50, maelstrom);
+        registerEntityWithID("maelstrom_shielder", EntityMaelstromShielder.class, ENTITY_START_ID++, 50, maelstrom);
         registerEntityWithID("chaos_knight", EntityChaosKnight.class, ENTITY_START_ID++, 70, crimson_maelstrom);
         registerEntityWithID("maelstrom_healer", EntityMaelstromHealer.class, ENTITY_START_ID++, 50, maelstrom);
         registerEntityWithID("maelstrom_gauntlet", EntityMaelstromGauntlet.class, ENTITY_START_ID++, 70, crimson_maelstrom);
@@ -135,22 +139,21 @@ public class ModEntities {
         registerEntityWithID("maelstrom_fury", EntityMaelstromFury.class, ENTITY_START_ID++, 100, maelstrom);
         registerEntityWithID("alternative_maelstrom_gauntlet_stage_1", EntityAlternativeMaelstromGauntletStage1.class, ENTITY_START_ID++, 100, crimson_maelstrom);
         registerEntityWithID("alternative_maelstrom_gauntlet_stage_2", EntityAlternativeMaelstromGauntletStage2.class, ENTITY_START_ID++, 100, crimson_maelstrom);
+        //Start of New Content
         registerEntityWithID("maelstrom_knight", EntityMaelstromKnight.class, ENTITY_START_ID++, 70, cliff_maelstrom);
-        registerEntityWithID("knight_crystal", EntityKnightCrystal.class, ENTITY_START_ID++, 50, azure);
-        registerEntityWithID("maelstrom_navigator", EntityMaelstromNavigator.class, ENTITY_START_ID++, 50, maelstrom);
-        registerEntityWithID("maelstrom_shielder", EntityMaelstromShielder.class, ENTITY_START_ID++, 50, maelstrom);
+        registerEntity("knight_crystal", EntityKnightCrystal.class, ENTITY_START_ID++, 50);
         registerEntityWithID("player_base", EntityPlayerBase.class, ENTITY_START_ID++, 100, maelstrom);
         registerEntityWithID("player_dialog", EntityPlayerDialouge.class, ENTITY_START_ID++, 100, maelstrom);
-        registerEntityWithID("azure_beetle", EntityAzureBeetle.class, ENTITY_START_ID++, 100, azure);
-        registerEntityWithID("azure_wraith", EntityAzureWraith.class, ENTITY_START_ID++, 100, azure);
-        registerEntityWithID("maelstrom_hunter", EntityMaelstromHunter.class, ENTITY_START_ID++, 100, crimson_maelstrom);
-        registerEntityWithID("wraith_hand", EntityWraithHand.class, ENTITY_START_ID++, 100, azure);
+        registerEntity("wraith_hand", EntityWraithHand.class, ENTITY_START_ID++, 100);
+        registerEntityWithID("maelstrom_hunter", EntityMaelstromHunter.class, ENTITY_START_ID++, 100, lush_maelstrom);
         registerEntityWithID("nether_knight", EntityNetherKnight.class, ENTITY_START_ID++, 100, crimson_maelstrom);
-        registerEntityWithID("fire_ring", EntityFireRing.class, ENTITY_START_ID++, 100, crimson_maelstrom);
+        registerEntity("fire_ring", EntityFireRing.class, ENTITY_START_ID++, 100);
         registerEntityWithID("fire_abberrant", EntityAbberrant.class, ENTITY_START_ID++, 110, crimson_maelstrom);
         registerEntityWithID("rot_knight", EntityShadeKnight.class, ENTITY_START_ID++, 110, maelstrom);
         registerEntityWithID("phaser", EntityPhaser.class, ENTITY_START_ID++, 110, maelstrom);
         registerEntityWithID("dhav", EntityDhav.class, ENTITY_START_ID++, 110, cliff_maelstrom);
+        registerEntityWithID("void_blossom", EntityVoidBlossom.class, ENTITY_START_ID++, 110, lush_maelstrom);
+        registerEntityWithID("void_spike", EntityVoidSpike.class, ENTITY_START_ID++, 110, lush_maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);
