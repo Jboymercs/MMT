@@ -91,6 +91,7 @@ public class RenderHandler {
         registerProjectileRenderer(ProjectileBeastFireball.class, Items.FIRE_CHARGE);
         registerProjectileRenderer(EntityMaelstromTowerDestroyer.class);
         registerProjectileRenderer(ProjectileAbberrantAttack.class, Items.FIRE_CHARGE);
+        registerProjectileRenderer(ProjectileVoidLeaf.class, Items.DYE);
 
     }
 

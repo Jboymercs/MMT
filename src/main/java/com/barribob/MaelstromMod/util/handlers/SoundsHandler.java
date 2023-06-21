@@ -60,6 +60,9 @@ public class SoundsHandler {
 
     public static SoundEvent ENTITY_NK_SLASH;
 
+    public static SoundEvent VOID_SPIKE_SHOOT;
+    public static SoundEvent APPEARING_WAVE;
+
     // Sound hooks
     public static class Hooks{
         public static SoundEvent ENTITY_ILLAGER_SPELL_CHARGE;
@@ -110,6 +113,8 @@ public class SoundsHandler {
         ENTITY_WRAITH_HURT = registerSound("wraith.hurt", "entity");
 
         ENTITY_NK_SLASH = registerSound("nether_knight.knight_slash_three", "entity");
+        VOID_SPIKE_SHOOT = registerSound("spike.shoot", "entity");
+        APPEARING_WAVE = registerSound("spike.wave", "entity");
 
         Hooks.ENTITY_ILLAGER_SPELL_CHARGE = registerSound("illager.spell_charge", "entity");
         Hooks.ENTITY_ILLAGER_DOME_CHARGE = registerSound("illager.dome_charge", "entity");

@@ -208,6 +208,7 @@ public class ModEntities {
         registerEntity("hunter_missile", EntityHunterMissile.class, PROJECTILE_START_ID++, 60);
         registerEntity("missile_projectile", ProjectileMissile.class, PROJECTILE_START_ID++, 60);
         registerEntity("abberrant_projectile", ProjectileAbberrantAttack.class, PROJECTILE_START_ID++, 30);
+        registerEntity("void_leaf", ProjectileVoidLeaf.class, PROJECTILE_START_ID++, 30);
 
 
 

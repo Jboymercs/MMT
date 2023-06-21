@@ -16,6 +16,8 @@ public class ModColors {
     public static final Vec3d BLUE = new Vec3d(0.1, 0.1, 0.8);
     public static final Vec3d MAELSTROM = new Vec3d(0.3, 0.2, 0.4);
     public static final Vec3d DARK_GREY = new Vec3d(0.2, 0.2, 0.2);
+
+    public static final Vec3d PINK = new Vec3d(0.3, 0.04, 0.1);
     public static final Vec3d FADED_RED = new Vec3d(0.7, 0.3, 0.3);
     public static final Vec3d FIREBALL_ORANGE = new Vec3d(1.0, 0.6, 0.5);
     public static final Vec3d SWAMP_FOG = new Vec3d(0.4, 0.35, 0.2);

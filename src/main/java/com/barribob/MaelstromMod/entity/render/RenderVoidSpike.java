@@ -15,14 +15,4 @@ public class RenderVoidSpike extends RenderAbstractGeoEntity<EntityVoidSpike> {
         super(renderManager, new ModelVoidSpike());
     }
 
-    @Override
-    public void doRender(EntityVoidSpike entity, double x, double y, double z, float entityYaw, float partialTicks) {
-        GlStateManager.enableNormalize();
-        GlStateManager.enableBlend();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 0.75F);
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
-        GlStateManager.disableBlend();
-        GlStateManager.disableNormalize();
-    }
 }

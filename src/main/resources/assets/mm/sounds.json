@@ -319,6 +319,27 @@
 			}
 		]
 	},
+	"entity.spike.shoot": {
+		"category": "entity",
+		"subtitle": "entity.spike.shoot",
+		"sounds": [
+			{
+				"name": "mm:entity/spike/shoot",
+				"steam": true
+			}
+		]
+	},
+
+	"entity.spike.wave": {
+		"category": "entity",
+		"subtitle": "entity.spike.wave",
+		"sounds": [
+			{
+				"name": "mm:entity/spike/wave",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",
