@@ -4,9 +4,12 @@ import com.barribob.MaelstromMod.entity.action.*;
 import com.barribob.MaelstromMod.entity.ai.EntityAITimedAttack;
 import com.barribob.MaelstromMod.entity.projectile.EntityVoidSpike;
 import com.barribob.MaelstromMod.entity.projectile.Projectile;
+import com.barribob.MaelstromMod.entity.projectile.ProjectileSporeBomb;
 import com.barribob.MaelstromMod.entity.projectile.ProjectileVoidLeaf;
 import com.barribob.MaelstromMod.entity.util.IAttack;
 import com.barribob.MaelstromMod.util.ModRandom;
+import com.barribob.MaelstromMod.util.ModUtils;
+import com.barribob.MaelstromMod.util.handlers.SoundsHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -18,6 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
@@ -50,6 +54,7 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
     private static final DataParameter<Boolean> SPIKE_ATTACK = EntityDataManager.createKey(EntityVoidBlossom.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SPIKE_WAVE = EntityDataManager.createKey(EntityVoidBlossom.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> LEAF_ATTACK = EntityDataManager.createKey(EntityVoidBlossom.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> SPORE_ATTACK = EntityDataManager.createKey(EntityVoidBlossom.class, DataSerializers.BOOLEAN);
     private final AnimationFactory factory = new AnimationFactory(this);
     private Consumer<EntityLivingBase> prevAttacks;
 
@@ -67,6 +72,7 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
         this.dataManager.register(SPIKE_ATTACK, Boolean.valueOf(false));
         this.dataManager.register(SPIKE_WAVE, Boolean.valueOf(false));
         this.dataManager.register(LEAF_ATTACK, Boolean.valueOf(false));
+        this.dataManager.register(SPORE_ATTACK, Boolean.valueOf(false));
     }
     public void setFightMode(boolean value) {
         this.dataManager.set(FIGHT_MODE, Boolean.valueOf(value));
@@ -74,12 +80,15 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
     public void setSpikeAttack(boolean value) {this.dataManager.set(SPIKE_ATTACK, Boolean.valueOf(value));}
     public void setSpikeWave(boolean value) {this.dataManager.set(SPIKE_WAVE, Boolean.valueOf(value));}
     public void setLeafAttack(boolean value) {this.dataManager.set(LEAF_ATTACK, Boolean.valueOf(value));}
+    public void setSporeAttack(boolean value) {this.dataManager.set(SPORE_ATTACK, Boolean.valueOf(value));
+    }
     public boolean isFightMode() {
         return this.dataManager.get(FIGHT_MODE);
     }
     public boolean isSpikeAttack() {return this.dataManager.get(SPIKE_ATTACK);}
     public boolean isSpikeWave() {return this.dataManager.get(SPIKE_WAVE);}
     public boolean isLeafAttack() {return this.dataManager.get(LEAF_ATTACK);}
+    public boolean isSporeAttack() {return this.dataManager.get(SPORE_ATTACK);}
 
     @Override
     public void registerControllers(AnimationData animationData) {
@@ -116,6 +125,10 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
             event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_LEAF_STRIKE, false));
             return PlayState.CONTINUE;
         }
+        if(this.isSporeAttack()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(ANIM_LAUNCH_SPORE, false));
+            return PlayState.CONTINUE;
+        }
         event.getController().markNeedsReload();
         return PlayState.STOP;
     }
@@ -133,6 +146,10 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
     public void onUpdate() {
         super.onUpdate();
         this.bossInfo.setPercent(getHealth() / getMaxHealth());
+        EntityLivingBase target = this.getAttackTarget();
+        if(target != null && !this.isSporeAttack() && !this.isSpikeWave()) {
+            this.getLookHelper().setLookPositionWithEntity(target, 0.8f, 0.8f);
+        }
     }
 
     @Override
@@ -140,11 +157,12 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
         double distance = Math.sqrt(distanceSq);
         double HealthChange = this.getHealth() / this.getMaxHealth();
         if(!this.isFightMode()) {
-            List<Consumer<EntityLivingBase>> attacksMelee = new ArrayList<>(Arrays.asList(spikeAttack, spikeWave, leafAttack));
+            List<Consumer<EntityLivingBase>> attacksMelee = new ArrayList<>(Arrays.asList(spikeAttack, spikeWave, leafAttack, sporeBomb));
             double[] weights = {
                     (distance < 20 && prevAttacks != spikeAttack) ? distance * 0.02 : 0, // Spike Attack Simple
                     (distance < 20 && prevAttacks != spikeWave) ? distance * 0.02 : 0, //Spike Wave
-                    (distance < 20 && prevAttacks != leafAttack && HealthChange < 0.5) ? distance * 0.02 : 0 // Leaf Attack only active at 50% below Health
+                    (distance < 20 && prevAttacks != leafAttack && HealthChange < 0.5) ? distance * 0.02 : 0, // Leaf Attack only active at 50% below Health
+                    (distance < 20 && prevAttacks != sporeBomb && HealthChange < 0.5) ? distance * 0.02 : 0 //Spore Bomb Attack active only at 50% below Health
             };
             prevAttacks = ModRandom.choice(attacksMelee, rand, weights).next();
             prevAttacks.accept(target);
@@ -176,9 +194,10 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
     private Consumer<EntityLivingBase> spikeWave = (target)-> {
       this.setFightMode(true);
       this.setSpikeWave(true);
+      addEvent(()-> playSound(SoundsHandler.BLOSSOM_BURROW, 1.0f, 1.0f), 25);
         addEvent(()-> new ActionShortRangeWave().performAction(this, target), 30);
-        addEvent(()-> new ActionMediumRangeWave().performAction(this, target), 50);
-        addEvent(()-> new ActionLongRangeWave().performAction(this, target), 70);
+        addEvent(()-> new ActionMediumRangeWave().performAction(this, target), 60);
+        addEvent(()-> new ActionLongRangeWave().performAction(this, target), 90);
       addEvent(()-> {
           this.setFightMode(false);
           this.setSpikeWave(false);
@@ -199,6 +218,27 @@ public class EntityVoidBlossom extends EntityLeveledMob implements IAnimatable, 
         this.setFightMode(false);
         this.setLeafAttack(false);
       }, 106);
+    };
+    //Spore bomb
+    private Consumer<EntityLivingBase> sporeBomb = (target) -> {
+        this.setFightMode(true);
+        this.setSporeAttack(true);
+        addEvent(()-> playSound(SoundsHandler.SPORE_PREPARE, 1.0f, 1.0f), 30);
+        addEvent(()-> {
+            ProjectileSporeBomb projectile = new ProjectileSporeBomb(this.world);
+            Vec3d pos = this.getPositionVector().add(ModUtils.yVec(12.0D));
+            Vec3d targetPos = target.getPositionVector().add(ModUtils.yVec(14));
+            Vec3d velocity = targetPos.subtract(pos).normalize().scale(0.7);
+            projectile.setVelocity(velocity.x, velocity.y -0.5, velocity.z);
+            projectile.setPosition(pos.x, pos.y, pos.z);
+            projectile.setTravelRange(40F);
+            world.spawnEntity(projectile);
+        }, 46);
+
+        addEvent(()-> {
+            this.setFightMode(false);
+            this.setSporeAttack(false);
+        }, 60);
     };
 
 

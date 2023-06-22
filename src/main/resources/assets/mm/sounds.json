@@ -340,6 +340,26 @@
 			}
 		]
 	},
+	"entity.spike.burrow": {
+		"category": "entity",
+		"subtitle": "entity.spike.burrow",
+		"sounds": [
+			{
+				"name": "mm:entity/spike/burrow",
+				"steam": true
+			}
+		]
+	},
+	"entity.spike.prepare": {
+		"category": "entity",
+		"subtitle": "entity.spike.prepare",
+		"sounds": [
+			{
+				"name": "mm:entity/spike/prepare",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",

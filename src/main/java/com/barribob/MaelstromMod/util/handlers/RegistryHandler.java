@@ -13,6 +13,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 
 /**
@@ -33,6 +35,7 @@ public class RegistryHandler {
     }
 
     @SubscribeEvent
+    @SideOnly(Side.CLIENT)
     public static void onModelRegister(ModelRegistryEvent event) {
         //Have to call these here due to being geckolib animated models
         ModelLoader.setCustomModelResourceLocation(ModItems.SPORE_BALL, 0, new ModelResourceLocation(Reference.MOD_ID + ":spore","inventory"));

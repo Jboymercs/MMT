@@ -33,6 +33,7 @@ item.crimson_maelstrom_core.name=Crimson Maelstrom Core
 item.crimson_maelstrom_fragment.name=Crimson Maelstrom Fragment
 item.maelstrom_key_fragments.name=Maelstrom Key Fragments
 item.void_leaf.name=Void Leaf
+item.spore.name=Void Blossom Spore
 
 //�����������������������������������������������������������
 // Food
@@ -431,6 +432,7 @@ entity.beast_quake.name=Minotaur Fissure
 entity.monolith.name=Maelstrom Monolith
 entity.maelstrom_lancer.name=Maelstrom Lancer
 entity.knight_crystal.name=Knight Crystal
+entity.spore_bomb_name=Spore Bomb
 
 //�����������������������������������������������������������
 // Damage Sources

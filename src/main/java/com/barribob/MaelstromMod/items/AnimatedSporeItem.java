@@ -1,7 +1,6 @@
 package com.barribob.MaelstromMod.items;
 
 import com.barribob.MaelstromMod.Main;
-import com.barribob.MaelstromMod.init.MMAnimations;
 import com.barribob.MaelstromMod.init.ModCreativeTabs;
 import com.barribob.MaelstromMod.util.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;

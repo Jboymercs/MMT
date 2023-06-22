@@ -65,7 +65,7 @@ public class ModItems {
     public static final Item MAELSTROM_KEY = new ItemBase("maelstrom_key");
     public static final Item VOID_LEAF = new ItemBase("void_leaf");
 
-    public static final Item SPORE_BALL = new ItemBase("spore");
+    public static final Item SPORE_BALL = new AnimatedSporeItem("spore", null);
     public static final Item RED_KEY = new ItemKey("red_key", "dimensional_key", ModCreativeTabs.ITEMS);
 
     public static final Item CLIFF_KEY_FRAGMENT = new ItemSingleDescription("cliff_key_fragment", "key_desc", ModCreativeTabs.ITEMS);
