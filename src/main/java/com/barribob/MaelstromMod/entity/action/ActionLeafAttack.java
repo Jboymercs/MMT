@@ -7,6 +7,8 @@ import com.barribob.MaelstromMod.util.ModUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -21,26 +23,24 @@ public class ActionLeafAttack implements IAction{
     }
     @Override
     public void performAction(EntityLeveledMob actor, EntityLivingBase target) {
-        Function<Vec3d, Runnable> missile = (offset) -> () -> {
+        Vec3d targetPos = target.getPositionEyes(1);
+        Vec3d fromTargetToActor = actor.getPositionVector().subtract(targetPos);
+
+        Vec3d lineDirection = ModUtils.rotateVector2(
+                        fromTargetToActor.crossProduct(ModUtils.Y_AXIS),
+                        fromTargetToActor,
+                        ModRandom.range(-45, 45))
+                .normalize()
+                .scale(4);
+
+        Vec3d lineStart = targetPos.subtract(lineDirection);
+        Vec3d lineEnd = targetPos.add(lineDirection);
+
+        ModUtils.lineCallback(lineStart, lineEnd, 11, (pos, i) -> {
             Projectile projectile = projectileSupplier.get();
-            projectile.setTravelRange(40);
-
-            ModUtils.throwProjectile(actor, target.getPositionEyes(1),
-                    projectile,
-                    6.0f,
-                    velocity,
-                    offset);
-
-            actor.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 1.0F, ModRandom.getFloat(0.2f) + 1.3f);
-        };
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 8.5, 3))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 8.25, 2.5))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 8.25, 2.0))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 8.0, 1.5))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 8.0, 1))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 8.0, 0.5))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 7.25, 0))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 7.25, -0.5))), 0);
-        actor.addEvent(missile.apply(ModUtils.getRelativeOffset(actor, new Vec3d(0, 7.5, -1))), 0);
+            projectile.setTravelRange(30);
+            projectile.setNoGravity(true);
+            ModUtils.throwProjectile(actor, pos, projectile, 0, velocity);
+        });
     }
 }
