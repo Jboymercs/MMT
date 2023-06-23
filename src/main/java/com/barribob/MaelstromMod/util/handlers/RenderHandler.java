@@ -175,6 +175,8 @@ public class RenderHandler {
         RenderingRegistry.registerEntityRenderingHandler(EntityFireRing.class, RenderFireRing::new);
         //Void Spike
         RenderingRegistry.registerEntityRenderingHandler(EntityVoidSpike.class, RenderVoidSpike::new);
+        //Spore Bomb Wave
+        RenderingRegistry.registerEntityRenderingHandler(EmtityGenericWave.class, RenderGenericWave::new);
 
     }
 }

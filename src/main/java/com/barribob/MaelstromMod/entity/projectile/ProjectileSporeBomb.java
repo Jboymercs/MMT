@@ -1,5 +1,6 @@
 package com.barribob.MaelstromMod.entity.projectile;
 
+import com.barribob.MaelstromMod.entity.action.ActionSporeBomb;
 import com.barribob.MaelstromMod.util.ModColors;
 import com.barribob.MaelstromMod.util.ModDamageSource;
 import com.barribob.MaelstromMod.util.ModRandom;
@@ -45,6 +46,9 @@ public class ProjectileSporeBomb extends Projectile{
     }
     @Override
     protected void onHit(RayTraceResult result) {
+        if(!world.isRemote) {
+            new ActionSporeBomb().performAction(this, null);
+        }
         DamageSource source = ModDamageSource.builder()
                 .indirectEntity(shootingEntity)
                 .directEntity(this)

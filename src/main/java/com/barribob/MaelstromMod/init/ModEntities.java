@@ -154,6 +154,7 @@ public class ModEntities {
         registerEntityWithID("dhav", EntityDhav.class, ENTITY_START_ID++, 110, cliff_maelstrom);
         registerEntityWithID("void_blossom", EntityVoidBlossom.class, ENTITY_START_ID++, 110, lush_maelstrom);
         registerEntityWithID("void_spike", EntityVoidSpike.class, ENTITY_START_ID++, 110, lush_maelstrom);
+        registerEntityWithID("spore_cloud", EmtityGenericWave.class, ENTITY_START_ID++, 110, lush_maelstrom);
 
         registerEntity("horror_attack", ProjectileHorrorAttack.class, HORROR_ATTACK_ID, 30);
         registerEntity("beast_attack", ProjectileBeastAttack.class, BEAST_ATTACK_ID, 100);

@@ -360,6 +360,16 @@
 			}
 		]
 	},
+	"entity.spike.impact": {
+		"category": "entity",
+		"subtitle": "entity.spike.impact",
+		"sounds": [
+			{
+				"name": "mm:entity/spike/impact",
+				"steam": true
+			}
+		]
+	},
 	"music.new_world": {
 		"category": "music",
 		"subtitle": "music.new_world",

@@ -66,6 +66,7 @@ public class SoundsHandler {
     public static SoundEvent SPORE_PREPARE;
 
     public static SoundEvent BLOSSOM_BURROW;
+    public static SoundEvent SPORE_IMPACT;
 
     // Sound hooks
     public static class Hooks{
@@ -121,6 +122,7 @@ public class SoundsHandler {
         APPEARING_WAVE = registerSound("spike.wave", "entity");
         BLOSSOM_BURROW = registerSound("spike.burrow", "entity");
         SPORE_PREPARE = registerSound("spike.prepare", "entity");
+        SPORE_IMPACT = registerSound("spike.impact", "entity");
 
         Hooks.ENTITY_ILLAGER_SPELL_CHARGE = registerSound("illager.spell_charge", "entity");
         Hooks.ENTITY_ILLAGER_DOME_CHARGE = registerSound("illager.dome_charge", "entity");

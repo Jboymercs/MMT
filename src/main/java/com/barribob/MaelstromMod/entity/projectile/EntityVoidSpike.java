@@ -48,7 +48,7 @@ public class EntityVoidSpike extends EntityLeveledMob implements IAnimatable {
             playSound(SoundsHandler.VOID_SPIKE_SHOOT, 1.0f, 1.0f);
         }
         if(ticksExisted > 24 && ticksExisted < 30) {
-            List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), e -> !e.getIsInvulnerable() && (!(e instanceof EntityVoidBlossom || e instanceof EntityVoidSpike)));
+            List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), e -> !e.getIsInvulnerable() && (!(e instanceof EntityVoidBlossom || e instanceof EntityVoidSpike || e instanceof EmtityGenericWave)));
 
             if(!targets.isEmpty()) {
                 Vec3d offset = this.getPositionVector().add(ModUtils.yVec(1.0D));
